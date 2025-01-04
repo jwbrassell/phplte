@@ -15,7 +15,10 @@ Thumbs.db
 .codegpt
 
 # Logs and databases
-*.log
+portal/logs/*/*.log
+portal/logs/*.log
+!portal/logs/*/.gitkeep
+!portal/logs/.gitkeep
 *.sql
 *.sqlite
 
