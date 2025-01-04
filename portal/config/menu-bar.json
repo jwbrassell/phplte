@@ -1,0 +1,38 @@
+{
+  "description": "User Management",
+  "summary": "Manage user access and permissions",
+  "dashboard": {
+    "type": "single",
+    "img": "fas fa-tachometer-alt",
+    "urls": {
+      "Dashboard": {
+        "url": "index.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  },
+  "admin": {
+    "type": "single",
+    "img": "fas fa-users-cog",
+    "urls": {
+      "User Admin": {
+        "url": "user_admin.php",
+        "roles": ["admin"]
+      }
+    }
+  },
+  "settings": {
+    "type": "category",
+    "img": "fas fa-cog",
+    "urls": {
+      "System Settings": {
+        "url": "settings.php",
+        "roles": ["admin"]
+      },
+      "User Settings": {
+        "url": "user_settings.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  }
+}
