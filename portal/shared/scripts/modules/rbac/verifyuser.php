@@ -10,12 +10,13 @@ $DOC_ROOT = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '/var
 
 $FILE = $DOC_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
-$ldapcheck = rtrim(`$DOC_ROOT/shared/scripts/modules/ldap/ldapcheck.py $uname '$passwd' $APP`);
+$ldapcheck = trim(`$DOC_ROOT/shared/scripts/modules/ldap/ldapcheck.py $uname '$passwd' $APP`);  // Remove whitespace from both ends
 
-list($status, $resp) = explode('|', $ldapcheck, 2);
+$parts = explode('|', $ldapcheck);
+$status = array_shift($parts);
 
-if($status == "OK!") {
-    list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = explode('|', $resp);
+if($status == "OK!" && count($parts) == 6) {  // Verify we have all required parts
+    list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = $parts;
     
     // Store username as session variable
     $_SESSION[$APP . "_user_session"] = $uname;
@@ -23,7 +24,7 @@ if($status == "OK!") {
     $_SESSION[$APP . "_user_name"] = $employee_name;
     $_SESSION[$APP . "_user_vzid"] = $vzid;
     $_SESSION[$APP . "_user_email"] = $employee_email;
-    $_SESSION[$APP . "_adom_groups"] = $adom_groups;
+    $_SESSION[$APP . "_adom_groups"] = str_replace(", ", ",", $adom_groups);  // Remove spaces after commas
     
     // Log successful login
     if(isset($error)) {
@@ -33,7 +34,7 @@ if($status == "OK!") {
     header("Location: /index.php");
     exit;
 } else {
-    $error = $resp;
+    $error = $ldapcheck;  // Use full error message
     file_put_contents($FILE, "$TS|$error|$uname\n", FILE_APPEND | LOCK_EX);
     header("Location: /login.php?error=" . urlencode($error));
     exit;
