@@ -15,12 +15,12 @@ import json
 warnings.filterwarnings("ignore", category=DeprecationWarning, 
     message="The raise_on_deleted_version parameter will change its default value to False in hvac v3.0.0.")
 
-# Add the directory containing vault module to the Python path
+# Add the directory containing modules to the Python path
 script_dir = os.path.dirname(os.path.abspath(__file__))
-modules_dir = os.path.dirname(os.path.dirname(script_dir))
+modules_dir = os.path.dirname(script_dir)  # parent directory containing all modules
 sys.path.append(modules_dir)
 
-from vault import VaultUtility
+from vault.vault_utility import VaultUtility
 vault_utility = VaultUtility()
 
 # Get LDAP configuration from vault
