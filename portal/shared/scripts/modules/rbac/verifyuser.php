@@ -12,9 +12,9 @@ $FILE = $DOC_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
 $ldapcheck = rtrim(`$DOC_ROOT/shared/scripts/modules/ldap/ldapcheck.py $uname '$passwd' $APP`);
 
-list($status, $resp) = explode('|', $ldapcheck);
+list($status, $resp) = explode('|', $ldapcheck, 2);
 
-if($status == "OK") {
+if($status == "OK!") {
     list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = explode('|', $resp);
     
     // Store username as session variable
