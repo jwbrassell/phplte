@@ -10,11 +10,11 @@ $DATE = date("Ymd");
 
 // Get the document root and set up paths
 $DOC_ROOT = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '/var/www/html';
-$FILE = $DOC_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
+$FILE = dirname(dirname(dirname(dirname(__FILE__)))) . "/logs/access/" . $DATE . "_access.log";
 $PORTAL_ROOT = dirname(dirname(dirname(dirname(__FILE__))));
 
 // Execute ldapcheck and capture only stdout, redirect stderr to null
-$cmd = "$DOC_ROOT/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
+$cmd = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
 $ldapcheck = trim(shell_exec("$cmd 2>/dev/null"));
 
 // Parse the response
@@ -34,11 +34,11 @@ if($status == "OK!" && count($parts) == 6) {
     
     // Log success and redirect
     file_put_contents($FILE, "$TS|SUCCESS|$uname|$adom_group\n", FILE_APPEND | LOCK_EX);
-    header("Location: $PORTAL_ROOT/index.php");
+    header("Location: /portal/index.php");
     exit;
 } else {
     // Log failure and redirect with error
     file_put_contents($FILE, "$TS|$ldapcheck|$uname\n", FILE_APPEND | LOCK_EX);
-    header("Location: $PORTAL_ROOT/login.php?error=" . urlencode($ldapcheck));
+    header("Location: /portal/login.php?error=" . urlencode($ldapcheck));
     exit;
 }
