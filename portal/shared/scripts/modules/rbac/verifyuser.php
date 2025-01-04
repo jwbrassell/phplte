@@ -10,10 +10,7 @@ $DOC_ROOT = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '/var
 
 $FILE = $DOC_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
-echo $APP;
-
 $ldapcheck = rtrim(`$DOC_ROOT/shared/scripts/modules/ldap/ldapcheck.py $uname '$passwd' $APP`);
-echo $ldapcheck;
 
 list($status, $resp) = explode('|', $ldapcheck);
 
@@ -33,7 +30,11 @@ if($status == "OK") {
         unset($error);
     }
     file_put_contents($FILE, "$TS|SUCCESS|$uname|$adom_group\n", FILE_APPEND | LOCK_EX);
+    header("Location: /index.php");
+    exit;
 } else {
     $error = $resp;
     file_put_contents($FILE, "$TS|$error|$uname\n", FILE_APPEND | LOCK_EX);
+    header("Location: /login.php?error=" . urlencode($error));
+    exit;
 }
