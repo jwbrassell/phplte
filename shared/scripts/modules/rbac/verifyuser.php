@@ -51,7 +51,7 @@ $APP = filter_var($_POST['APP'], FILTER_SANITIZE_STRING);
 // Set up logging variables
 $TS = date('Y,m,d,H,i,s');
 $DATE = date('Ymd');
-$LOG_DIR = "/var/www/html/" . $APP . "/portal/logs/access";
+$LOG_DIR = __DIR__ . "/../../../portal/logs/access";
 $FILE = $LOG_DIR . "/" . $DATE . "_access.log";
 
 // Ensure log directory exists
@@ -63,17 +63,35 @@ if (!ensure_log_directory($LOG_DIR)) {
 
 // Verify user through LDAP with error handling
 try {
-    $python_script = "/var/www/html/shared/scripts/modules/ldap/ldapcheck.py";
+    $python_script = __DIR__ . "/../../ldap/ldapcheck.py";
+    error_log("LDAP Script Path: " . $python_script);
+    
     if (!file_exists($python_script)) {
+        error_log("LDAP script not found at: " . $python_script);
         throw new Exception("LDAP check script not found");
     }
-
-    $ldapcheck = rtrim(shell_exec("$python_script " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP) . " 2>&1"));
+    
+    error_log("LDAP script exists, checking permissions...");
+    $perms = substr(sprintf('%o', fileperms($python_script)), -4);
+    error_log("LDAP script permissions: " . $perms);
+    
+    // Build command with full path to Python
+    $command = "/usr/bin/python3 " . escapeshellarg($python_script) . " " . 
+               escapeshellarg($uname) . " " . 
+               escapeshellarg($passwd) . " " . 
+               escapeshellarg($APP) . " 2>&1";
+    error_log("Executing command (sanitized): " . str_replace($passwd, '********', $command));
+    
+    $ldapcheck = rtrim(shell_exec($command));
+    error_log("LDAP check raw response: " . str_replace($passwd, '********', $ldapcheck));
+    
     if ($ldapcheck === null) {
+        error_log("shell_exec returned null");
         throw new Exception("Failed to execute LDAP check script");
     }
 
     if (strpos($ldapcheck, '||') === false) {
+        error_log("Invalid response format. Response: " . str_replace($passwd, '********', $ldapcheck));
         throw new Exception("Invalid LDAP check response format");
     }
 

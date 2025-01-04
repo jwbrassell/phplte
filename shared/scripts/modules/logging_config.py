@@ -21,14 +21,18 @@ def setup_logger(script_name, log_level=logging.INFO):
     """
     
     # Create logs directory if it doesn't exist
-    log_dir = '/var/www/html/portal/logs/python'
-    if not os.path.exists(log_dir):
-        try:
+    script_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    log_dir = os.path.join(script_dir, 'portal', 'logs', 'python')
+    
+    try:
+        if not os.path.exists(log_dir):
             os.makedirs(log_dir, mode=0o755)
-        except Exception as e:
-            # If we can't create the directory, log to system logger
-            logging.error(f"Failed to create log directory {log_dir}: {str(e)}")
-            return None
+            # Log directory creation to system logger for debugging
+            logging.info(f"Created log directory: {log_dir}")
+    except Exception as e:
+        # If we can't create the directory, log to system logger
+        logging.error(f"Failed to create log directory {log_dir}: {str(e)}")
+        return None
 
     # Set up log file path
     log_file = os.path.join(log_dir, f"{datetime.now().strftime('%Y%m%d')}_{script_name}.log")

@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Function to safely write to error log
 function write_client_error_log($message, $type = 'JS_ERROR') {
     $log_dir = __DIR__ . '/logs/client';
+    error_log("Attempting to write to log directory: " . $log_dir); // Debug line
     if (!file_exists($log_dir)) {
         if (!mkdir($log_dir, 0755, true)) {
             error_log("Failed to create client error log directory: $log_dir");
@@ -34,7 +35,9 @@ function write_client_error_log($message, $type = 'JS_ERROR') {
         $message
     );
     
-    return error_log($log_message, 3, $log_file);
+    $result = error_log($log_message, 3, $log_file);
+    error_log("Log write attempt result: " . ($result ? "success" : "failed")); // Debug line
+    return $result;
 }
 
 // Validate and sanitize input

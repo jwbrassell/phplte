@@ -6,6 +6,8 @@ error_reporting(E_ERROR | E_PARSE);
 // Function to ensure logging directories exist and are writable
 function ensure_logging_directories() {
     $base_dir = __DIR__ . '/../logs';
+    error_log("Base logging directory path: " . $base_dir);
+    
     $required_dirs = [
         '',          // Main logs directory
         '/access',   // Access logs
@@ -16,18 +18,37 @@ function ensure_logging_directories() {
     
     foreach ($required_dirs as $dir) {
         $path = $dir ? $base_dir . $dir : $base_dir;
+        error_log("Checking directory: " . $path);
+        
         if (!file_exists($path)) {
+            error_log("Directory doesn't exist, attempting to create: " . $path);
             if (!@mkdir($path, 0755, true)) {
-                error_log("Failed to create logging directory: " . $path);
+                error_log("Failed to create directory: " . $path . " - Error: " . error_get_last()['message']);
                 continue;
             }
+            error_log("Successfully created directory: " . $path);
         }
         
         if (!is_writable($path)) {
+            error_log("Directory not writable, attempting to set permissions: " . $path);
             if (!@chmod($path, 0755)) {
-                error_log("Failed to set permissions on logging directory: " . $path);
+                error_log("Failed to set permissions: " . $path . " - Error: " . error_get_last()['message']);
+            } else {
+                error_log("Successfully set permissions for: " . $path);
             }
         }
+        
+        // Debug: Show current permissions and ownership
+        $perms = substr(sprintf('%o', fileperms($path)), -4);
+        $owner = posix_getpwuid(fileowner($path));
+        $group = posix_getgrgid(filegroup($path));
+        error_log(sprintf(
+            "Directory %s - Permissions: %s, Owner: %s, Group: %s",
+            $path,
+            $perms,
+            $owner['name'],
+            $group['name']
+        ));
     }
 }
 
