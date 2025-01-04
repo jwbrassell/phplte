@@ -31,6 +31,9 @@ class VaultUtility:
             token (str): Authentication token
             env_file_path (str): Path to environment file
         """
+        # Set logging to ERROR only
+        logging.basicConfig(level=logging.ERROR)
+        
         # Initialize connection parameters
         self.vault_url = vault_url or os.getenv('VAULT_URL', 'http://127.0.0.1:8200')
         self.token = token or os.getenv('VAULT_TOKEN')

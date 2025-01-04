@@ -15,6 +15,9 @@ import json
 warnings.filterwarnings("ignore", category=DeprecationWarning, 
     message="The raise_on_deleted_version parameter will change its default value to False in hvac v3.0.0.")
 
+# Configure logging to suppress debug output
+logging.basicConfig(level=logging.ERROR)
+
 # Add the directory containing modules to the Python path
 script_dir = os.path.dirname(os.path.abspath(__file__))
 modules_dir = os.path.dirname(script_dir)  # parent directory containing all modules
