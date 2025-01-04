@@ -5,7 +5,7 @@
  */
 
 // Application settings
-$APP = "southlake";
+$APP = "framework";
 $DIR = __DIR__;  // Use current directory path for local development
 $ROOTDIR = "../..";
 

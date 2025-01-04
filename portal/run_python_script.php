@@ -87,7 +87,7 @@ $directory = isset($script_directory) && !empty($script_directory)
 
 // Prepare command with proper escaping
 $escaped_request = escapeshellarg($request_to_process);
-$command = "/opt/python-venv/bin/python $directory/$script $escaped_request";
+$command = "/opt/python-venv/bin/python3 $directory/$script $escaped_request";
 log_message("Command to Execute: $command");
 
 // Execute command and capture output

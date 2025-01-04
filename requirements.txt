@@ -1,0 +1,17 @@
+certifi==2024.12.14
+charset-normalizer==3.4.1
+hvac==2.3.0
+idna==3.10
+numpy==2.2.1
+pandas==2.2.3
+portalocker==3.1.1
+psutil==6.1.1
+pyasn1==0.6.1
+pyasn1_modules==0.4.1
+python-dateutil==2.9.0
+python-ldap==3.4.4
+pytz==2024.2
+requests==2.32.3
+six==1.17.0
+tzdata==2024.2
+urllib3==2.3.0

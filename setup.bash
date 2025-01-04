@@ -88,12 +88,25 @@ if command -v semanage >/dev/null 2>&1 && command -v getenforce >/dev/null 2>&1;
     fi
 fi
 
-# Install Python dependencies
-log "Installing Python dependencies..."
-if command -v pip3 >/dev/null 2>&1; then
-    pip3 install python-ldap hvac
+# Install LDAP dependencies and Python packages
+log "Installing LDAP and Python dependencies..."
+if command -v dnf >/dev/null 2>&1; then
+    log "Installing python3.11-devel..."
+    dnf install -y python3.11-devel
 else
-    warn "pip3 not found. Please install Python dependencies manually."
+    error "DNF package manager not found. Please install python3.11-devel manually."
+fi
+
+if [ -f "$PYTHON_VENV/bin/pip3" ]; then
+    # Set CFLAGS for python-ldap installation
+    export CFLAGS="-I/usr/include/python3.11"
+    log "Installing python-ldap with custom flags..."
+    $PYTHON_VENV/bin/pip3 install python-ldap
+    
+    log "Installing remaining Python dependencies..."
+    $PYTHON_VENV/bin/pip3 install -r requirements.txt
+else
+    warn "Python virtual environment not found at $PYTHON_VENV. Please set up virtual environment manually."
 fi
 
 # Verify critical files and directories
