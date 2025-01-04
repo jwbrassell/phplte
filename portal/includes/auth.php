@@ -14,7 +14,7 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
     } else {
         // Get the document root from server variables or fallback to default
         $DOC_ROOT = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '/var/www/html';
-        include($DOC_ROOT . "/portal/shared/scripts/modules/rbac/verifyuser.php");
+        include($DOC_ROOT . "/shared/scripts/modules/rbac/verifyuser.php");
     }
 }
 
