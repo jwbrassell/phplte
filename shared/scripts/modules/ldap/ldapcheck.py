@@ -16,10 +16,10 @@ warnings.filterwarnings("ignore", category=DeprecationWarning,
     message="The raise_on_deleted_version parameter will change its default value to False in hvac v3.0.0.")
 
 # Add the directory containing vault utility.py to the Python path
-sys.path.append(os.path.join(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from vault import vault_utility
-vault_utility = vault_utility.VaultUtility()
+from vault.vault_utility import VaultUtility
+vault_utility = VaultUtility()
 
 # Get LDAP configuration from vault
 ldap_user = vault_utility.get_value_for_key("wens/portal/framework/config/ldap/username")

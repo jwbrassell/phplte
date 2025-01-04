@@ -5,11 +5,14 @@ $passwd = $_POST["login_passwd"];
 $APP = $_POST["APP"];
 $TS = date("Y-m-d H:i:s");
 $DATE = date("Ymd");
-$FILE = "/var/www/html/portal/logs/access/" . $DATE . "_access.log";
+// Get the document root from server variables or fallback to default
+$DOC_ROOT = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '/var/www/html';
+
+$FILE = $DOC_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
 echo $APP;
 
-$ldapcheck = rtrim(`/var/www/html/shared/scripts/modules/ldap/ldapcheck.py $uname '$passwd' $APP`);
+$ldapcheck = rtrim(`$DOC_ROOT/shared/scripts/modules/ldap/ldapcheck.py $uname '$passwd' $APP`);
 echo $ldapcheck;
 
 list($status, $resp) = explode('|', $ldapcheck);
