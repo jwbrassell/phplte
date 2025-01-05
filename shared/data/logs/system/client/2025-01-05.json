@@ -1,0 +1,83 @@
+[
+  {
+    "timestamp": "2025-01-05T14:23:09.698635",
+    "type": "client",
+    "user": "anonymous",
+    "message": "Test message for client logging",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aea2da7293",
+      "timestamp": "2025-01-05 20:23:09",
+      "source": "test_write.php",
+      "type": "client"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:00.121830",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test client message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aed3018316",
+      "source": "test_write.php",
+      "browser": "test"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:39.144963",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test client message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aed571fd5b",
+      "source": "test_write.php",
+      "browser": "test"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:57.746552",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test client message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aed69b2a38",
+      "source": "test_write.php",
+      "browser": "test"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:34.608989",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test client message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aef3291138",
+      "source": "test_write.php",
+      "browser": "test"
+    }
+  }
+]

@@ -1,0 +1,151 @@
+[
+  {
+    "timestamp": "2025-01-05T14:23:09.719372",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Test message for audit logging",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aea2dabbc0",
+      "timestamp": "2025-01-05 20:23:09",
+      "source": "test_write.php",
+      "type": "audit"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:23:09.799397",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Audit: test_update on test_entity",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "audit",
+      "action": "test_update",
+      "entity": "test_entity",
+      "before": {
+        "old_value": "before"
+      },
+      "after": {
+        "new_value": "after"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:34:21.462822",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Audit: test_update on test_entity",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "audit",
+      "action": "test_update",
+      "entity": "test_entity",
+      "before": {
+        "old_value": "before"
+      },
+      "after": {
+        "new_value": "after"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:35:59.968411",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Audit: test_update on test_entity",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "audit",
+      "action": "test_update",
+      "entity": "test_entity",
+      "before": {
+        "old_value": "before"
+      },
+      "after": {
+        "new_value": "after"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:39.124660",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Audit: test_update on test_entity",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "audit",
+      "action": "test_update",
+      "entity": "test_entity",
+      "before": {
+        "old_value": "before"
+      },
+      "after": {
+        "new_value": "after"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:57.726241",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Audit: test_update on test_entity",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "audit",
+      "action": "test_update",
+      "entity": "test_entity",
+      "before": {
+        "old_value": "before"
+      },
+      "after": {
+        "new_value": "after"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:34.588839",
+    "type": "audit",
+    "user": "anonymous",
+    "message": "Audit: test_update on test_entity",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "audit",
+      "action": "test_update",
+      "entity": "test_entity",
+      "before": {
+        "old_value": "before"
+      },
+      "after": {
+        "new_value": "after"
+      }
+    }
+  }
+]

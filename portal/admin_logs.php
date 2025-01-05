@@ -8,24 +8,57 @@ if (!in_array('admin', $adom_groups)) {
     exit;
 }
 
+// Function to get available log dates and types
+function getLogInfo() {
+    $logDir = __DIR__ . '/../shared/data/logs/system';
+    $dates = [];
+    $types = [];
+    
+    if (is_dir($logDir)) {
+        // Get all log types (directories)
+        foreach (scandir($logDir) as $type) {
+            if ($type === '.' || $type === '..') continue;
+            
+            $typeDir = $logDir . '/' . $type;
+            if (!is_dir($typeDir)) continue;
+            
+            $types[] = $type;
+            
+            // Get all dates for this type
+            foreach (scandir($typeDir) as $file) {
+                if (preg_match('/^(\d{4}-\d{2}-\d{2})\.json$/', $file, $matches)) {
+                    $dates[$matches[1]] = true;
+                }
+            }
+        }
+    }
+    
+    // Convert dates to array and sort descending
+    $dates = array_keys($dates);
+    rsort($dates);
+    
+    // Sort types alphabetically
+    sort($types);
+    
+    return [
+        'dates' => $dates,
+        'types' => $types,
+        'latest_date' => !empty($dates) ? $dates[0] : date('Y-m-d')
+    ];
+}
+
+$logInfo = getLogInfo();
 $PAGE_TITLE = "System Logs";
 require_once("header.php");
 ?>
 
-<!-- Content Wrapper -->
 <div class="content-wrapper">
-    <!-- Content Header -->
-    <div class="content-header">
+    <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">System Logs</h1>
-                </div>
-            </div>
+            <h1>System Logs</h1>
         </div>
-    </div>
+    </section>
 
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -37,18 +70,23 @@ require_once("header.php");
                         <div class="card-body">
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    <select id="logType" class="form-control">
+                                    <select id="logType" class="form-control select2">
                                         <option value="all">All Logs</option>
-                                        <option value="access">Access Logs</option>
-                                        <option value="errors">Error Logs</option>
-                                        <option value="client">Client Logs</option>
-                                        <option value="python">Python Logs</option>
-                                        <option value="audit">Audit Logs</option>
-                                        <option value="performance">Performance Logs</option>
+                                        <?php foreach ($logInfo['types'] as $type): ?>
+                                        <option value="<?= htmlspecialchars($type) ?>"<?= isset($_GET['type']) && $_GET['type'] === $type ? ' selected' : '' ?>>
+                                            <?= ucfirst(htmlspecialchars($type)) ?> Logs
+                                        </option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="date" id="dateFilter" class="form-control" value="2024-01-05">
+                                    <select id="dateFilter" class="form-control select2">
+                                        <?php foreach ($logInfo['dates'] as $date): ?>
+                                        <option value="<?= htmlspecialchars($date) ?>"<?= isset($_GET['date']) && $_GET['date'] === $date ? ' selected' : ($date === $logInfo['latest_date'] && !isset($_GET['date']) ? ' selected' : '') ?>>
+                                            <?= htmlspecialchars($date) ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                             <table id="logsTable" class="table table-bordered table-striped">
@@ -71,9 +109,13 @@ require_once("header.php");
 </div>
 
 <script>
-$(document).ready(function() {
-    let loadingTimer;
-    
+$(function () {
+    // Initialize Select2
+    $('.select2').select2({
+        theme: 'bootstrap4'
+    });
+
+    // Initialize DataTable with custom settings
     var table = $('#logsTable').DataTable({
         processing: true,
         serverSide: true,
@@ -83,102 +125,19 @@ $(document).ready(function() {
             data: function(d) {
                 d.logType = $('#logType').val();
                 d.dateFilter = $('#dateFilter').val();
-            },
-            beforeSend: function() {
-                // Clear any existing timer
-                if (loadingTimer) clearTimeout(loadingTimer);
-                
-                // Show loading after a slight delay to prevent flashing
-                loadingTimer = setTimeout(() => {
-                    Swal.fire({
-                        title: 'Loading Logs',
-                        text: 'Please wait while we fetch the log entries...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                }, 250);
-            },
-            error: function(xhr, error, thrown) {
-                // Clear loading timer and close any open alerts
-                if (loadingTimer) clearTimeout(loadingTimer);
-                Swal.close();
-                
-                console.error('DataTables error:', {
-                    status: xhr.status,
-                    statusText: xhr.statusText,
-                    responseText: xhr.responseText,
-                    error: error,
-                    thrown: thrown
-                });
-                
-                let errorMessage = 'Failed to load log entries. ';
-                let errorDetails = '';
-                
-                try {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.error) {
-                        errorMessage += response.error;
-                        errorDetails = `Status: ${xhr.status}\nResponse: ${JSON.stringify(response, null, 2)}`;
-                    }
-                } catch (e) {
-                    errorMessage += `Server error (${xhr.status}): ${xhr.statusText}`;
-                    errorDetails = `Error: ${error}\nDetails: ${thrown}`;
-                }
-                
-                // Show error to user
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error Loading Logs',
-                    html: `<p>${errorMessage}</p>
-                          <pre class="text-left" style="margin-top: 1em; background: #f8f9fa; padding: 1em;">
-                          ${errorDetails}</pre>`,
-                    confirmButtonText: 'Retry',
-                    showCancelButton: true,
-                    cancelButtonText: 'Close',
-                    customClass: {
-                        popup: 'swal-wide',
-                        content: 'text-left'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        table.ajax.reload();
-                    }
-                });
-            },
-            complete: function(response) {
-                // Clear loading timer and close any open alerts
-                if (loadingTimer) clearTimeout(loadingTimer);
-                Swal.close();
-                
-                // Check if we got a "no data" message
-                try {
-                    const data = JSON.parse(response.responseText);
-                    if (data.message && data.recordsTotal === 0) {
-                        // Show message in the table
-                        $('#logsTable tbody').html(
-                            '<tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">' + 
-                            data.message + '</td></tr>'
-                        );
-                    }
-                } catch (e) {
-                    // JSON parse error, ignore
-                }
             }
         },
-        pageLength: 25,
         columns: [
             { 
                 data: 'timestamp',
                 render: function(data) {
-                    return data || 'N/A';
+                    return data ? moment(data).format('YYYY-MM-DD HH:mm:ss') : 'N/A';
                 }
             },
             { 
                 data: 'type',
                 render: function(data) {
-                    return data || 'unknown';
+                    return data ? data.charAt(0).toUpperCase() + data.slice(1) : 'unknown';
                 }
             },
             { 
@@ -198,27 +157,14 @@ $(document).ready(function() {
                 render: function(data, type, row) {
                     if (type === 'display') {
                         try {
-                            // If data is already a string, parse it
                             const details = typeof data === 'string' ? JSON.parse(data) : data;
-                            // Filter out null values and format nested objects
-                            const cleanDetails = {};
-                            Object.entries(details).forEach(([key, value]) => {
-                                if (value !== null) {
-                                    if (typeof value === 'object') {
-                                        cleanDetails[key] = JSON.stringify(value, null, 2);
-                                    } else {
-                                        cleanDetails[key] = value;
-                                    }
-                                }
-                            });
-                            if (Object.keys(cleanDetails).length === 0) {
+                            if (!details || Object.keys(details).length === 0) {
                                 return '<span class="text-muted">No details</span>';
                             }
                             return '<button type="button" class="btn btn-info btn-sm" onclick=\'showDetails(' + 
-                                   JSON.stringify(cleanDetails) + ')\'><i class="fas fa-info-circle"></i></button>';
+                                   JSON.stringify(details) + ')\'><i class="fas fa-info-circle"></i></button>';
                         } catch (e) {
                             console.error('Error parsing details:', e);
-                            console.error('Raw data:', data);
                             return '<span class="text-danger">Invalid JSON</span>';
                         }
                     }
@@ -227,33 +173,13 @@ $(document).ready(function() {
             }
         ],
         order: [[0, 'desc']],
-        dom: '<"row"<"col-sm-12 col-md-6"B><"col-sm-12 col-md-6"f>>rtip',
-        buttons: [
-            {
-                extend: 'collection',
-                text: 'Export',
-                buttons: ['copy', 'csv', 'excel', 'pdf']
-            }
-        ],
-        language: {
-            emptyTable: "No log entries found for the selected date and type",
-            zeroRecords: "No matching log entries found",
-            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'
-        }
-    });
-
-    // Debug DataTables response
-    table.on('xhr', function() {
-        var json = table.ajax.json();
-        console.log('DataTables response:', json);
+        pageLength: 25,
+        dom: 'Bfrtip',
+        buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
     });
 
     // Refresh table when filters change
     $('#logType, #dateFilter').change(function() {
-        console.log('Filter changed:', {
-            logType: $('#logType').val(),
-            dateFilter: $('#dateFilter').val()
-        });
         table.ajax.reload();
     });
 });

@@ -11,9 +11,6 @@ ini_set('log_errors', 1);
 // Define the application root path
 define('APP_ROOT', dirname(dirname(__FILE__)));
 
-// Set error log path
-ini_set('error_log', APP_ROOT . '/logs/errors/' . date('Y-m-d') . '.log');
-
 // Include required files
 require_once(APP_ROOT . "/includes/init.php");
 
@@ -81,7 +78,7 @@ try {
     }
 
     // Validate log type
-    $validLogTypes = ['all', 'access', 'errors', 'client', 'python', 'audit', 'performance'];
+    $validLogTypes = ['all', 'access', 'errors', 'client', 'audit', 'performance'];
     if (!in_array($logType, $validLogTypes)) {
         sendJsonResponse([
             'error' => 'Invalid log type',
@@ -92,47 +89,83 @@ try {
         ], 400);
     }
 
-    // Get log files
-    $logDir = APP_ROOT . '/logs';
+    // Get log files from new location
+    $logDir = APP_ROOT . '/../shared/data/logs/system';
+    error_log("Looking for logs in: $logDir");
+    error_log("Log type: $logType");
+    error_log("Date filter: $dateFilter");
+    
     $logFiles = [];
     
     if ($logType === 'all') {
         foreach ($validLogTypes as $type) {
             if ($type !== 'all') {
-                $logFile = $logDir . '/' . $type . '/' . $dateFilter . '.log';
+                $logFile = $logDir . '/' . $type . '/' . $dateFilter . '.json';
+                error_log("Checking file: $logFile");
                 if (file_exists($logFile) && is_readable($logFile)) {
-                    $logFiles[] = $logFile;
+                    error_log("Found log file: $logFile");
+                    $logFiles[] = [
+                        'file' => $logFile,
+                        'type' => $type
+                    ];
+                } else {
+                    error_log("File not found or not readable: $logFile");
                 }
             }
         }
     } else {
-        $logFile = $logDir . '/' . $logType . '/' . $dateFilter . '.log';
+        $logFile = $logDir . '/' . $logType . '/' . $dateFilter . '.json';
+        error_log("Checking file: $logFile");
         if (file_exists($logFile) && is_readable($logFile)) {
-            $logFiles[] = $logFile;
+            error_log("Found log file: $logFile");
+            $logFiles[] = [
+                'file' => $logFile,
+                'type' => $logType
+            ];
+        } else {
+            error_log("File not found or not readable: $logFile");
         }
     }
 
     // Process log files
     $allEntries = [];
-    foreach ($logFiles as $file) {
-        if ($lines = @file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)) {
-            foreach ($lines as $line) {
-                $entry = json_decode($line, true);
-                if ($entry) {
-                    $allEntries[] = [
-                        'timestamp' => $entry['timestamp'] ?? date('Y-m-d H:i:s'),
-                        'type' => $entry['type'] ?? 'unknown',
-                        'user' => $entry['user'] ?? 'system',
-                        'message' => $entry['message'] ?? '',
-                        'details' => json_encode(array_merge(
-                            ['level' => $entry['level'] ?? 'unknown'],
-                            ['status' => $entry['status'] ?? null],
-                            ['action' => $entry['action'] ?? null],
-                            ['details' => $entry['details'] ?? null]
-                        ), JSON_PRETTY_PRINT)
-                    ];
+    foreach ($logFiles as $fileInfo) {
+        try {
+            error_log("Reading file: {$fileInfo['file']}");
+            $content = file_get_contents($fileInfo['file']);
+            $entries = json_decode($content, true);
+            if ($entries === null) {
+                error_log("JSON decode error: " . json_last_error_msg());
+                continue;
+            }
+            error_log("Found " . count($entries) . " entries");
+            
+            if (is_array($entries)) {
+                foreach ($entries as $entry) {
+                    // Format timestamp to local time
+                    try {
+                        $timestamp = new DateTime($entry['timestamp']);
+                        $timestamp->setTimezone(new DateTimeZone(date_default_timezone_get()));
+                        
+                        $formattedEntry = [
+                            'timestamp' => $timestamp->format('Y-m-d H:i:s'),
+                            'type' => $entry['type'] ?? $fileInfo['type'],
+                            'user' => $entry['user'] ?? 'system',
+                            'message' => $entry['message'] ?? '',
+                            'details' => json_encode($entry['details'] ?? [], JSON_PRETTY_PRINT)
+                        ];
+                        error_log("Processed entry: " . json_encode($formattedEntry));
+                        $allEntries[] = $formattedEntry;
+                    } catch (Exception $e) {
+                        error_log("Error processing entry: " . json_encode($entry));
+                        error_log("Error: " . $e->getMessage());
+                        continue;
+                    }
                 }
             }
+        } catch (Exception $e) {
+            error_log("Error reading log file {$fileInfo['file']}: " . $e->getMessage());
+            continue;
         }
     }
 
@@ -184,3 +217,4 @@ try {
         'data' => []
     ], 500);
 }
+?>

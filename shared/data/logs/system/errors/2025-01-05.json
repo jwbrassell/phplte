@@ -1,0 +1,369 @@
+[
+  {
+    "timestamp": "2025-01-05T14:06:37.695374",
+    "type": "general",
+    "user": "anonymous",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "page": "test_logging.php",
+      "referrer": "direct"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:23.459393",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:33.771950",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:15:42.936817",
+    "type": "general",
+    "user": "anonymous",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "page": "test_logging.php",
+      "referrer": "direct"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:23:09.679293",
+    "type": "errors",
+    "user": "anonymous",
+    "message": "Test message for errors logging",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aea2da2211",
+      "timestamp": "2025-01-05 20:23:09",
+      "source": "test_write.php",
+      "type": "errors"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:23:09.759827",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test error message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "error_code": 500,
+      "source": "test_write.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:01.619532",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:15.158390",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:19.624458",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/settings.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:22.709380",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:26.230209",
+    "type": "general",
+    "user": "anonymous",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/login.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.656572",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/index.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:41.894072",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:52.129870",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:34:21.416701",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test error message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "error_code": 500,
+      "test_id": "677aeccd61328",
+      "source": "test_write.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:35:59.922553",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test error message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "error_code": 500,
+      "test_id": "677aed2fdd40d",
+      "source": "test_write.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:39.078924",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test error message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "error_code": 500,
+      "test_id": "677aed570db24",
+      "source": "test_write.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:57.679359",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test error message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "error_code": 500,
+      "test_id": "677aed69a15b9",
+      "source": "test_write.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:10.953520",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:34.969723",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:36.272902",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:37.456275",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:34.542156",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test error message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "error_code": 500,
+      "test_id": "677aef327fe0b",
+      "source": "test_write.php"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:51.328893",
+    "type": "general",
+    "user": "Test User",
+    "message": "404 Error",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "page": "vz.png",
+      "referrer": "http://localhost:8000/admin_logs.php"
+    }
+  }
+]

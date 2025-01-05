@@ -1,11 +1,34 @@
 <?php
-require_once(__DIR__ . '/Logger.php');
+require_once(__DIR__ . '/PythonLogger.php');
 
 // Initialize different logger instances
-$accessLogger = new Logger('access');
-$errorLogger = new Logger('errors');
-$auditLogger = new Logger('audit');
-$perfLogger = new Logger('performance');
+$accessLogger = new PythonLogger('access');
+$errorLogger = new PythonLogger('errors');
+$auditLogger = new PythonLogger('audit');
+$perfLogger = new PythonLogger('performance');
+
+// Remove old logger if it exists
+if (file_exists(__DIR__ . '/Logger.php')) {
+    unlink(__DIR__ . '/Logger.php');
+}
+
+// Remove old log directory and its contents
+$oldLogDir = dirname(dirname(__DIR__)) . '/portal/logs';
+if (file_exists($oldLogDir)) {
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($oldLogDir, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
+    
+    foreach ($files as $file) {
+        if ($file->isDir()) {
+            rmdir($file->getRealPath());
+        } else {
+            unlink($file->getRealPath());
+        }
+    }
+    rmdir($oldLogDir);
+}
 
 // Start output buffering to capture response code
 ob_start();
@@ -56,5 +79,10 @@ function getResponseCode() {
     $status_line = $http_response_header[0] ?? '';
     preg_match('{HTTP/\S*\s(\d{3})}', $status_line, $match);
     return $match[1] ?? 200;
+}
+
+// Function to get a logger instance
+function getLogger($type) {
+    return new PythonLogger($type);
 }
 ?>

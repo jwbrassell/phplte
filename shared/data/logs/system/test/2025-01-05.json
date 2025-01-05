@@ -1,0 +1,28 @@
+[
+  {
+    "timestamp": "2025-01-05T14:03:09.059063",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test message",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "no_session",
+      "test_id": "123"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:17:36.782483",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Testing directory creation",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "no_session",
+      "test": "true"
+    }
+  }
+]

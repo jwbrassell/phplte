@@ -1,0 +1,1674 @@
+[
+  {
+    "timestamp": "2025-01-05T14:06:37.670091",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_logging.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_logging.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:22.980137",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:23.279097",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:23.400558",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:23.571205",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:26.659201",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:28.893519",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:33.306508",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:33.594996",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:33.713960",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:33.883248",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:38.686148",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:10:40.644373",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:15:42.900194",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_logging.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_logging.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:20:07.264188",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:22:37.165876",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:23:09.631083",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:23:09.658262",
+    "type": "access",
+    "user": "anonymous",
+    "message": "Test message for access logging",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aea2d9c670",
+      "timestamp": "2025-01-05 20:23:09",
+      "source": "test_write.php",
+      "type": "access"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:25:59.747164",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:00.080331",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:01.558034",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:01.736497",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:05.559356",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:07.487920",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:09.525442",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:14.705611",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "type=access&date=2025-01-05"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:14.981122",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:15.100037",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:15.269092",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:19.298466",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: settings.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "settings.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php?type=access&date=2025-01-05",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:19.566843",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/settings.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:19.740292",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/settings.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:22.255489",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/settings.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:22.529539",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:22.649712",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:22.822096",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:25.785274",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: login.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "login.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:26.172287",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/login.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:26.343450",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/login.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.094154",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: login.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "login.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/login.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.154506",
+    "type": "user_activity",
+    "user": "anonymous",
+    "message": "User activity: login_attempt",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "user_activity",
+      "action": "login_attempt",
+      "status": "success",
+      "details": {
+        "username": "test"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.212788",
+    "type": "user_activity",
+    "user": "Test User",
+    "message": "User activity: login_success",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "user_activity",
+      "action": "login_success",
+      "status": "success",
+      "details": {
+        "username": "test",
+        "type": "test_account"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.328092",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: index.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "index.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/login.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.598547",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/index.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:37.772842",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/index.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:41.444542",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/index.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:41.715460",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:41.834785",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:42.003961",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:51.751298",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:51.956929",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:52.074130",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:26:52.239824",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:34:21.362364",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:34:21.389177",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": "",
+      "additional_data": {
+        "test_id": "677aeccd5b2ae",
+        "source": "test_write.php"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:35:59.866175",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:35:59.898071",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": "",
+      "additional_data": {
+        "test_id": "677aed2fd659d",
+        "source": "test_write.php"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:38.908532",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:39.048138",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": "",
+      "additional_data": {
+        "test_id": "677aed57075fc",
+        "source": "test_write.php"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:57.609434",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:36:57.649894",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": "",
+      "additional_data": {
+        "test_id": "677aed699a606",
+        "source": "test_write.php"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:38:34.564055",
+    "type": "page_access",
+    "user": "test_user",
+    "message": "Page accessed: test_logs_api.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "test_user",
+      "type": "page_access",
+      "page": "test_logs_api.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:10.532002",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:10.764430",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:10.893594",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:11.105130",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:31.337254",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:31.459801",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:34.616204",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:34.798915",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:34.914417",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:35.080340",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:35.913592",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:36.097251",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:36.216519",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:36.383022",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:37.082642",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:37.282456",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:37.400069",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:37.565792",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:41:44.417856",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:34.484965",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": null,
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:34.513441",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: test_write.php",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "test_write.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": "",
+      "additional_data": {
+        "test_id": "677aef32790fc",
+        "source": "test_write.php"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:50.773592",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: admin_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "admin_logs.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "direct",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:51.113676",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: get_logs.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "get_logs.php",
+      "method": "POST",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:51.260027",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: vz.png",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "vz.png",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": ""
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:44:51.448804",
+    "type": "page_access",
+    "user": "anonymous",
+    "message": "Page accessed: 404.php",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "anonymous",
+      "type": "page_access",
+      "page": "404.php",
+      "method": "GET",
+      "status_code": 200,
+      "referer": "http://localhost:8000/admin_logs.php",
+      "query_string": "page=vz.png"
+    }
+  }
+]

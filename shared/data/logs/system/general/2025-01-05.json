@@ -1,0 +1,18 @@
+[
+  {
+    "timestamp": "2025-01-05T14:22:37.190473",
+    "type": "general",
+    "user": "anonymous",
+    "message": "Test message from PHP",
+    "details": {
+      "level": "INFO",
+      "ip": "unknown",
+      "user_agent": "unknown",
+      "session_id": "",
+      "user": "anonymous",
+      "test_id": "677aea0d2ab7f",
+      "timestamp": "2025-01-05 20:22:37",
+      "source": "test_write.php"
+    }
+  }
+]

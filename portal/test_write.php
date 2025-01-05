@@ -1,36 +1,76 @@
 <?php
-$logFile = __DIR__ . '/logs/access/2024-01-05.log';
-$message = json_encode([
-    'timestamp' => date('Y-m-d H:i:s'),
-    'type' => 'test',
-    'message' => 'Direct write test',
-    'details' => ['test' => true]
-]) . "\n";
+require_once(__DIR__ . '/includes/init.php');
+require_once(__DIR__ . '/includes/logging_bootstrap.php');
 
-echo "Attempting to write to: " . $logFile . "\n";
-echo "Current permissions: " . substr(sprintf('%o', fileperms($logFile)), -4) . "\n";
-echo "Current owner: " . fileowner($logFile) . "\n";
-echo "Current process owner: " . posix_getuid() . "\n";
+echo "Testing logging system...\n\n";
 
-$fp = fopen($logFile, 'a');
-if (!$fp) {
-    echo "Failed to open file: " . error_get_last()['message'] . "\n";
-    exit(1);
-}
+try {
+    // Test access logging
+    logAccess('test_write.php', 'GET', 200, [
+        'test_id' => uniqid(),
+        'source' => 'test_write.php'
+    ]);
+    echo "Access log written\n";
 
-if (flock($fp, LOCK_EX)) {
-    $result = fwrite($fp, $message);
-    if ($result === false) {
-        echo "Failed to write: " . error_get_last()['message'] . "\n";
-    } else {
-        echo "Successfully wrote " . $result . " bytes\n";
+    // Test error logging
+    logError("Test error message", [
+        'error_code' => 500,
+        'test_id' => uniqid(),
+        'source' => 'test_write.php'
+    ]);
+    echo "Error log written\n";
+
+    // Test performance logging
+    logPerformance("test_operation", 123.45, [
+        'test_id' => uniqid(),
+        'source' => 'test_write.php'
+    ]);
+    echo "Performance log written\n";
+
+    // Test audit logging
+    logAudit(
+        "test_update",
+        ['old_value' => 'before'],
+        ['new_value' => 'after'],
+        'test_entity'
+    );
+    echo "Audit log written\n";
+
+    // Test client logging
+    $logger = getLogger('client');
+    $logger->log("Test client message", 'INFO', [
+        'test_id' => uniqid(),
+        'source' => 'test_write.php',
+        'browser' => 'test'
+    ]);
+    echo "Client log written\n";
+
+    // List all log files
+    $logDir = dirname(__DIR__) . '/shared/data/logs/system';
+    echo "\nChecking log files in: $logDir\n";
+    
+    if (is_dir($logDir)) {
+        foreach (scandir($logDir) as $type) {
+            if ($type === '.' || $type === '..') continue;
+            
+            $typeDir = $logDir . '/' . $type;
+            if (!is_dir($typeDir)) continue;
+            
+            echo "\n$type logs:\n";
+            foreach (scandir($typeDir) as $file) {
+                if (preg_match('/\.json$/', $file)) {
+                    $filePath = $typeDir . '/' . $file;
+                    $content = file_get_contents($filePath);
+                    $logs = json_decode($content, true);
+                    echo "  $file: " . count($logs) . " entries\n";
+                }
+            }
+        }
     }
-    fflush($fp);
-    flock($fp, LOCK_UN);
-} else {
-    echo "Failed to acquire lock: " . error_get_last()['message'] . "\n";
-}
-fclose($fp);
 
-echo "Current file contents:\n";
-echo file_get_contents($logFile);
+    echo "\nAll tests completed.\n";
+
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage() . "\n";
+    echo "Stack trace:\n" . $e->getTraceAsString() . "\n";
+}
