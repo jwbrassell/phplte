@@ -8,7 +8,7 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
         $_SESSION[$APP."_user_session"] = "test";
         $_SESSION[$APP."_user_vzid"] = "test123";
         $_SESSION[$APP."_user_email"] = "test@example.com";
-        $_SESSION[$APP."_adom_groups"] = "['admin']";
+        $_SESSION[$APP."_adom_groups"] = "['admin','user']";
         header("Location: index.php");
         exit;
     } else {
