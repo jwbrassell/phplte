@@ -27,12 +27,42 @@ if (in_array($PAGE, $alwaysAllowedPages)) {
     $pageExists = true;
     $pageAllowed = true;
 } else {
+    error_log("Current page: " . $PAGE);
+    error_log("Available menu data: " . print_r($data, true));
+    
+    if (!is_array($data)) {
+        error_log("Menu data is not an array");
+        $data = array();
+    }
+    
     foreach ($data as $category => $details) {
+        error_log("Processing category: " . $category);
+        
+        if (!is_array($details)) {
+            error_log("Category details is not an array for: " . $category);
+            continue;
+        }
+        
+        if (!isset($details['urls']) || !is_array($details['urls'])) {
+            error_log("Invalid or missing urls for category: " . $category);
+            continue;
+        }
+        
         foreach ($details['urls'] as $pageName => $pageDetails) {
+            error_log("Checking page: " . $pageName);
+            
+            if (!isset($pageDetails['url'])) {
+                error_log("Missing url for page: " . $pageName);
+                continue;
+            }
+            
             $urlPath = parse_url($pageDetails['url'], PHP_URL_PATH);
-            if ($PAGE == $urlPath) {
+            error_log("Comparing paths: " . $urlPath . " vs " . $PAGE);
+            
+            if ($PAGE === $urlPath) {
                 $pageExists = true;
                 $pageAllowed = true;
+                error_log("Page match found: " . $PAGE);
                 break 2;
             }
         }

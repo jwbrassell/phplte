@@ -83,8 +83,68 @@ if (file_exists($menuFile)) {
     $jsonContent = file_get_contents($menuFile);
     if ($jsonContent !== false) {
         $data = json_decode($jsonContent, true);
+        error_log("Raw menu data: " . print_r($data, true));
+        
         if ($data !== null) {
+            // Validate and sanitize menu data
+            $menuData = array();
+            
+            // First pass: identify valid menu categories
+            foreach ($data as $key => $value) {
+                // Skip metadata fields
+                if ($key === 'description' || $key === 'summary') {
+                    error_log("Skipping metadata field: $key");
+                    continue;
+                }
+                
+                // Validate menu category structure
+                if (!is_array($value)) {
+                    error_log("Invalid menu category (not an array): $key");
+                    continue;
+                }
+                
+                if (!isset($value['type'])) {
+                    error_log("Invalid menu category (missing type): $key");
+                    continue;
+                }
+                
+                if (!isset($value['urls']) || !is_array($value['urls'])) {
+                    error_log("Invalid menu category (invalid urls): $key");
+                    continue;
+                }
+                
+                // Validate and sanitize URLs
+                $validUrls = array();
+                foreach ($value['urls'] as $pageName => $pageDetails) {
+                    if (!is_array($pageDetails)) {
+                        error_log("Invalid page details for $key -> $pageName");
+                        continue;
+                    }
+                    
+                    if (!isset($pageDetails['url'])) {
+                        error_log("Missing URL for $key -> $pageName");
+                        continue;
+                    }
+                    
+                    // Ensure URL is properly formatted
+                    $validUrls[$pageName] = array(
+                        'url' => $pageDetails['url'],
+                        'roles' => isset($pageDetails['roles']) ? $pageDetails['roles'] : array()
+                    );
+                }
+                
+                if (!empty($validUrls)) {
+                    $menuData[$key] = array(
+                        'type' => $value['type'],
+                        'img' => isset($value['img']) ? $value['img'] : '',
+                        'urls' => $validUrls
+                    );
+                }
+            }
+            
+            $data = $menuData;
             ksort($data);
+            error_log("Processed menu data: " . print_r($data, true));
         } else {
             error_log("Failed to decode JSON from menu-bar.json");
             $data = array(); // Fallback to empty array
