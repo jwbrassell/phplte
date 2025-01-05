@@ -14,52 +14,48 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('Method Not Allowed');
 }
 
-// Function to safely write to error log
-function write_client_error_log($message, $type = 'JS_ERROR') {
-    $log_dir = __DIR__ . '/logs/client';
-    error_log("Attempting to write to log directory: " . $log_dir); // Debug line
-    if (!file_exists($log_dir)) {
-        if (!mkdir($log_dir, 0755, true)) {
-            error_log("Failed to create client error log directory: $log_dir");
-            return false;
-        }
-    }
-    
-    $log_file = $log_dir . '/' . date('Ymd') . '_client_error.log';
-    $log_message = sprintf(
-        "%s||%s||%s||%s||%s\n",
-        date('Y,m,d,H,i,s'),
-        $type,
-        $_SERVER['REMOTE_ADDR'],
-        $_SERVER['HTTP_USER_AGENT'],
-        $message
-    );
-    
-    $result = error_log($log_message, 3, $log_file);
-    error_log("Log write attempt result: " . ($result ? "success" : "failed")); // Debug line
-    return $result;
-}
+require_once(__DIR__ . '/includes/logging_bootstrap.php');
 
 // Validate and sanitize input
 $type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING) ?: 'UNKNOWN';
 $message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING) ?: 'No message provided';
 $url = filter_input(INPUT_POST, 'url', FILTER_SANITIZE_URL) ?: 'No URL provided';
 $line = filter_input(INPUT_POST, 'line', FILTER_SANITIZE_NUMBER_INT) ?: 'No line number';
+$column = filter_input(INPUT_POST, 'column', FILTER_SANITIZE_NUMBER_INT);
+$error = filter_input(INPUT_POST, 'error', FILTER_SANITIZE_STRING);
+$page = filter_input(INPUT_POST, 'page', FILTER_SANITIZE_STRING);
+$duration = filter_input(INPUT_POST, 'duration', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 
-// Construct error message
-$error_message = sprintf(
-    "Client Error: %s at %s:%s - %s",
-    $type,
-    $url,
-    $line,
-    $message
-);
+// Handle different types of client-side events
+switch ($type) {
+    case 'JS_ERROR':
+        $context = [
+            'url' => $url,
+            'line' => $line,
+            'column' => $column,
+            'stack_trace' => $error,
+            'page' => $page
+        ];
+        logError($message, array_filter($context));
+        break;
 
-// Log the error
-if (write_client_error_log($error_message, $type)) {
-    http_response_code(200);
-    echo json_encode(['status' => 'success']);
-} else {
-    http_response_code(500);
-    echo json_encode(['status' => 'error', 'message' => 'Failed to log error']);
+    case 'PERFORMANCE':
+        if ($duration !== false) {
+            logPerformance('client_side_' . strtolower($message), $duration, [
+                'page' => $page,
+                'url' => $url
+            ]);
+        }
+        break;
+
+    default:
+        logActivity('client_event', [
+            'type' => $type,
+            'message' => $message,
+            'url' => $url,
+            'page' => $page
+        ]);
 }
+
+http_response_code(200);
+echo json_encode(['status' => 'success']);

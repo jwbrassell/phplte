@@ -1,6 +1,8 @@
 <?php
 // Login and authentication handling
 if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($_POST['login_submit']))) {
+    // Log login attempt
+    logActivity('login_attempt', ['username' => $_POST['login_user']]);
     // Test authentication bypass
     if ($_POST['login_user'] === 'test' && $_POST['login_passwd'] === 'test123') {
         // Set test session variables
@@ -8,7 +10,13 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
         $_SESSION[$APP."_user_session"] = "test";
         $_SESSION[$APP."_user_vzid"] = "test123";
         $_SESSION[$APP."_user_email"] = "test@example.com";
-        $_SESSION[$APP."_adom_groups"] = "['admin','user']";
+        // Set admin groups in a consistent format
+        $_SESSION[$APP."_adom_groups"] = "admin,user";
+        $_SESSION[$APP."_is_admin"] = true;
+        
+        // Log successful test login
+        error_log("Test user logged in with groups: " . $_SESSION[$APP."_adom_groups"]);
+        logActivity('login_success', ['username' => 'test', 'type' => 'test_account']);
         header("Location: index.php");
         exit;
     } else {
@@ -71,6 +79,10 @@ if (in_array($PAGE, $alwaysAllowedPages)) {
 
 // Handle 404 errors
 if (!$pageExists) {
+    logError("404 Error", [
+        'page' => $PAGE,
+        'referrer' => $_SERVER['HTTP_REFERER'] ?? 'direct'
+    ]);
     header("Location: /404.php?page=".urlencode($PAGE));
     exit;
 }
@@ -78,12 +90,21 @@ if (!$pageExists) {
 // Handle unauthorized access
 if (!$pageAllowed) {
     $referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'index.php';
+    logError("403 Error - Unauthorized Access", [
+        'page' => $PAGE,
+        'referrer' => $referrer,
+        'user_groups' => $_SESSION[$APP."_adom_groups"] ?? 'none'
+    ]);
     header("Location: /403.php?page=".urlencode($PAGE)."&referrer=".urlencode($referrer));
     exit;
 }
 
 // Handle login redirects
 if (($PAGE == "login.php") && (isset($_SESSION[$APP."_user_name"]))) {
+    logActivity('redirect_logged_in_user', [
+        'username' => $_SESSION[$APP."_user_name"],
+        'destination' => isset($_GET['next']) ? $_GET['next'] : 'index.php'
+    ]);
     if (isset($_GET['next'])) {
         $next_url = $_GET['next'];
         header("location: $next_url");

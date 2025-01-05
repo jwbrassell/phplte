@@ -1,6 +1,8 @@
 <?php
-// Include core initialization
-require_once(__DIR__ . '/includes/init.php');
+// Skip init.php if it's already been included
+if (!defined('APP_INITIALIZED')) {
+    require_once(__DIR__ . '/includes/init.php');
+}
 
 // Include authentication and authorization
 require_once(__DIR__ . '/includes/auth.php');

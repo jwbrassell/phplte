@@ -12,11 +12,15 @@
     }
   },
   "admin": {
-    "type": "single",
+    "type": "category",
     "img": "fas fa-users-cog",
     "urls": {
       "User Admin": {
         "url": "user_admin.php",
+        "roles": ["admin"]
+      },
+      "System Logs": {
+        "url": "admin_logs.php",
         "roles": ["admin"]
       }
     }

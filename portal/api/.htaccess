@@ -1,0 +1,31 @@
+# Prevent directory listing
+Options -Indexes
+
+# Set CORS headers for API responses
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, X-Requested-With"
+Header set Access-Control-Allow-Credentials "true"
+
+# Handle API requests
+RewriteEngine On
+RewriteBase /api/
+
+# If the request is for get_logs.php, process it
+RewriteCond %{REQUEST_URI} ^/api/get_logs\.php$
+RewriteRule ^get_logs\.php$ get_logs.php [L]
+
+# Allow only POST requests to get_logs.php
+<Files "get_logs.php">
+    Order allow,deny
+    Allow from all
+    <LimitExcept POST>
+        Deny from all
+    </LimitExcept>
+</Files>
+
+# Deny access to all other files
+<FilesMatch "^(?!get_logs\.php$)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

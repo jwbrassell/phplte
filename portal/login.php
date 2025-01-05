@@ -5,31 +5,14 @@ require_once(__DIR__ . '/header.php');
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-// Function to safely write to error log
-function write_error_log($message, $type = 'ERROR') {
-    $log_dir = __DIR__ . '/logs/errors';
-    if (!file_exists($log_dir)) {
-        mkdir($log_dir, 0755, true);
-    }
-    
-    $log_file = $log_dir . '/' . date('Ymd') . '_error.log';
-    $log_message = sprintf(
-        "%s||%s||%s||%s||%s\n",
-        date('Y,m,d,H,i,s'),
-        $type,
-        $_SERVER['REMOTE_ADDR'],
-        $_SERVER['HTTP_USER_AGENT'],
-        $message
-    );
-    
-    error_log($log_message, 3, $log_file);
-}
-
 // Check for session hijacking
 if(isset($_SESSION[$APP."_user_session"])) {
     if(!isset($_SESSION['ip']) || !isset($_SESSION['user_agent'])) {
         session_destroy();
-        write_error_log("Session security check failed - missing IP or user agent");
+        logError("Session security check failed - missing IP or user agent", [
+            'type' => 'session_security',
+            'check' => 'missing_identifiers'
+        ]);
         header("Location: login.php");
         exit;
     }
@@ -37,7 +20,12 @@ if(isset($_SESSION[$APP."_user_session"])) {
     if($_SESSION['ip'] !== $_SERVER['REMOTE_ADDR'] || 
        $_SESSION['user_agent'] !== $_SERVER['HTTP_USER_AGENT']) {
         session_destroy();
-        write_error_log("Session security check failed - IP or user agent mismatch");
+        logError("Session security check failed - IP or user agent mismatch", [
+            'type' => 'session_security',
+            'check' => 'identifier_mismatch',
+            'stored_ip' => $_SESSION['ip'],
+            'current_ip' => $_SERVER['REMOTE_ADDR']
+        ]);
         header("Location: login.php");
         exit;
     }
@@ -46,10 +34,17 @@ if(isset($_SESSION[$APP."_user_session"])) {
     
     // Browser check with better error handling
     try {
+        $startTime = microtime(true);
         $browser_info = get_browser(null, true);
+        logPerformance('browser_detection', (microtime(true) - $startTime) * 1000);
+        
         if ($browser_info && isset($browser_info["browser"]) && $browser_info["browser"] == "IE") {
             $error_message = "Internet Explorer is not supported. Please use Chrome or Safari.";
-            write_error_log($error_message, 'WARN');
+            logError($error_message, [
+                'type' => 'browser_compatibility',
+                'browser' => $browser_info["browser"],
+                'version' => $browser_info["version"] ?? 'unknown'
+            ]);
             ?>
             <script type="text/javascript">
                 $(document).ready(function() {
@@ -59,7 +54,10 @@ if(isset($_SESSION[$APP."_user_session"])) {
             <?php
         }
     } catch (Exception $e) {
-        write_error_log("Browser detection failed: " . $e->getMessage());
+        logError("Browser detection failed: " . $e->getMessage(), [
+            'type' => 'browser_detection_error',
+            'error_code' => $e->getCode()
+        ]);
     }
 }
 
@@ -140,16 +138,31 @@ function submitOnEnter(event) {
     }
 }
 
-// Add error logging for client-side errors
-window.onerror = function(msg, url, line) {
+// Enhanced client-side error logging
+window.onerror = function(msg, url, line, col, error) {
     $.post('log_error.php', {
         type: 'JS_ERROR',
         message: msg,
         url: url,
-        line: line
+        line: line,
+        column: col,
+        error: error ? error.stack : 'No error object',
+        page: 'login'
     });
     return false;
 };
+
+// Performance monitoring
+const pageLoadStart = performance.now();
+window.addEventListener('load', function() {
+    const pageLoadTime = performance.now() - pageLoadStart;
+    $.post('log_error.php', {
+        type: 'PERFORMANCE',
+        message: 'Page Load Complete',
+        duration: pageLoadTime,
+        page: 'login'
+    });
+});
 </script>
 
 <body class="hold-transition login-page">
