@@ -1,10 +1,26 @@
 <?php
-// Get the request payload
-$request = json_decode(file_get_contents('php://input'), true);
-
-if (!$request) {
+// Get the request payload and validate JSON
+$raw_input = file_get_contents('php://input');
+if (empty($raw_input)) {
     http_response_code(400);
-    echo "Invalid request format";
+    echo json_encode(['error' => 'Empty request body']);
+    error_log("Empty request body received");
+    exit;
+}
+
+$request = json_decode($raw_input, true);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Invalid JSON: ' . json_last_error_msg()]);
+    error_log("JSON decode error: " . json_last_error_msg() . "\nRaw input: " . $raw_input);
+    exit;
+}
+
+// Validate request structure
+if (!isset($request['request_payload']) || !isset($request['request_payload']['data'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Missing required request structure']);
+    error_log("Invalid request structure: " . print_r($request, true));
     exit;
 }
 
@@ -13,14 +29,53 @@ $config_dir = __DIR__ . '/../../config/';
 $rbac_file = $config_dir . 'rbac.json';
 $menu_file = $config_dir . 'menu-bar.json';
 
-// Load configurations
+// Load and validate configurations
+if (!file_exists($rbac_file) || !file_exists($menu_file)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Configuration files not found']);
+    error_log("Missing configuration files - rbac: " . (file_exists($rbac_file) ? 'exists' : 'missing') . 
+              ", menu: " . (file_exists($menu_file) ? 'exists' : 'missing'));
+    exit;
+}
+
 $rbac_data = json_decode(file_get_contents($rbac_file), true);
 $menu_data = json_decode(file_get_contents($menu_file), true);
 
-// Extract request data
-$page_name = $request['request_payload']['data']['page_name'];
-$page_file = $request['request_payload']['data']['page_file_name'];
-$action = $request['request_payload']['data']['action'];
+if (!$rbac_data || !isset($rbac_data['adom_groups']) || !isset($rbac_data['icon_list']) || !isset($rbac_data['category_list'])) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Invalid RBAC configuration structure']);
+    error_log("Invalid RBAC data structure: " . print_r($rbac_data, true));
+    exit;
+}
+
+if (!$menu_data || !is_array($menu_data)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Invalid menu configuration structure']);
+    error_log("Invalid menu data structure: " . print_r($menu_data, true));
+    exit;
+}
+
+// Extract and validate request data
+$data = $request['request_payload']['data'];
+$required_fields = ['page_name', 'page_file_name', 'action'];
+$missing_fields = [];
+
+foreach ($required_fields as $field) {
+    if (!isset($data[$field]) || empty($data[$field])) {
+        $missing_fields[] = $field;
+    }
+}
+
+if (!empty($missing_fields)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Missing required fields: ' . implode(', ', $missing_fields)]);
+    error_log("Missing required fields: " . implode(', ', $missing_fields));
+    exit;
+}
+
+$page_name = $data['page_name'];
+$page_file = $data['page_file_name'];
+$action = $data['action'];
 
 // Get available groups and icons
 $adom_groups = $rbac_data['adom_groups'];
@@ -30,34 +85,52 @@ $categories = $rbac_data['category_list'];
 // Find existing page configuration if it exists
 $existing_config = null;
 foreach ($menu_data as $key => $value) {
-    if ($value['type'] === 'single') {
+    // Skip non-array values and special keys
+    if (!is_array($value) || in_array($key, ['description', 'summary'])) {
+        continue;
+    }
+    
+    // Validate required structure
+    if (!isset($value['type']) || !isset($value['urls']) || !is_array($value['urls'])) {
+        error_log("Invalid menu item structure for key '$key': " . print_r($value, true));
+        continue;
+    }
+    
+    // Handle single type
+    if ($value['type'] === 'single' && is_array($value['urls'])) {
         foreach ($value['urls'] as $title => $info) {
-            if ($info['url'] === $page_file) {
+            if (is_array($info) && isset($info['url']) && $info['url'] === $page_file) {
                 $existing_config = [
                     'name' => $title,
                     'type' => 'single',
                     'category' => $key,
-                    'icon' => $value['img'],
-                    'roles' => $info['roles']
+                    'icon' => isset($value['img']) ? $value['img'] : 'fas fa-file',
+                    'roles' => isset($info['roles']) ? $info['roles'] : []
                 ];
                 break 2;
             }
         }
-    } elseif ($value['type'] === 'category') {
+    }
+    // Handle category type
+    elseif ($value['type'] === 'category' && is_array($value['urls'])) {
         foreach ($value['urls'] as $title => $info) {
-            if ($info['url'] === $page_file) {
+            if (is_array($info) && isset($info['url']) && $info['url'] === $page_file) {
                 $existing_config = [
                     'name' => $title,
                     'type' => 'category',
                     'category' => $key,
-                    'icon' => $value['img'],
-                    'roles' => $info['roles']
+                    'icon' => isset($value['img']) ? $value['img'] : 'fas fa-folder',
+                    'roles' => isset($info['roles']) ? $info['roles'] : []
                 ];
                 break 2;
             }
         }
     }
 }
+
+// Log the result for debugging
+error_log("Page file: $page_file");
+error_log("Existing config: " . ($existing_config ? json_encode($existing_config) : 'null'));
 
 // Generate the edit form HTML
 ?>

@@ -201,8 +201,14 @@ function manage_page(name, link, action) {
         url: "shared/php/rbac_edit_page.php",
         data: JSON.stringify(data),
         contentType: 'application/json',
-        dataType: "text",
+        dataType: "html",
         success: function(response) {
+            if (response.startsWith('{"error":')) {
+                // Handle JSON error response
+                const errorData = JSON.parse(response);
+                showToastr('error', errorData.error, 'Error');
+                return;
+            }
             document.getElementById('edit_page_div').innerHTML = response;
             
             // Initialize Select2 elements
@@ -220,7 +226,8 @@ function manage_page(name, link, action) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error:', textStatus, errorThrown);
-            showToastr('error', 'Failed to load edit form', 'error');
+            console.log('Response:', jqXHR.responseText); // Log the full response
+            showToastr('error', 'Failed to load edit form: ' + errorThrown, 'Error');
         }
     });
 }
