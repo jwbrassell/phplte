@@ -24,7 +24,7 @@ if($status == "OK") {
          $employee_name, 
          $employee_email,
          $adom_group,
-         $vzid, 
+         $vzid,
          $adom_groups) = explode('|', $resp);
 
     // Set session variables

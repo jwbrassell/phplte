@@ -39,7 +39,7 @@ if ($validuser == 1) {
                                     <span class="fa-li">
                                         <i class="fab fa-lg fa-slack"></i>
                                     </span>
-                                    <a href="https://verizon.enterprise.slack.com/user/@<?php echo $slack; ?>" 
+                                    <a href="https://sampleorganization.enterprise.slack.com/user/@<?php echo $slack; ?>"
                                        target="_blank">Connect on Slack</a>
                                 </li>
                                 
@@ -53,7 +53,7 @@ if ($validuser == 1) {
                             </ul>
                         </div>
                         <div class="col-4 text-center">
-                            <img src="https://profilepicture.verizon.com/apps/photoapp/ImageServlet?eid=<?php echo $vzid; ?>" 
+                            <img src="https://profilepicture.sampleorganization.com/apps/photoapp/ImageServlet?eid=<?php echo $vzid; ?>"
                                  class="img-circle img-fluid"
                                  alt="User Profile Picture">
                         </div>
@@ -63,7 +63,7 @@ if ($validuser == 1) {
         </div>
     </div>
     <div class="modal-footer justify-content-between">
-        <a href="https://oneprofile.verizon.com/profile/<?php echo $vzid; ?>" 
+        <a href="https://oneprofile.sampleorganization.com/profile/<?php echo $vzid; ?>"
            target="_blank" 
            class="btn btn-primary">View Profile</a>
         <button type="button" 

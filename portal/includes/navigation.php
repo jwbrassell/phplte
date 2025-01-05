@@ -91,7 +91,7 @@
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                             <span class="dropdown-item dropdown-header">
                                 <div class="dropdown-divider"></div>
-                                <img src="https://profilepicture.verizon.com/apps/photoapp/ImageServlet?eid=<?php echo $_SESSION[$APP."_user_num"]; ?>" 
+                                <img src="https://profilepicture.sampleorganization.com/apps/photoapp/ImageServlet?eid=<?php echo $_SESSION[$APP."_user_num"]; ?>"
                                      class="img-circle elevation-2" 
                                      alt="User Image">
                                 <div class="dropdown-divider"></div>
@@ -112,12 +112,12 @@
                     <!-- User Panel -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="https://profilepicture.verizon.com/apps/photoapp/ImageServlet?eid=<?php echo $_SESSION[$APP."_user_num"]; ?>" 
+                            <img src="https://profilepicture.sampleorganization.com/apps/photoapp/ImageServlet?eid=<?php echo $_SESSION[$APP."_user_num"]; ?>"
                                  class="img-circle elevation-2" 
                                  alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="https://oneprofile.verizon.com/profile/<?php echo $_SESSION[$APP."_user_num"]; ?>" 
+                            <a href="https://oneprofile.sampleorganization.com/profile/<?php echo $_SESSION[$APP."_user_num"]; ?>"
                                target="_blank" 
                                class="d-block"><?php echo "$fname $lname"; ?></a>
                         </div>

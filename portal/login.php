@@ -172,7 +172,7 @@ window.onerror = function(msg, url, line) {
                                class="form-control" 
                                name="login_user" 
                                <?php if(!isset($uname)) { 
-                                   echo 'placeholder="Verizon ID"'; 
+                                   echo 'placeholder="SampleOrganization ID"';
                                } else { 
                                    echo 'value="'.$uname.'"'; 
                                } ?>>
