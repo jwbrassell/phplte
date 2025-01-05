@@ -147,5 +147,200 @@
         "new_value": "after"
       }
     }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.412960",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for audit logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "test_id": "677af1d9600d9",
+      "timestamp": "2025-01-05 20:55:53",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.508061",
+    "type": "user_activity",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "User activity: test_action",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "action": "test_action",
+      "status": "success",
+      "details": {
+        "test": true
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.555227",
+    "type": "audit",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Audit: test_change on test_entity",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "action": "test_change",
+      "entity": "test_entity",
+      "before": {
+        "old": 1
+      },
+      "after": {
+        "new": 2
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.448996",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for audit logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "test_id": "677af1fb69c0f",
+      "timestamp": "2025-01-05 20:56:27",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.540751",
+    "type": "user_activity",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "User activity: test_action",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "action": "test_action",
+      "status": "success",
+      "details": {
+        "test": true
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.586433",
+    "type": "audit",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Audit: test_change on test_entity",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "action": "test_change",
+      "entity": "test_entity",
+      "before": {
+        "old": 1
+      },
+      "after": {
+        "new": 2
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.007922",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for audit logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "test_id": "677af2daf2185",
+      "timestamp": "2025-01-05 21:00:10",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.098713",
+    "type": "user_activity",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "User activity: test_action",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "action": "test_action",
+      "status": "success",
+      "details": {
+        "test": true
+      }
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.144472",
+    "type": "audit",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Audit: test_change on test_entity",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "action": "test_change",
+      "entity": "test_entity",
+      "before": {
+        "old": 1
+      },
+      "after": {
+        "new": 2
+      }
+    }
   }
 ]

@@ -14,5 +14,65 @@
       "timestamp": "2025-01-05 20:22:37",
       "source": "test_write.php"
     }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.460843",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for general logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "test_id": "677af1d96c94d",
+      "timestamp": "2025-01-05 20:55:53",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.496078",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for general logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "test_id": "677af1fb75437",
+      "timestamp": "2025-01-05 20:56:27",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.053919",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for general logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "test_id": "677af2db09514",
+      "timestamp": "2025-01-05 21:00:11",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
   }
 ]

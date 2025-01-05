@@ -11,43 +11,31 @@ class Logger:
             self.log_type = log_type
             # Get the absolute path to the script
             script_path = Path(os.path.abspath(__file__))
-            print(f"Script path: {script_path}")
-            
             # Navigate up to project root (from shared/scripts/modules/logging)
             script_dir = os.path.dirname(os.path.abspath(__file__))
             root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(script_dir))))
-            print(f"Root directory: {root_dir}")
             
             # Set log directory under shared/data/logs/system
             self.base_dir = Path(root_dir) / 'shared' / 'data' / 'logs' / 'system'
             self.log_dir = self.base_dir / log_type
-            print(f"Log directory: {self.log_dir}")
             
             self.ensure_log_directory()
         except Exception as e:
-            print(f"Error in initialization: {str(e)}")
+            sys.stderr.write(f"CRITICAL: Logger initialization failed: {str(e)}\n")
             raise
 
     def ensure_log_directory(self):
         """Ensure the log directory exists with proper permissions"""
         try:
-            print(f"Creating directory: {self.log_dir}")
             self.log_dir.mkdir(parents=True, exist_ok=True)
-            
-            # Set directory permissions to 755
-            print("Setting directory permissions")
             os.chmod(self.log_dir, 0o755)
-            
-            # Verify permissions
-            perms = oct(os.stat(self.log_dir).st_mode)[-3:]
-            print(f"Directory permissions: {perms}")
             
             # Check if directory is writable
             if not os.access(self.log_dir, os.W_OK):
-                print(f"Warning: Directory {self.log_dir} is not writable")
+                sys.stderr.write(f"CRITICAL: Directory {self.log_dir} is not writable\n")
                 
         except Exception as e:
-            print(f"Error ensuring directory: {str(e)}")
+            sys.stderr.write(f"CRITICAL: Failed to create log directory: {str(e)}\n")
             raise
 
     def get_log_file(self):
@@ -78,7 +66,6 @@ class Logger:
         import tempfile
         
         log_file = self.get_log_file()
-        print(f"Writing to log file: {log_file}")
         self.ensure_log_file(log_file)
         
         # Create a temporary file in the same directory
@@ -120,7 +107,7 @@ class Logger:
             os.chmod(log_file, 0o644)
             
         except Exception as e:
-            print(f"Error writing log: {str(e)}")
+            sys.stderr.write(f"CRITICAL: Failed to write log: {str(e)}\n")
             if temp_file:
                 try:
                     os.unlink(temp_file.name)
@@ -132,19 +119,31 @@ class Logger:
         """Main logging method"""
         context = context or {}
         
+        # Extract user info and common fields
         log_data = {
             'timestamp': datetime.now().isoformat(),
             'type': context.get('type', 'general'),
             'user': context.get('user', 'anonymous'),
+            'user_id': context.get('user_id', 'unknown'),
+            'user_email': context.get('user_email', 'unknown'),
+            'user_groups': context.get('user_groups', 'none'),
+            'page': context.get('page', 'unknown'),
             'message': message,
-            'details': {
-                'level': level,
-                'ip': context.get('ip', 'unknown'),
-                'user_agent': context.get('user_agent', 'unknown'),
-                'session_id': context.get('session_id', 'no_session'),
-                **context
-            }
+            'level': level,
+            'ip': context.get('ip', 'unknown'),
+            'user_agent': context.get('user_agent', 'unknown'),
+            'session_id': context.get('session_id', 'no_session')
         }
+
+        # Remove extracted fields from context to avoid duplication
+        context_copy = context.copy()
+        for field in ['type', 'user', 'user_id', 'user_email', 'user_groups', 
+                     'page', 'ip', 'user_agent', 'session_id']:
+            context_copy.pop(field, None)
+
+        # Add remaining context as details
+        if context_copy:
+            log_data['details'] = context_copy
 
         self.write_log(log_data)
 
@@ -157,22 +156,17 @@ def main():
 
         log_type = sys.argv[1]
         message = sys.argv[2]
-        print(f"Log type: {log_type}")
-        print(f"Message: {message}")
-        
         try:
             context = json.loads(sys.argv[3])
-            print(f"Context: {json.dumps(context, indent=2)}")
         except json.JSONDecodeError as e:
-            print(f"Error decoding context: {str(e)}")
+            sys.stderr.write(f"ERROR: Failed to decode context: {str(e)}\n")
             context = {}
 
         logger = Logger(log_type)
         logger.log(message, context.get('level', 'INFO'), context)
-        print("Log written successfully")
         
     except Exception as e:
-        print(f"Error in main: {str(e)}")
+        sys.stderr.write(f"CRITICAL: Logger failed: {str(e)}\n")
         sys.exit(1)
 
 if __name__ == '__main__':

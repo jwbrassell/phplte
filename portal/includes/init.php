@@ -19,11 +19,6 @@ if (strpos($domain, ':') !== false) {
     $domain = strstr($domain, ':', true); // Remove port number if present
 }
 
-error_log("Session configuration:");
-error_log("Base path: " . $basePath);
-error_log("Domain: " . $domain);
-error_log("Full URL: " . $_SERVER['REQUEST_URI']);
-
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start([
@@ -33,9 +28,6 @@ if (session_status() === PHP_SESSION_NONE) {
         'use_only_cookies' => true,
         'cookie_samesite' => 'Lax'
     ]);
-    error_log("Session started:");
-    error_log("Session ID: " . session_id());
-    error_log("Session cookie params: " . print_r(session_get_cookie_params(), true));
 }
 
 date_default_timezone_set('UTC');
@@ -68,15 +60,10 @@ if (!isset($_SESSION[$APP."_user_name"])) {
 $data = array();
 $menuFile = $DIR.'/config/menu-bar.json';
 
-// Debug output
-error_log("Attempting to read menu file: " . $menuFile);
-
 if (file_exists($menuFile)) {
     $jsonContent = file_get_contents($menuFile);
     if ($jsonContent !== false) {
         $data = json_decode($jsonContent, true);
-        error_log("Raw menu data: " . print_r($data, true));
-        
         if ($data !== null) {
             // Validate and sanitize menu data
             $menuData = array();
@@ -85,23 +72,19 @@ if (file_exists($menuFile)) {
             foreach ($data as $key => $value) {
                 // Skip metadata fields
                 if ($key === 'description' || $key === 'summary') {
-                    error_log("Skipping metadata field: $key");
                     continue;
                 }
                 
                 // Validate menu category structure
                 if (!is_array($value)) {
-                    error_log("Invalid menu category (not an array): $key");
                     continue;
                 }
                 
                 if (!isset($value['type'])) {
-                    error_log("Invalid menu category (missing type): $key");
                     continue;
                 }
                 
                 if (!isset($value['urls']) || !is_array($value['urls'])) {
-                    error_log("Invalid menu category (invalid urls): $key");
                     continue;
                 }
                 
@@ -109,12 +92,10 @@ if (file_exists($menuFile)) {
                 $validUrls = array();
                 foreach ($value['urls'] as $pageName => $pageDetails) {
                     if (!is_array($pageDetails)) {
-                        error_log("Invalid page details for $key -> $pageName");
                         continue;
                     }
                     
                     if (!isset($pageDetails['url'])) {
-                        error_log("Missing URL for $key -> $pageName");
                         continue;
                     }
                     
@@ -136,17 +117,13 @@ if (file_exists($menuFile)) {
             
             $data = $menuData;
             ksort($data);
-            error_log("Processed menu data: " . print_r($data, true));
         } else {
-            error_log("Failed to decode JSON from menu-bar.json");
             $data = array(); // Fallback to empty array
         }
     } else {
-        error_log("Failed to read contents of menu-bar.json");
         $data = array(); // Fallback to empty array
     }
 } else {
-    error_log("Menu file not found at: " . $menuFile);
     $data = array(); // Fallback to empty array
 }
 

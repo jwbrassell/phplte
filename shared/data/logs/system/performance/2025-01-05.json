@@ -1508,5 +1508,1688 @@
       "duration_ms": 62.18409538269043,
       "memory_usage": 2097152
     }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:10.538414",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 105.2680015564ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 105.26800155639648,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:10.916225",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 168.06697845459ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 168.06697845458984,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:11.033904",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 58.347940444946ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 58.34794044494629,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:13.013497",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 102.79011726379ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 102.79011726379395,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:13.349054",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 130.45787811279ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 130.45787811279297,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:13.467136",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 60.586214065552ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 60.58621406555176,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:15.816334",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 107.0339679718ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 107.03396797180176,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:16.098527",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 82.791090011597ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 82.79109001159668,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:16.280343",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 121.67096138ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 121.67096138000488,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:16.405577",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 63.394069671631ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 63.39406967163086,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:21.528440",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 102.62012481689ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 102.62012481689453,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:24.762907",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 106.61602020264ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 106.61602020263672,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:31.178897",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 103.90520095825ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 103.90520095825195,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:47:59.833678",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 107.22494125366ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 107.22494125366211,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:48:04.590624",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 117.79499053955ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 117.79499053955078,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:48:54.621676",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 115.16094207764ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 115.16094207763672,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:49:05.662528",
+    "type": "performance",
+    "user": "Test User",
+    "message": "Performance: page_execution took 104.93612289429ms",
+    "details": {
+      "level": "INFO",
+      "ip": "::1",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+      "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+      "user": "Test User",
+      "type": "performance",
+      "operation": "page_execution",
+      "duration_ms": 104.93612289428711,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:54:31.972867",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "test_logging.php",
+    "message": "Performance: page_execution took 57.968854904175ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 57.968854904174805,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.435642",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for performance logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "test_id": "677af1d96673e",
+      "timestamp": "2025-01-05 20:55:53",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.528552",
+    "type": "performance",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Performance: test_operation took 100ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "operation": "test_operation",
+      "duration_ms": 100,
+      "memory_usage": 2097152,
+      "test": true
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:55:53.602812",
+    "type": "performance",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Performance: page_execution took 318.79281997681ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "e21d07e494cc0c6f837bd2e4a50302d3",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 318.79281997680664,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.470651",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for performance logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "test_id": "677af1fb6ef8b",
+      "timestamp": "2025-01-05 20:56:27",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.562717",
+    "type": "performance",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Performance: test_operation took 100ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "operation": "test_operation",
+      "duration_ms": 100,
+      "memory_usage": 2097152,
+      "test": true
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:27.630196",
+    "type": "performance",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Performance: page_execution took 374.68099594116ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "16d0a1e1a2dc83e862f8cf3ad7db8a2b",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 374.6809959411621,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:37.417205",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution took 109.0829372406ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 109.08293724060059,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:37.702439",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 86.688995361328ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 86.68899536132812,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:37.894241",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution took 125.89311599731ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 125.89311599731445,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:38.009467",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution took 57.081937789917ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 57.08193778991699,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:43.985341",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 107.41806030273ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 107.41806030273438,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:52.152730",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution took 101.06801986694ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 101.06801986694336,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:52.433686",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 80.348968505859ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 80.34896850585938,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:52.621508",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution took 127.8018951416ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 127.80189514160156,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:52.737217",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution took 56.994915008545ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 56.99491500854492,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:56:55.345182",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 106.40501976013ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 106.40501976013184,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:57:33.244613",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 94.83814239502ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 94.83814239501953,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:57:39.603400",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 115.03100395203ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 115.03100395202637,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:57:40.134467",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 108.2079410553ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 108.20794105529785,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:57:42.917401",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 182.41190910339ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 182.41190910339355,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:57:48.371957",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 107.71203041077ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 107.7120304107666,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T14:57:52.007876",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution took 108.94894599915ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution",
+      "duration_ms": 108.94894599914551,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.028469",
+    "type": "general",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Test message for performance logging",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "test_id": "677af2db03419",
+      "timestamp": "2025-01-05 21:00:11",
+      "test_run": true,
+      "test_type": "user_info_verification"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.120105",
+    "type": "performance",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Performance: test_operation took 100ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "operation": "test_operation",
+      "duration_ms": 100,
+      "memory_usage": 2097152,
+      "test": true
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:11.188041",
+    "type": "performance",
+    "user": "test",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "test_logging.php",
+    "message": "Performance: page_execution:test_logging.php took 373.36611747742ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "46200ad2d629e56407c6053496be215f",
+    "details": {
+      "operation": "page_execution:test_logging.php",
+      "duration_ms": 373.366117477417,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:00:33.474123",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 52.162170410156ms",
+    "level": "INFO",
+    "ip": "unknown",
+    "user_agent": "unknown",
+    "session_id": "",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 52.16217041015625,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:01:47.622559",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 107.70606994629ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 107.70606994628906,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:01:47.897973",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 78.940868377686ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 78.94086837768555,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:01:48.077919",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 120.77498435974ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 120.77498435974121,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:01:48.194699",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 57.744026184082ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 57.74402618408203,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:01:55.752173",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 110.21399497986ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 110.2139949798584,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:20:52.049263",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 142.47298240662ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 142.4729824066162,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:20:52.414923",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 94.931125640869ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 94.93112564086914,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:20:52.627091",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 142.982006073ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 142.98200607299805,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:20:52.762337",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 67.725896835327ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 67.72589683532715,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:13.096986",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 129.10008430481ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 129.10008430480957,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:13.423143",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 106.31585121155ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 106.31585121154785,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:13.636802",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 145.35307884216ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 145.3530788421631,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:13.770957",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 67.615985870361ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 67.61598587036133,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:59.280968",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 169.43621635437ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 169.43621635437012,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:59.505591",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 77.526807785034ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 77.52680778503418,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:59.703942",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 133.94594192505ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 133.94594192504883,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T15:23:59.830570",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 61.609983444214ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "71d0c264964707eb6c0ef2d9cc6540d8",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 61.60998344421387,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:14.249211",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "login.php",
+    "message": "Performance: page_execution:login.php took 121.906042099ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:login.php",
+      "duration_ms": 121.90604209899902,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:14.411413",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "login",
+    "message": "Performance: client_side_page load complete took 21.40000009536743ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "",
+    "details": {
+      "operation": "client_side_page load complete",
+      "duration_ms": "21.40000009536743",
+      "memory_usage": 2097152,
+      "url": "No URL provided"
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:14.471286",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "unknown",
+    "message": "Performance: page_execution:unknown took 63.733816146851ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "",
+    "details": {
+      "operation": "page_execution:unknown",
+      "duration_ms": 63.733816146850586,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:14.647202",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 116.4219379425ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 116.42193794250488,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:14.767652",
+    "type": "performance",
+    "user": "anonymous",
+    "user_id": "unknown",
+    "user_email": "unknown",
+    "user_groups": "none",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 59.355974197388ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 59.355974197387695,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:18.385721",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "login.php",
+    "message": "Performance: page_execution:login.php took 226.76491737366ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:login.php",
+      "duration_ms": 226.76491737365723,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:18.507327",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "index.php",
+    "message": "Performance: page_execution:index.php took 59.727907180786ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:index.php",
+      "duration_ms": 59.72790718078613,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:18.794166",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 124.85384941101ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 124.85384941101074,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:18.914556",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 59.857845306396ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 59.857845306396484,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:25.108323",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 108.63995552063ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 108.63995552062988,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:25.318943",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 75.469970703125ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 75.469970703125,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:25.503090",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 123.79908561707ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 123.79908561706543,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:25.626519",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 60.66107749939ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 60.66107749938965,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:29.939704",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "user_admin.php",
+    "message": "Performance: page_execution:user_admin.php took 117.55108833313ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:user_admin.php",
+      "duration_ms": 117.55108833312988,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:30.200548",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 121.98400497437ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 121.98400497436523,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:30.320619",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 58.83002281189ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 58.83002281188965,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:35.844380",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "user_admin.php",
+    "message": "Performance: page_execution:user_admin.php took 108.06488990784ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:user_admin.php",
+      "duration_ms": 108.06488990783691,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:36.117556",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 135.68592071533ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 135.68592071533203,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:38:36.238131",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 59.560060501099ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 59.56006050109863,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:13.919876",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "user_admin.php",
+    "message": "Performance: page_execution:user_admin.php took 113.4979724884ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:user_admin.php",
+      "duration_ms": 113.49797248840332,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:14.184532",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 121.92702293396ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 121.92702293395996,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:14.317395",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 67.323923110962ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 67.32392311096191,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:16.992196",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "admin_logs.php",
+    "message": "Performance: page_execution:admin_logs.php took 107.14387893677ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:admin_logs.php",
+      "duration_ms": 107.14387893676758,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:17.198428",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "get_logs.php",
+    "message": "Performance: page_execution:get_logs.php took 73.611974716187ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:get_logs.php",
+      "duration_ms": 73.61197471618652,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:17.378522",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 118.53384971619ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 118.53384971618652,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:46:17.499836",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 59.432983398438ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 59.4329833984375,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:47:00.862732",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "user_admin.php",
+    "message": "Performance: page_execution:user_admin.php took 111.63687705994ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:user_admin.php",
+      "duration_ms": 111.63687705993652,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:47:01.123524",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "vz.png",
+    "message": "Performance: page_execution:vz.png took 120.43714523315ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:vz.png",
+      "duration_ms": 120.4371452331543,
+      "memory_usage": 2097152
+    }
+  },
+  {
+    "timestamp": "2025-01-05T16:47:01.250144",
+    "type": "performance",
+    "user": "Test User",
+    "user_id": "test123",
+    "user_email": "test@example.com",
+    "user_groups": "admin,user",
+    "page": "404.php",
+    "message": "Performance: page_execution:404.php took 59.582948684692ms",
+    "level": "INFO",
+    "ip": "::1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "session_id": "706b8a1b25ea10e98fca92acd4d1bfe0",
+    "details": {
+      "operation": "page_execution:404.php",
+      "duration_ms": 59.58294868469238,
+      "memory_usage": 2097152
+    }
   }
 ]

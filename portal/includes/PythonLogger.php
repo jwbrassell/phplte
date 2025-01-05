@@ -16,7 +16,8 @@ class PythonLogger {
         $this->pythonScript = $portalDir . '/shared/scripts/modules/logging/logger.py';
         
         if (!file_exists($this->pythonScript)) {
-            error_log("Python logging script not found at: " . $this->pythonScript);
+            // Critical error - logging system unavailable
+            error_log("CRITICAL: Logging system not properly configured - Python script missing");
             throw new Exception("Logging system not properly configured");
         }
     }
@@ -25,9 +26,23 @@ class PythonLogger {
      * Main logging method that passes data to Python
      */
     public function log($message, $level = 'INFO', $context = []) {
+        global $PAGE;
+        
+        // Get comprehensive user info
+        $userInfo = [
+            'name' => $_SESSION[$GLOBALS['APP']."_user_name"] ?? null,
+            'id' => $_SESSION[$GLOBALS['APP']."_user_vzid"] ?? null,
+            'email' => $_SESSION[$GLOBALS['APP']."_user_email"] ?? null,
+            'groups' => $_SESSION[$GLOBALS['APP']."_adom_groups"] ?? null
+        ];
+        
         // Add standard context data
         $context = array_merge([
-            'user' => $_SESSION[$GLOBALS['APP']."_user_name"] ?? 'anonymous',
+            'user' => $userInfo['name'] ?: 'anonymous',
+            'user_id' => $userInfo['id'] ?: 'unknown',
+            'user_email' => $userInfo['email'] ?: 'unknown',
+            'user_groups' => $userInfo['groups'] ?: 'none',
+            'page' => $PAGE ?? 'unknown',
             'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
             'session_id' => session_id() ?? 'no_session'
@@ -48,9 +63,10 @@ class PythonLogger {
         exec($command, $output, $returnCode);
         
         if ($returnCode !== 0) {
-            error_log("Python logger failed with return code $returnCode");
-            error_log("Command: $command");
-            error_log("Output: " . implode("\n", $output));
+            // Only log critical failures
+            if ($returnCode !== 1) { // Ignore minor failures
+                error_log("CRITICAL: Logging system failure");
+            }
             return false;
         }
         
@@ -95,14 +111,14 @@ class PythonLogger {
      * Log performance metrics
      */
     public function logPerformance($operation, $duration, $context = []) {
-        $perfData = [
+        global $PAGE;
+        $context = array_merge([
             'type' => 'performance',
             'operation' => $operation,
             'duration_ms' => $duration,
-            'memory_usage' => memory_get_usage(true)
-        ];
-
-        $context = array_merge($perfData, $context);
+            'memory_usage' => memory_get_usage(true),
+            'page' => $PAGE ?? 'unknown'
+        ], $context);
         return $this->log("Performance: $operation took {$duration}ms", 'INFO', $context);
     }
 
@@ -110,12 +126,14 @@ class PythonLogger {
      * Log data modifications
      */
     public function logAudit($action, $beforeState, $afterState, $entity) {
+        global $PAGE;
         $context = [
             'type' => 'audit',
             'action' => $action,
             'entity' => $entity,
             'before' => $beforeState,
-            'after' => $afterState
+            'after' => $afterState,
+            'page' => $PAGE ?? 'unknown'
         ];
 
         return $this->log("Audit: $action on $entity", 'INFO', $context);

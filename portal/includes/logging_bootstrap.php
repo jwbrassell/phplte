@@ -48,8 +48,14 @@ function logActivity($action, $details = [], $status = 'success') {
 }
 
 function logError($message, $context = []) {
-    global $errorLogger;
-    $errorLogger->log($message, 'ERROR', $context);
+    global $errorLogger, $PAGE;
+    
+    // Ensure error context includes page name if not already set
+    if (!isset($context['page'])) {
+        $context['page'] = $PAGE ?? 'unknown';
+    }
+    
+    return $errorLogger->log($message, 'ERROR', $context);
 }
 
 function logAudit($action, $beforeState, $afterState, $entity) {
@@ -58,10 +64,16 @@ function logAudit($action, $beforeState, $afterState, $entity) {
 }
 
 function logPerformance($operation, $duration = null, $context = []) {
-    global $perfLogger, $scriptStartTime;
+    global $perfLogger, $scriptStartTime, $PAGE;
     
     if ($duration === null) {
         $duration = (microtime(true) - $scriptStartTime) * 1000; // Convert to milliseconds
+    }
+    
+    // Include page name in operation for clarity
+    $pageContext = $PAGE ?? 'unknown';
+    if ($operation === 'page_execution') {
+        $operation = "page_execution:{$pageContext}";
     }
     
     $perfLogger->logPerformance($operation, $duration, $context);

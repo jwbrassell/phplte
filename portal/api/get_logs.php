@@ -152,7 +152,7 @@ try {
                             'type' => $entry['type'] ?? $fileInfo['type'],
                             'user' => $entry['user'] ?? 'system',
                             'message' => $entry['message'] ?? '',
-                            'details' => json_encode($entry['details'] ?? [], JSON_PRETTY_PRINT)
+                            'details' => $entry['details'] ?? []
                         ];
                         error_log("Processed entry: " . json_encode($formattedEntry));
                         $allEntries[] = $formattedEntry;

@@ -156,17 +156,11 @@ $(function () {
                 data: 'details',
                 render: function(data, type, row) {
                     if (type === 'display') {
-                        try {
-                            const details = typeof data === 'string' ? JSON.parse(data) : data;
-                            if (!details || Object.keys(details).length === 0) {
+                            if (!data || Object.keys(data).length === 0) {
                                 return '<span class="text-muted">No details</span>';
                             }
                             return '<button type="button" class="btn btn-info btn-sm" onclick=\'showDetails(' + 
-                                   JSON.stringify(details) + ')\'><i class="fas fa-info-circle"></i></button>';
-                        } catch (e) {
-                            console.error('Error parsing details:', e);
-                            return '<span class="text-danger">Invalid JSON</span>';
-                        }
+                                   JSON.stringify(data) + ')\'><i class="fas fa-info-circle"></i></button>';
                     }
                     return data;
                 }
