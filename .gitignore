@@ -9,7 +9,8 @@ Thumbs.db
 
 # IDE files
 .idea/
-.vscode/
+.vscode/*
+!*.code-workspace
 *.sublime-workspace
 *.sublime-project
 .codegpt
@@ -19,6 +20,9 @@ portal/logs/*/*.log
 portal/logs/*.log
 !portal/logs/*/.gitkeep
 !portal/logs/.gitkeep
+shared/data/logs/system/*/*.json
+!shared/data/logs/system/*/.gitkeep
+!shared/data/logs/system/.gitkeep
 *.sql
 *.sqlite
 
