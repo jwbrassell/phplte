@@ -6,12 +6,18 @@
 
 include('../config.php');
 
-// Get and parse incoming data
-$rawData = file_get_contents('php://input');
-$posted_data = json_decode($rawData, true);
+// Get configuration data
+if (!isset($posted_data) || !is_array($posted_data)) {
+    // Try reading from POST input if not passed directly
+    $posted_data = [];
+    $rawData = file_get_contents('php://input');
+    if (!empty($rawData)) {
+        $posted_data = json_decode($rawData, true);
+    }
+}
 
 // Validate required parameters
-if(!isset($posted_data['type']) || !isset($posted_data['data_directory'])) {
+if (!isset($posted_data['type']) || !isset($posted_data['data_directory'])) {
     echo "Please provide type and directory for datatables data.";
     return;
 }

@@ -1,0 +1,105 @@
+{
+  "rbac_settings": {
+    "adom_groups": ["admin", "user"],
+    "category_list": ["Dashboard", "Admin", "Reports", "Settings"],
+    "icon_list": [
+      "fas fa-tachometer-alt",
+      "fas fa-users-cog",
+      "fas fa-chart-bar",
+      "fas fa-cog",
+      "fas fa-file",
+      "fas fa-folder",
+      "fas fa-list"
+    ]
+  },
+  "menu_structure": {
+    "description": "User Management",
+    "summary": "Manage user access and permissions",
+    "oncall": {
+      "type": "single",
+      "img": "fas fa-calendar-alt",
+      "urls": {
+        "On-Call Schedule": {
+          "url": "oncall.php",
+          "roles": ["admin", "user"]
+        }
+      }
+    },
+    "dashboard": {
+      "type": "single",
+      "img": "fas fa-tachometer-alt",
+      "urls": {
+        "Dashboard": {
+          "url": "index.php",
+          "roles": ["admin", "user"]
+        }
+      }
+    },
+    "admin": {
+      "type": "category",
+      "img": "fas fa-users-cog",
+      "urls": {
+        "User Admin": {
+          "url": "user_admin.php",
+          "roles": ["admin"]
+        },
+        "System Logs": {
+          "url": "admin_logs.php",
+          "roles": ["admin"]
+        },
+        "WebLinks Admin": {
+          "url": "weblinks_admin.php",
+          "roles": ["admin"]
+        }
+      }
+    },
+    "settings": {
+      "type": "category",
+      "img": "fas fa-cog",
+      "urls": {
+        "System Settings": {
+          "url": "settings.php",
+          "roles": ["admin"]
+        },
+        "User Settings": {
+          "url": "user_settings.php",
+          "roles": ["admin", "user"]
+        }
+      }
+    },
+    "weblinks": {
+      "type": "single",
+      "img": "fas fa-link",
+      "urls": {
+        "WebLinks": {
+          "url": "weblinks.php",
+          "roles": ["admin", "user"]
+        }
+      }
+    },
+    "examples": {
+      "type": "category",
+      "img": "fas fa-list",
+      "urls": {
+        "Datatable List Example": {
+          "url": "e_datatable_from_json_list_of_lists.php",
+          "roles": ["admin", "user"]
+        },
+        "Datatable Dictionary Example": {
+          "url": "e_datatable_from_json_dictionary.php",
+          "roles": ["admin", "user"]
+        }
+      }
+    }
+  },
+  "pages_config": {
+    "headers": ["Name", "File", "Type", "Roles", "Actions"],
+    "pages_table_data": [
+      ["Dashboard", "index.php", "Single", "admin, user", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"index\", \"index.php\", \"edit\")'><i class='fas fa-edit'></i></button>"],
+      ["User Admin", "user_admin.php", "Single", "admin", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"user_admin\", \"user_admin.php\", \"edit\")'><i class='fas fa-edit'></i></button>"],
+      ["System Settings", "settings.php", "Category", "admin", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"settings\", \"settings.php\", \"edit\")'><i class='fas fa-edit'></i></button>"],
+      ["User Settings", "user_settings.php", "Category", "admin, user", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"user_settings\", \"user_settings.php\", \"edit\")'><i class='fas fa-edit'></i></button>"]
+    ],
+    "pages_table_headers": ["Name", "File", "Type", "Roles", "Actions"]
+  }
+}

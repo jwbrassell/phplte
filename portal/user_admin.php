@@ -1,21 +1,40 @@
 <?php
 include('header.php');
 
-// Load configuration files
-$menu_bar_file_path = __DIR__ . '/config/menu-bar.json';
-$rbac_file_path = __DIR__ . '/config/rbac.json';
+// Configure datatable
+$posted_data = [
+    'type' => 'rbac_pages',
+    'data_directory' => '',
+    'root_data_dir' => 'config',
+    'data_key' => 'pages_table_data',
+    'header_key' => 'pages_table_headers',
+    'row_height' => 30
+];
 
-// Load and parse JSON data
-$menu_bar_data = file_exists($menu_bar_file_path) ? file_get_contents($menu_bar_file_path) : '{}';
-$data = json_decode($menu_bar_data, true) ?: [];
+// Required DataTables assets
+$datatable_assets = [
+    'css' => [
+        'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css',
+        'plugins/datatables-responsive/css/responsive.bootstrap4.min.css',
+        'plugins/datatables-buttons/css/buttons.bootstrap4.min.css'
+    ],
+    'js' => [
+        'plugins/datatables/jquery.dataTables.min.js',
+        'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js',
+        'plugins/datatables-responsive/js/dataTables.responsive.min.js',
+        'plugins/datatables-responsive/js/responsive.bootstrap4.min.js',
+        'plugins/datatables-buttons/js/dataTables.buttons.min.js',
+        'plugins/datatables-buttons/js/buttons.bootstrap4.min.js'
+    ]
+];
 
-$rbac_file_data = file_exists($rbac_file_path) ? file_get_contents($rbac_file_path) : '{}';
-$rbac_data = json_decode($rbac_file_data, true) ?: [];
-
-// Extract configuration data
-$rbac_groups = $rbac_data["adom_groups"];
-$categories = $rbac_data["category_list"];
-$icons = $rbac_data["icon_list"];
+// Load DataTables assets
+foreach ($datatable_assets['css'] as $css) {
+    echo "<link rel='stylesheet' href='$css'>\n";
+}
+foreach ($datatable_assets['js'] as $js) {
+    echo "<script src='$js'></script>\n";
+}
 
 // Handle login submission
 if (isset($_POST['login_submit'])) {
@@ -115,8 +134,7 @@ if (isset($_POST['login_submit'])) {
                             <h3 class="card-title">Pages</h3>
                         </div>
                         <div class="card-body">
-                            <div id="rbac_pages_table_div" name="rbac_pages_table_div">
-                            </div>
+                            <?php require('modals/datatable.php'); ?>
                         </div>
                     </div>
                 </div>
@@ -293,8 +311,8 @@ function sendRequest(script_directory = null) {
                 showToastr('error', 'Operation failed', 'error');
             } else {
                 showToastr('success', response || 'Operation successful', 'success');
-                // Reload the table to show updated data
-                loadTable();
+                // Reload the page to show updated data
+                location.reload();
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -304,45 +322,10 @@ function sendRequest(script_directory = null) {
     });
 }
 
-/**
- * Loads card data with table
- */
-function loadTable() {
-    const url = 'modals/datatable.php';
-    const postData = {
-        type: "rbac_pages",
-        data_directory: "",
-        root_data_dir: "config",
-        data_key: "pages_table_data",
-        header_key: "pages_table_headers",
-        row_height: 30
-    };
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(postData)
-    })
-    .then(response => response.text())
-    .then(data => {
-        $('#rbac_pages_table_div').html(data);
-        $('#rbac_pages_table').DataTable({
-            createdRow: function(row, data, dataIndex) {
-                $('td:eq(2)', row).addClass('custom-word-wrap');
-            }
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showToastr('error', 'Failed to load table', 'error');
-    });
-}
-
 // Initialize on page load
 $(function() {
-    loadTable();
+    // Apply word wrap to Type column after table is loaded
+    $('table#table_rbac_pages td:nth-child(3)').addClass('custom-word-wrap');
 });
 </script>
 <?php

@@ -1,0 +1,10 @@
+{
+  "headers": ["Name", "File", "Type", "Roles", "Actions"],
+  "pages_table_data": [
+    ["Dashboard", "index.php", "Single", "admin, user", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"index\", \"index.php\", \"edit\")'><i class='fas fa-edit'></i></button>"],
+    ["User Admin", "user_admin.php", "Single", "admin", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"user_admin\", \"user_admin.php\", \"edit\")'><i class='fas fa-edit'></i></button>"],
+    ["System Settings", "settings.php", "Category", "admin", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"settings\", \"settings.php\", \"edit\")'><i class='fas fa-edit'></i></button>"],
+    ["User Settings", "user_settings.php", "Category", "admin, user", "<button type='button' class='btn btn-primary btn-sm' onclick='manage_page(\"user_settings\", \"user_settings.php\", \"edit\")'><i class='fas fa-edit'></i></button>"]
+  ],
+  "pages_table_headers": ["Name", "File", "Type", "Roles", "Actions"]
+}

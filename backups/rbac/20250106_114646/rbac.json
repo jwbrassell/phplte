@@ -1,0 +1,32 @@
+{
+  "adom_groups": [
+    ""
+  ],
+  "category_list": [
+    "Dashboard",
+    "Admin",
+    "Reports",
+    "Settings"
+  ],
+  "icon_list": [
+    "fas fa-tachometer-alt",
+    "fas fa-users-cog",
+    "fas fa-chart-bar",
+    "fas fa-cog",
+    "fas fa-file",
+    "fas fa-folder",
+    "fas fa-list"
+  ],
+  "role_definitions": {
+    "admin": {
+      "description": "Full system access",
+      "inherits": [
+        "user"
+      ]
+    },
+    "user": {
+      "description": "Basic user access",
+      "inherits": []
+    }
+  }
+}

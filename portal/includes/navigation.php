@@ -131,8 +131,18 @@
                             data-accordion="false">
                             <?php
                             foreach ($data as $key => $value) {
+                                // Skip metadata fields
+                                if ($key === 'description' || $key === 'summary') {
+                                    continue;
+                                }
+
+                                // Validate menu item structure
+                                if (!is_array($value) || !isset($value['type']) || !isset($value['urls'])) {
+                                    continue;
+                                }
+
                                 // Handle single menu items
-                                if ($value['type'] == 'single') {
+                                if ($value['type'] === 'single' && !empty($value['urls'])) {
                                     foreach ($value['urls'] as $title => $info) {
                                         $displayLink = false;
                                         foreach ($adom_groups as $userRole) {
@@ -159,7 +169,7 @@
                                     }
                                 }
                                 // Handle category menu items
-                                else if ($value['type'] == 'category') {
+                                else if ($value['type'] === 'category' && !empty($value['urls'])) {
                                     $category_authorized = false;
                                     foreach ($value['urls'] as $title => $info) {
                                         $displayLink = false;

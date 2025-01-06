@@ -614,3 +614,11 @@
 2025-01-06 08:59:23,094 - DEBUG - Command: get_common_links
 2025-01-06 08:59:23,094 - DEBUG - Result type: <class 'list'>
 2025-01-06 08:59:23,094 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 8, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:29:57.746995', 'updated_at': '2025-01-06T10:29:57.747120', 'click_count': 0, 'history': []}, {'id': 9, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:29:57.747124', 'updated_at': '2025-01-06T10:29:57.747125', 'click_count': 0, 'history': []}]
+2025-01-06 14:27:07,005 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 14:27:07,006 - DEBUG - Command: get_stats
+2025-01-06 14:27:07,006 - DEBUG - Result type: <class 'dict'>
+2025-01-06 14:27:07,006 - DEBUG - Result: {'total_links': 3, 'total_clicks': 1, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}
+2025-01-06 14:27:07,066 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 14:27:07,066 - DEBUG - Command: get_all_tags
+2025-01-06 14:27:07,066 - DEBUG - Result type: <class 'list'>
+2025-01-06 14:27:07,067 - DEBUG - Result: ['test', 'shopping', 'news', 'tag1', 'tag2', 'tag3']

@@ -24,34 +24,41 @@ if (!isset($request['request_payload']) || !isset($request['request_payload']['d
     exit;
 }
 
-// Get configuration files
+// Get configuration file
 $config_dir = __DIR__ . '/../../config/';
-$rbac_file = $config_dir . 'rbac.json';
-$menu_file = $config_dir . 'menu-bar.json';
+$config_file = $config_dir . 'rbac_config.json';
 
-// Load and validate configurations
-if (!file_exists($rbac_file) || !file_exists($menu_file)) {
+// Load and validate configuration
+if (!file_exists($config_file)) {
     http_response_code(500);
-    echo json_encode(['error' => 'Configuration files not found']);
-    error_log("Missing configuration files - rbac: " . (file_exists($rbac_file) ? 'exists' : 'missing') . 
-              ", menu: " . (file_exists($menu_file) ? 'exists' : 'missing'));
+    echo json_encode(['error' => 'Configuration file not found']);
+    error_log("Missing configuration file: " . $config_file);
     exit;
 }
 
-$rbac_data = json_decode(file_get_contents($rbac_file), true);
-$menu_data = json_decode(file_get_contents($menu_file), true);
+$config_data = json_decode(file_get_contents($config_file), true);
 
-if (!$rbac_data || !isset($rbac_data['adom_groups']) || !isset($rbac_data['icon_list']) || !isset($rbac_data['category_list'])) {
+if (!$config_data || !isset($config_data['rbac_settings']) || !isset($config_data['menu_structure'])) {
     http_response_code(500);
-    echo json_encode(['error' => 'Invalid RBAC configuration structure']);
-    error_log("Invalid RBAC data structure: " . print_r($rbac_data, true));
+    echo json_encode(['error' => 'Invalid configuration structure']);
+    error_log("Invalid configuration structure: " . print_r($config_data, true));
     exit;
 }
 
-if (!$menu_data || !is_array($menu_data)) {
+$rbac_data = $config_data['rbac_settings'];
+$menu_data = $config_data['menu_structure'];
+
+if (!isset($rbac_data['adom_groups']) || !isset($rbac_data['icon_list']) || !isset($rbac_data['category_list'])) {
     http_response_code(500);
-    echo json_encode(['error' => 'Invalid menu configuration structure']);
-    error_log("Invalid menu data structure: " . print_r($menu_data, true));
+    echo json_encode(['error' => 'Invalid RBAC settings structure']);
+    error_log("Invalid RBAC settings structure: " . print_r($rbac_data, true));
+    exit;
+}
+
+if (!is_array($menu_data)) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Invalid menu structure']);
+    error_log("Invalid menu structure: " . print_r($menu_data, true));
     exit;
 }
 

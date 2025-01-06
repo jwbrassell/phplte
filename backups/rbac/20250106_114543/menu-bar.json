@@ -1,0 +1,80 @@
+{
+  "description": "User Management",
+  "summary": "Manage user access and permissions",
+  "oncall": {
+    "type": "single",
+    "img": "fas fa-calendar-alt",
+    "urls": {
+      "On-Call Schedule": {
+        "url": "oncall.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  },
+  "dashboard": {
+    "type": "single",
+    "img": "fas fa-tachometer-alt",
+    "urls": {
+      "Dashboard": {
+        "url": "index.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  },
+  "admin": {
+    "type": "category",
+    "img": "fas fa-users-cog",
+    "urls": {
+      "User Admin": {
+        "url": "user_admin.php",
+        "roles": ["admin"]
+      },
+      "System Logs": {
+        "url": "admin_logs.php",
+        "roles": ["admin"]
+      },
+      "WebLinks Admin": {
+        "url": "weblinks_admin.php",
+        "roles": ["admin"]
+      }
+    }
+  },
+  "settings": {
+    "type": "category",
+    "img": "fas fa-cog",
+    "urls": {
+      "System Settings": {
+        "url": "settings.php",
+        "roles": ["admin"]
+      },
+      "User Settings": {
+        "url": "user_settings.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  },
+  "weblinks": {
+    "type": "single",
+    "img": "fas fa-link",
+    "urls": {
+      "WebLinks": {
+        "url": "weblinks.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  },
+  "examples": {
+    "type": "category",
+    "img": "fas fa-list",
+    "urls": {
+      "Datatable List Example": {
+        "url": "e_datatable_from_json_list_of_lists.php",
+        "roles": ["admin", "user"]
+      },
+      "Datatable Dictionary Example": {
+        "url": "e_datatable_from_json_dictionary.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  }
+}

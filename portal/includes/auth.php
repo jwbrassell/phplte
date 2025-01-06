@@ -11,19 +11,19 @@ function check_access($feature) {
     $adom_groups_string = $_SESSION[$APP."_adom_groups"];
     $adom_groups = explode(",", str_replace(["[", "]", "'", " "], "", $adom_groups_string));
     
-    // Get menu configuration
-    $menuFile = dirname(__FILE__) . '/../config/menu-bar.json';
-    if (!file_exists($menuFile)) {
+    // Get RBAC configuration
+    $configFile = dirname(__FILE__) . '/../config/rbac_config.json';
+    if (!file_exists($configFile)) {
         return false;
     }
     
-    $menuData = json_decode(file_get_contents($menuFile), true);
-    if (!$menuData) {
+    $configData = json_decode(file_get_contents($configFile), true);
+    if (!$configData || !isset($configData['menu_structure'])) {
         return false;
     }
     
     // Check each menu category for the feature
-    foreach ($menuData as $category => $value) {
+    foreach ($configData['menu_structure'] as $category => $value) {
         if (isset($value['urls'])) {
             foreach ($value['urls'] as $title => $info) {
                 if (strpos($info['url'], $feature) !== false) {
@@ -83,6 +83,15 @@ if (in_array($PAGE, $alwaysAllowedPages)) {
     $pageExists = true;
     $pageAllowed = true;
 } else {
+    // Get menu configuration
+    $configFile = dirname(__FILE__) . '/../config/rbac_config.json';
+    if (!file_exists($configFile)) {
+        $data = array();
+    } else {
+        $configData = json_decode(file_get_contents($configFile), true);
+        $data = isset($configData['menu_structure']) ? $configData['menu_structure'] : array();
+    }
+    
     if (!is_array($data)) {
         $data = array();
     }

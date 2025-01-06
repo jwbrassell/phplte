@@ -62,73 +62,54 @@ if (!isset($_SESSION[$APP."_user_name"])) {
 
 // Initialize menu data
 $data = array();
-$menuFile = $DIR.'/config/menu-bar.json';
+$configFile = $DIR.'/config/rbac_config.json';
 
-if (file_exists($menuFile)) {
-    $jsonContent = file_get_contents($menuFile);
+if (file_exists($configFile)) {
+    $jsonContent = file_get_contents($configFile);
     if ($jsonContent !== false) {
-        $data = json_decode($jsonContent, true);
-        if ($data !== null) {
-            // Validate and sanitize menu data
-            $menuData = array();
+        $configData = json_decode($jsonContent, true);
+        if ($configData !== null && isset($configData['menu_structure'])) {
+            $menuData = $configData['menu_structure'];
             
-            // First pass: identify valid menu categories
-            foreach ($data as $key => $value) {
-                // Skip metadata fields
+            // Validate and sanitize menu data
+            $validatedData = array();
+            
+            // Keep description and summary
+            $data = array(
+                'description' => $menuData['description'] ?? '',
+                'summary' => $menuData['summary'] ?? ''
+            );
+
+            // Process menu categories
+            foreach ($menuData as $key => $value) {
+                // Skip non-menu items
                 if ($key === 'description' || $key === 'summary') {
                     continue;
                 }
-                
-                // Validate menu category structure
-                if (!is_array($value)) {
+
+                // Basic validation
+                if (!is_array($value) || !isset($value['type']) || !isset($value['urls']) || !is_array($value['urls'])) {
                     continue;
                 }
-                
-                if (!isset($value['type'])) {
-                    continue;
-                }
-                
-                if (!isset($value['urls']) || !is_array($value['urls'])) {
-                    continue;
-                }
-                
-                // Validate and sanitize URLs
-                $validUrls = array();
-                foreach ($value['urls'] as $pageName => $pageDetails) {
-                    if (!is_array($pageDetails)) {
-                        continue;
-                    }
-                    
-                    if (!isset($pageDetails['url'])) {
-                        continue;
-                    }
-                    
-                    // Ensure URL is properly formatted
-                    $validUrls[$pageName] = array(
-                        'url' => $pageDetails['url'],
-                        'roles' => isset($pageDetails['roles']) ? $pageDetails['roles'] : array()
-                    );
-                }
-                
-                if (!empty($validUrls)) {
-                    $menuData[$key] = array(
-                        'type' => $value['type'],
-                        'img' => isset($value['img']) ? $value['img'] : '',
-                        'urls' => $validUrls
-                    );
-                }
+
+                // Copy the entire menu item structure
+                $data[$key] = $value;
             }
-            
-            $data = $menuData;
+
+            // Sort menu items while keeping description and summary at the top
+            $description = $data['description'] ?? '';
+            $summary = $data['summary'] ?? '';
+            unset($data['description'], $data['summary']);
             ksort($data);
-        } else {
-            $data = array(); // Fallback to empty array
+            $data = array_merge(
+                array(
+                    'description' => $description,
+                    'summary' => $summary
+                ),
+                $data
+            );
         }
-    } else {
-        $data = array(); // Fallback to empty array
     }
-} else {
-    $data = array(); // Fallback to empty array
 }
 
 $alertMessage = '';
