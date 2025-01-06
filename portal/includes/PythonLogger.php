@@ -53,7 +53,7 @@ class PythonLogger {
         $jsonContext = escapeshellarg(json_encode($context));
         
         // Build and execute command
-        $command = sprintf('python3 %s %s %s %s 2>&1',
+        $command = sprintf('/opt/python-venv/bin/python %s %s %s %s 2>&1',
             escapeshellarg($this->pythonScript),
             escapeshellarg($this->logType),
             $escapedMessage,

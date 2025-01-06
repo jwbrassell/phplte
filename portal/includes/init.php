@@ -34,7 +34,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 date_default_timezone_set('UTC');
-error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Get config first for $APP and $DIR variables
 require_once(__DIR__ . "/../config.php");
