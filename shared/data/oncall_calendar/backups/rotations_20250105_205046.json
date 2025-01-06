@@ -1,0 +1,37 @@
+{
+  "rotations": [
+    {
+      "id": 1,
+      "team_id": 1,
+      "person_name": "John Doe",
+      "phone_number": "555-0101",
+      "week_number": 1,
+      "year": 2025,
+      "start_time": "2025-01-03T23:00:00+00:00",
+      "end_time": "2025-01-10T23:00:00+00:00",
+      "created_at": "2025-01-06T02:50:46.624034"
+    },
+    {
+      "id": 2,
+      "team_id": 1,
+      "person_name": "Jane Smith",
+      "phone_number": "555-0102",
+      "week_number": 2,
+      "year": 2025,
+      "start_time": "2025-01-10T23:00:00+00:00",
+      "end_time": "2025-01-17T23:00:00+00:00",
+      "created_at": "2025-01-06T02:50:46.624636"
+    },
+    {
+      "id": 3,
+      "team_id": 1,
+      "person_name": "Bob Wilson",
+      "phone_number": "555-0103",
+      "week_number": 3,
+      "year": 2025,
+      "start_time": "2025-01-17T23:00:00+00:00",
+      "end_time": "2025-01-24T23:00:00+00:00",
+      "created_at": "2025-01-06T02:50:46.625375"
+    }
+  ]
+}

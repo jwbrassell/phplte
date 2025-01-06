@@ -19,7 +19,7 @@ if (strpos($domain, ':') !== false) {
     $domain = strstr($domain, ':', true); // Remove port number if present
 }
 
-// Start session if not already started
+// Configure session if not already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start([
         'cookie_path' => $basePath,
@@ -28,10 +28,21 @@ if (session_status() === PHP_SESSION_NONE) {
         'use_only_cookies' => true,
         'cookie_samesite' => 'Lax'
     ]);
+} else {
+    // Update session cookie parameters
+    session_set_cookie_params([
+        'path' => $basePath,
+        'domain' => $domain,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
 }
 
 date_default_timezone_set('UTC');
 error_reporting(E_ERROR | E_PARSE);
+
+// Get config first for $APP and $DIR variables
+require_once(__DIR__ . "/../config.php");
 
 // Initialize logging system
 require_once(__DIR__ . '/logging_bootstrap.php');
@@ -42,8 +53,6 @@ $URI = str_replace('%20', ' ', $_SERVER['REQUEST_URI']);
 
 // Log page access
 logAccess($PAGE, $_SERVER['REQUEST_METHOD']);
-
-require_once(__DIR__ . "/../config.php");
 
 // Initialize session variables if not set
 if (!isset($_SESSION[$APP."_user_name"])) {

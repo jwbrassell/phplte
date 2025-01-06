@@ -1,0 +1,12 @@
+[2025-01-05 23:25:56] Current User Running the Script: justin
+[2025-01-05 23:25:56] Raw Request Payload: {"request_payload":{"request_type":"rbac","data":{"action_type":"save_page_rbac","link_name":"Oncall","link_type":"single","filename":"oncall.php","old_adom_groups":"","new_adom_groups":["user"],"full_name":"User Test","vzid":"test123","app":"framework","image":"fas fa-tachometer-alt"}}}
+[2025-01-05 23:25:56] Processed Request Payload: {"request_type":"rbac","data":{"action_type":"save_page_rbac","link_name":"Oncall","link_type":"single","filename":"oncall.php","old_adom_groups":"","new_adom_groups":["user"],"full_name":"User Test","vzid":"test123","app":"framework","image":"fas fa-tachometer-alt"}}
+[2025-01-05 23:25:56] Command to Execute: python3 /Users/justin/Downloads/phpadminlte/portal/../shared/scripts/modules/rbac/rbac.py '{"request_type":"rbac","data":{"action_type":"save_page_rbac","link_name":"Oncall","link_type":"single","filename":"oncall.php","old_adom_groups":"","new_adom_groups":["user"],"full_name":"User Test","vzid":"test123","app":"framework","image":"fas fa-tachometer-alt"}}'
+[2025-01-05 23:25:57] Command Output: Traceback (most recent call last):
+  File "/Users/justin/Downloads/phpadminlte/portal/../shared/scripts/modules/rbac/rbac.py", line 13, in <module>
+    from file_operations import FileLock
+  File "/Users/justin/Downloads/phpadminlte/shared/scripts/modules/file_operations.py", line 9, in <module>
+    import portalocker
+ModuleNotFoundError: No module named 'portalocker'
+[2025-01-05 23:25:57] Command Status: 1
+[2025-01-05 23:25:57] Command execution failed

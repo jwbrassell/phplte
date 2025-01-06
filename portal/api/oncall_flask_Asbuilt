@@ -1,0 +1,1219 @@
+### routes.py """Routes for on-call rotation management."""
+
+from flask import render_template, request, jsonify, current_app
+from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
+import csv
+from datetime import datetime, timezone
+import zoneinfo
+from functools import wraps
+from . import bp
+from .models import OnCallRotation, Team, CompanyHoliday, db
+from sqlalchemy.exc import OperationalError
+import io
+import traceback
+
+def admin_required(f):
+    """Decorator to require admin role for a route."""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not any(role.name.lower() == 'administrator' for role in current_user.roles):
+            return jsonify({'error': 'Admin privileges required'}), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
+@bp.route('/')
+@login_required
+def index():
+    """Render the main on-call schedule view."""
+    try:
+        teams = Team.query.order_by(Team.name).all()
+    except OperationalError:
+        teams = []
+        
+    # Debug information about user roles
+    user_roles = [role.name for role in current_user.roles]
+    current_app.logger.info(f"User {current_user.username} has roles: {user_roles}")
+    
+    return render_template('oncall/index.html', 
+                         is_admin=any(role.name.lower() == 'administrator' for role in current_user.roles),
+                         teams=teams,
+                         now=datetime.now())
+
+@bp.route('/api/teams', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def manage_teams():
+    """API endpoint for managing teams."""
+    if request.method == 'POST':
+        try:
+            if not request.is_json:
+                return jsonify({'error': 'Content-Type must be application/json'}), 400
+                
+            data = request.get_json()
+            name = data.get('name')
+            color = data.get('color', 'primary')
+            
+            if not name:
+                return jsonify({'error': 'Team name is required'}), 400
+                
+            # Check if team already exists
+            existing_team = Team.query.filter_by(name=name).first()
+            if existing_team:
+                return jsonify({'error': 'Team already exists'}), 400
+                
+            team = Team(name=name, color=color)
+            db.session.add(team)
+            db.session.commit()
+            
+            return jsonify(team.to_dict())
+            
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error creating team: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+            
+    # GET request - return list of teams
+    try:
+        teams = Team.query.order_by(Team.name).all()
+        return jsonify([team.to_dict() for team in teams])
+    except OperationalError:
+        return jsonify([])
+
+@bp.route('/api/teams/<int:team_id>', methods=['GET', 'PUT', 'DELETE'])
+@login_required
+@admin_required
+def manage_team(team_id):
+    """API endpoint for managing a specific team."""
+    team = Team.query.get_or_404(team_id)
+    
+    if request.method == 'GET':
+        return jsonify(team.to_dict())
+    
+    if request.method == 'DELETE':
+        try:
+            db.session.delete(team)
+            db.session.commit()
+            return '', 204
+        except Exception as e:
+            db.session.rollback()
+            current_app.logger.error(f"Error deleting team: {str(e)}")
+            return jsonify({'error': str(e)}), 500
+            
+    # PUT request
+    try:
+        if not request.is_json:
+            return jsonify({'error': 'Content-Type must be application/json'}), 400
+            
+        data = request.get_json()
+        if 'name' in data:
+            team.name = data['name']
+        if 'color' in data:
+            team.color = data['color']
+            
+        db.session.commit()
+        return jsonify(team.to_dict())
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error updating team: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@bp.route('/api/upload', methods=['POST'])
+@login_required
+@admin_required
+def upload_oncall():
+    """API endpoint for uploading on-call schedules via CSV."""
+    current_app.logger.info("Starting file upload process")
+    
+    if 'file' not in request.files:
+        current_app.logger.error("No file in request")
+        return jsonify({'error': 'No file provided'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        current_app.logger.error("Empty filename")
+        return jsonify({'error': 'No file selected'}), 400
+    
+    if not file.filename.endswith('.csv'):
+        current_app.logger.error(f"Invalid file type: {file.filename}")
+        return jsonify({'error': 'File must be a CSV'}), 400
+
+    try:
+        # Get team from form
+        team_id = request.form.get('team')
+        if not team_id:
+            current_app.logger.error("No team provided")
+            return jsonify({'error': 'Team is required'}), 400
+            
+        team = Team.query.get(team_id)
+        if not team:
+            current_app.logger.error(f"Invalid team ID: {team_id}")
+            return jsonify({'error': 'Invalid team selected'}), 400
+
+        # Get year from form data or use current year
+        try:
+            year = int(request.form.get('year', datetime.now().year))
+            if year < 1900 or year > 9999:
+                current_app.logger.error(f"Invalid year: {year}")
+                return jsonify({'error': 'Invalid year'}), 400
+        except ValueError as e:
+            current_app.logger.error(f"Year parsing error: {str(e)}")
+            return jsonify({'error': 'Invalid year format'}), 400
+
+        # Check if auto-generate is requested
+        auto_generate = request.form.get('auto_generate') == 'true'
+
+        # Read and validate CSV file
+        try:
+            # Read file content into memory
+            file_content = file.read()
+            
+            # Try different encodings
+            encodings = ['utf-8-sig', 'utf-8', 'ascii']
+            csv_content = None
+            
+            for encoding in encodings:
+                try:
+                    csv_content = file_content.decode(encoding)
+                    current_app.logger.info(f"Successfully decoded file with {encoding}")
+                    break
+                except UnicodeDecodeError:
+                    continue
+            
+            if csv_content is None:
+                current_app.logger.error("Failed to decode file with any encoding")
+                return jsonify({'error': 'Unable to read CSV file. Please ensure it is properly encoded.'}), 400
+
+            if not csv_content.strip():
+                current_app.logger.error("Empty CSV file")
+                return jsonify({'error': 'CSV file is empty'}), 400
+
+            # Parse CSV content
+            rows = []
+            reader = csv.DictReader(io.StringIO(csv_content))
+            
+            if auto_generate:
+                required_fields = ['name', 'phone']
+            else:
+                required_fields = ['week', 'name', 'phone']
+            
+            # Validate CSV headers
+            if not all(field in reader.fieldnames for field in required_fields):
+                current_app.logger.error(f"Missing required fields. Found: {reader.fieldnames}")
+                return jsonify({'error': f'CSV must contain columns: {", ".join(required_fields)}'}), 400
+
+            # Collect all rows first for validation
+            for row_num, row in enumerate(reader, start=1):
+                # Basic validation
+                if not all(row.get(field, '').strip() for field in required_fields):
+                    current_app.logger.error(f"Missing values in row {row_num}: {row}")
+                    return jsonify({'error': f'All required fields must have values (row {row_num})'}), 400
+                
+                if not auto_generate:
+                    try:
+                        week = int(row['week'])
+                        if week < 1 or week > 53:
+                            current_app.logger.error(f"Invalid week number in row {row_num}: {week}")
+                            return jsonify({'error': f'Invalid week number: {week} (row {row_num})'}), 400
+                    except ValueError:
+                        current_app.logger.error(f"Invalid week format in row {row_num}: {row['week']}")
+                        return jsonify({'error': f'Invalid week number format: {row["week"]} (row {row_num})'}), 400
+                rows.append(row)
+
+            if not rows:
+                current_app.logger.error("No valid rows found in CSV")
+                return jsonify({'error': 'No valid rows found in CSV'}), 400
+
+            current_app.logger.info(f"Found {len(rows)} valid rows in CSV")
+
+            # Begin transaction
+            db.session.begin_nested()
+
+            if auto_generate:
+                # Extract names and phones for schedule generation
+                names_and_phones = [(row['name'].strip(), row['phone'].strip()) for row in rows]
+                
+                # Delete existing rotations for this team and year
+                OnCallRotation.query.filter_by(team_id=team_id, year=year).delete()
+                
+                # Generate and save new schedule
+                schedule = OnCallRotation.generate_schedule(team_id, year, names_and_phones)
+                for rotation in schedule:
+                    db.session.add(rotation)
+                
+                message = f'Successfully generated schedule with {len(schedule)} rotations for {team.name} in {year}'
+            else:
+                # Instead of deleting, update existing entries or create new ones
+                for row in rows:
+                    try:
+                        week_num = int(row['week'])
+                        # Try to find existing rotation for this week
+                        rotation = OnCallRotation.query.filter_by(
+                            team_id=team_id,
+                            year=year,
+                            week_number=week_num
+                        ).first()
+                        
+                        if rotation:
+                            # Update existing rotation
+                            rotation.person_name = row['name'].strip()
+                            rotation.phone_number = row['phone'].strip()
+                            # Recalculate dates in case the algorithm has been updated
+                            new_rotation = OnCallRotation.create_from_csv_row(row, year, team_id)
+                            rotation.start_time = new_rotation.start_time
+                            rotation.end_time = new_rotation.end_time
+                            current_app.logger.info(f"Updated rotation for week {week_num}")
+                        else:
+                            # Create new rotation
+                            rotation = OnCallRotation.create_from_csv_row(row, year, team_id)
+                            db.session.add(rotation)
+                            current_app.logger.info(f"Created new rotation for week {week_num}")
+                    except Exception as e:
+                        current_app.logger.error(f"Error processing row: {row}")
+                        current_app.logger.error(traceback.format_exc())
+                        raise ValueError(f"Error processing week {row['week']}: {str(e)}")
+                
+                message = f'Successfully uploaded {len(rows)} on-call rotations for {team.name} in {year}'
+
+            # Commit transaction
+            db.session.commit()
+            
+            current_app.logger.info(message)
+            return jsonify({'message': message})
+            
+        except Exception as e:
+            current_app.logger.error(f"Error processing CSV content: {str(e)}")
+            current_app.logger.error(traceback.format_exc())
+            return jsonify({'error': str(e)}), 500
+            
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error in upload process: {str(e)}")
+        current_app.logger.error(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
+
+@bp.route('/api/holidays/upload', methods=['POST'])
+@login_required
+@admin_required
+def upload_holidays():
+    """API endpoint for uploading company holidays via CSV."""
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file provided'}), 400
+    
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    
+    if not file.filename.endswith('.csv'):
+        return jsonify({'error': 'File must be a CSV'}), 400
+
+    try:
+        # Read file content
+        content = file.read().decode('utf-8-sig')
+        reader = csv.DictReader(io.StringIO(content))
+        
+        # Validate headers
+        required_fields = ['name', 'date']
+        if not all(field in reader.fieldnames for field in required_fields):
+            return jsonify({'error': f'CSV must contain columns: {", ".join(required_fields)}'}), 400
+        
+        # Begin transaction
+        db.session.begin_nested()
+        
+        # Process each row
+        holidays = []
+        for row in reader:
+            try:
+                holiday = CompanyHoliday.create_from_csv_row(row)
+                holidays.append(holiday)
+            except ValueError as e:
+                return jsonify({'error': str(e)}), 400
+        
+        if not holidays:
+            return jsonify({'error': 'No valid holidays found in CSV'}), 400
+        
+        # Get the year of the first holiday
+        year = holidays[0].date.year
+        
+        # Delete existing holidays for this year
+        CompanyHoliday.query.filter(
+            db.extract('year', CompanyHoliday.date) == year
+        ).delete()
+        
+        # Add new holidays
+        for holiday in holidays:
+            db.session.add(holiday)
+        
+        db.session.commit()
+        return jsonify({
+            'message': f'Successfully uploaded {len(holidays)} holidays for {year}'
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.error(f"Error uploading holidays: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@bp.route('/api/holidays')
+@login_required
+def get_holidays():
+    """API endpoint for retrieving holidays."""
+    try:
+        year = request.args.get('year', type=int)
+        if not year:
+            return jsonify({'error': 'Year parameter is required'}), 400
+            
+        holidays = CompanyHoliday.query.filter(
+            db.extract('year', CompanyHoliday.date) == year
+        ).order_by(CompanyHoliday.date).all()
+        
+        return jsonify([{
+            'id': h.id,
+            'name': h.name,
+            'date': h.date.isoformat()
+        } for h in holidays])
+        
+    except Exception as e:
+        current_app.logger.error(f"Error getting holidays: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@bp.route('/api/events')
+@login_required
+def get_events():
+    """API endpoint for retrieving calendar events."""
+    try:
+        start = request.args.get('start')
+        end = request.args.get('end')
+        team_id = request.args.get('team')  # Optional team filter
+        
+        if not start or not end:
+            return jsonify({'error': 'Start and end dates are required'}), 400
+        
+        # Convert string dates to datetime with UTC timezone
+        start_date = datetime.fromisoformat(start.replace('Z', '+00:00'))
+        end_date = datetime.fromisoformat(end.replace('Z', '+00:00'))
+        
+        # Query events in the date range
+        query = OnCallRotation.query.filter(
+            OnCallRotation.start_time < end_date,
+            OnCallRotation.end_time > start_date
+        )
+
+        # Apply team filter if provided
+        if team_id:
+            query = query.filter_by(team_id=int(team_id))
+
+        events = query.all()
+        
+        # Get holidays in the date range
+        holidays = CompanyHoliday.query.filter(
+            CompanyHoliday.date >= start_date.date(),
+            CompanyHoliday.date <= end_date.date()
+        ).all()
+        
+        # Format events for FullCalendar
+        calendar_events = []
+        central_tz = zoneinfo.ZoneInfo('America/Chicago')
+        
+        # Add on-call rotations
+        for event in events:
+            # Convert UTC times to Central time for display
+            start_central = event.start_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+            end_central = event.end_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+            
+            calendar_events.append({
+                'id': event.id,
+                'title': event.person_name,
+                'start': start_central.isoformat(),
+                'end': end_central.isoformat(),
+                'description': f"Phone: {event.phone_number}",
+                'classNames': [f'bg-{event.team.color}'],
+                'textColor': '#ffffff',
+                'allDay': True,  # Show as all-day events for better visibility
+                'display': 'block',  # Make events take up full width
+                'extendedProps': {
+                    'week_number': event.week_number,
+                    'phone': event.phone_number,
+                    'team': event.team.name,
+                    'team_id': event.team_id
+                }
+            })
+            
+        # Add holidays
+        for holiday in holidays:
+            calendar_events.append({
+                'id': f'holiday-{holiday.id}',
+                'title': f'🎉 {holiday.name}',
+                'start': holiday.date.isoformat(),
+                'allDay': True,
+                'display': 'background',
+                'backgroundColor': '#ff9f89',
+                'classNames': ['holiday-event']
+            })
+        
+        return jsonify(calendar_events)
+    except OperationalError:
+        # If team table doesn't exist yet, return empty list
+        return jsonify([])
+    except Exception as e:
+        current_app.logger.error(f"Error getting events: {str(e)}")
+        current_app.logger.error(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
+
+@bp.route('/api/current')
+@login_required
+def get_current_oncall():
+    """API endpoint for getting the current on-call person."""
+    try:
+        team_id = request.args.get('team')
+        if team_id:
+            try:
+                team_id = int(team_id)
+                # Verify team exists
+                team = Team.query.get(team_id)
+                if not team:
+                    return jsonify({
+                        'name': 'No one currently on call',
+                        'phone': '-',
+                        'message': 'Team not found'
+                    }), 200
+            except ValueError:
+                return jsonify({
+                    'name': 'No one currently on call',
+                    'phone': '-',
+                    'message': 'Invalid team ID'
+                }), 200
+
+        rotation = OnCallRotation.get_current_oncall(team_id)
+        if rotation:
+            central_tz = zoneinfo.ZoneInfo('America/Chicago')
+            start_central = rotation.start_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+            end_central = rotation.end_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+            
+            return jsonify({
+                'name': rotation.person_name,
+                'phone': rotation.phone_number,
+                'team': rotation.team.name,
+                'color': rotation.team.color,
+                'start': start_central.isoformat(),
+                'end': end_central.isoformat()
+            }), 200
+        
+        # Return empty state with 200 status when no one is on call
+        message = 'No one currently on call'
+        if team_id:
+            team = Team.query.get(team_id)
+            if team:
+                message += f' for {team.name}'
+        return jsonify({
+            'name': message,
+            'phone': '-'
+        }), 200
+
+    except OperationalError:
+        return jsonify({
+            'name': 'No one currently on call',
+            'phone': '-',
+            'message': 'Database error occurred'
+        }), 200
+    except Exception as e:
+        current_app.logger.error(f"Error getting current on-call: {str(e)}")
+        current_app.logger.error(traceback.format_exc())
+        return jsonify({
+            'name': 'No one currently on call',
+            'phone': '-',
+            'message': str(e)
+        }), 200
+
+### models.py 
+"""Models for on-call rotation management."""
+
+from app.extensions import db
+from datetime import datetime, timedelta, timezone
+import zoneinfo
+from sqlalchemy import and_
+import csv
+import json
+from io import StringIO
+import random
+
+class CompanyHoliday(db.Model):
+    """Model for company holidays."""
+    
+    __tablename__ = 'company_holiday'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    
+    @staticmethod
+    def create_from_csv_row(row):
+        """Create a holiday entry from a CSV row."""
+        try:
+            # Try different date formats
+            date_formats = ['%Y-%m-%d', '%m/%d/%Y', '%d/%m/%Y']
+            holiday_date = None
+            
+            for fmt in date_formats:
+                try:
+                    holiday_date = datetime.strptime(row['date'].strip(), fmt).date()
+                    break
+                except ValueError:
+                    continue
+                    
+            if not holiday_date:
+                raise ValueError(f"Invalid date format: {row['date']}")
+                
+            return CompanyHoliday(
+                name=row['name'].strip(),
+                date=holiday_date
+            )
+        except KeyError as e:
+            raise ValueError(f"Missing required field: {str(e)}")
+
+class Team(db.Model):
+    """Team model for organizing on-call rotations."""
+    
+    __tablename__ = 'oncall_team'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    color = db.Column(db.String(20), nullable=False, default='primary')  # Bootstrap color class
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    rotations = db.relationship('OnCallRotation', backref='team', lazy=True, cascade='all, delete-orphan')
+
+    def to_dict(self):
+        """Convert team to dictionary representation."""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'color': self.color
+        }
+
+class OnCallRotation(db.Model):
+    """Model for individual on-call rotation assignments."""
+    
+    __tablename__ = 'oncall_rotation'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    week_number = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    person_name = db.Column(db.String(100), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
+    team_id = db.Column(db.Integer, db.ForeignKey('oncall_team.id'), nullable=False)
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    @staticmethod
+    def get_current_oncall(team_id=None):
+        """Get the current on-call person based on the time and optionally filtered by team."""
+        # Get current time in Central timezone
+        central_tz = zoneinfo.ZoneInfo('America/Chicago')
+        current_time = datetime.now(central_tz)
+        
+        # Convert to UTC for database query
+        current_time_utc = current_time.astimezone(timezone.utc)
+        
+        # Build query for current time
+        query = OnCallRotation.query.filter(
+            OnCallRotation.start_time <= current_time_utc,
+            OnCallRotation.end_time > current_time_utc
+        )
+
+        # Add team filter if provided
+        if team_id:
+            query = query.filter_by(team_id=team_id)
+            
+        return query.first()
+
+    @staticmethod
+    def create_from_csv_row(row, year, team_id):
+        """Create an on-call rotation entry from a CSV row."""
+        week_num = int(row['week'])
+        if week_num < 1 or week_num > 53:  # Fixed: using week_num consistently
+            raise ValueError(f"Invalid week number: {week_num}")
+        
+        # Calculate the Friday 5 PM start time for this week
+        central_tz = zoneinfo.ZoneInfo('America/Chicago')
+        
+        # Get the date of the first day of the year
+        jan_first = datetime(year, 1, 1)
+        
+        # Calculate the start of week 1
+        # Week 1 is the week containing January 1st
+        days_to_monday = (jan_first.weekday() - 0) % 7  # Days until previous Monday
+        first_monday = jan_first - timedelta(days=days_to_monday)
+        
+        # Calculate target week's Monday
+        target_monday = first_monday + timedelta(weeks=week_num-1)
+        
+        # Calculate Friday 5 PM of target week (start time)
+        start_time = datetime.combine(
+            (target_monday + timedelta(days=4)).date(),  # Friday
+            datetime.strptime("17:00", "%H:%M").time()
+        ).replace(tzinfo=central_tz)
+        
+        # End time is the next Friday at 5 PM
+        end_time = start_time + timedelta(days=7)
+
+        # Convert to UTC for storage
+        start_time_utc = start_time.astimezone(timezone.utc)
+        end_time_utc = end_time.astimezone(timezone.utc)
+
+        return OnCallRotation(
+            week_number=week_num,
+            year=year,
+            person_name=row['name'].strip(),
+            phone_number=row['phone'].strip(),
+            team_id=team_id,
+            start_time=start_time_utc,
+            end_time=end_time_utc
+        )
+
+    @staticmethod
+    def generate_schedule(team_id, year, names_and_phones):
+        """Generate a full year schedule based on provided names."""
+        # Get all holidays for the year
+        holidays = CompanyHoliday.query.filter(
+            db.extract('year', CompanyHoliday.date) == year
+        ).all()
+        holiday_dates = {h.date for h in holidays}
+        
+        # Get the total number of weeks in the year
+        jan_first = datetime(year, 1, 1)
+        dec_31 = datetime(year, 12, 31)
+        total_weeks = int((dec_31 - jan_first).days / 7) + 1
+        
+        # Create a list of all weeks with their holiday count
+        weeks = []
+        for week_num in range(1, total_weeks + 1):
+            start_time, end_time = OnCallRotation.get_week_dates(year, week_num)
+            
+            # Count holidays in this week
+            holiday_count = 0
+            current = start_time
+            while current < end_time:
+                if current.date() in holiday_dates:
+                    holiday_count += 1
+                current += timedelta(days=1)
+            
+            weeks.append({
+                'week_number': week_num,
+                'holiday_count': holiday_count
+            })
+        
+        # Sort weeks by holiday count (descending) to assign high-holiday weeks first
+        weeks.sort(key=lambda x: x['holiday_count'], reverse=True)
+        
+        # Track assignments per person for fair distribution
+        assignments = {name: 0 for name, _ in names_and_phones}
+        
+        # Create schedule
+        schedule = []
+        for week in weeks:
+            # Find person with fewest assignments
+            eligible_persons = sorted(assignments.items(), key=lambda x: x[1])
+            person_name = eligible_persons[0][0]
+            
+            # Get phone number for selected person
+            phone_number = next(phone for name, phone in names_and_phones if name == person_name)
+            
+            # Create rotation
+            start_time, end_time = OnCallRotation.get_week_dates(year, week['week_number'])
+            rotation = OnCallRotation(
+                week_number=week['week_number'],
+                year=year,
+                person_name=person_name,
+                phone_number=phone_number,
+                team_id=team_id,
+                start_time=start_time.astimezone(timezone.utc),
+                end_time=end_time.astimezone(timezone.utc)
+            )
+            
+            schedule.append(rotation)
+            assignments[person_name] += 1
+        
+        # Sort schedule by week number
+        schedule.sort(key=lambda x: x.week_number)
+        return schedule
+
+    @staticmethod
+    def get_week_number(date):
+        """Get the ISO week number for a given date."""
+        return date.isocalendar()[1]
+
+    @staticmethod
+    def get_week_dates(year, week):
+        """Get the start and end dates for a given week number."""
+        jan_first = datetime(year, 1, 1)
+        days_to_monday = (jan_first.weekday() - 0) % 7
+        first_monday = jan_first - timedelta(days=days_to_monday)
+        target_monday = first_monday + timedelta(weeks=week-1)
+        target_friday = target_monday + timedelta(days=4)
+        
+        central_tz = zoneinfo.ZoneInfo('America/Chicago')
+        start_time = datetime.combine(
+            target_friday.date(),
+            datetime.strptime("17:00", "%H:%M").time()
+        ).replace(tzinfo=central_tz)
+        
+        end_time = start_time + timedelta(days=7)
+        
+        return start_time, end_time
+
+    def to_dict(self):
+        """Convert the rotation to a dictionary."""
+        central_tz = zoneinfo.ZoneInfo('America/Chicago')
+        start_central = self.start_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+        end_central = self.end_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+        
+        return {
+            'id': self.id,
+            'week_number': self.week_number,
+            'year': self.year,
+            'person_name': self.person_name,
+            'phone_number': self.phone_number,
+            'team': self.team.to_dict(),
+            'start_time': start_central.isoformat(),
+            'end_time': end_central.isoformat()
+        }
+
+    @staticmethod
+    def export_team_schedule(team_id, year, format='json'):
+        """Export a team's schedule in the specified format."""
+        rotations = OnCallRotation.query.filter_by(
+            team_id=team_id,
+            year=year
+        ).order_by(OnCallRotation.week_number).all()
+
+        if format == 'json':
+            return json.dumps([rotation.to_dict() for rotation in rotations], indent=2)
+        elif format == 'csv':
+            output = StringIO()
+            writer = csv.writer(output)
+            writer.writerow(['Week', 'Name', 'Phone', 'Start Time', 'End Time'])
+            
+            for rotation in rotations:
+                central_tz = zoneinfo.ZoneInfo('America/Chicago')
+                start_central = rotation.start_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+                end_central = rotation.end_time.replace(tzinfo=timezone.utc).astimezone(central_tz)
+                
+                writer.writerow([
+                    rotation.week_number,
+                    rotation.person_name,
+                    rotation.phone_number,
+                    start_central.isoformat(),
+                    end_central.isoformat()
+                ])
+            
+            return output.getvalue()
+        else:
+            raise ValueError(f"Unsupported export format: {format}")
+
+    def __repr__(self):
+        return f'<OnCallRotation {self.year}-W{self.week_number:02d} {self.team.name} - {self.person_name}>'
+
+### init.py 
+"""On-call rotation management blueprint."""
+
+from flask import Blueprint
+
+bp = Blueprint('oncall', __name__, 
+              template_folder='templates',
+              static_folder='static',
+              url_prefix='/oncall')
+
+# Import routes after blueprint creation to avoid circular imports
+from app.blueprints.oncall import routes, models
+
+def init_app(app):
+    """Initialize the oncall blueprint with the app."""
+    app.register_blueprint(bp)
+
+### static/templates/oncall_template.csv 
+week,name,phone
+1,John Doe,555-0101
+2,Jane Smith,555-0102
+
+### templates/oncall/index.html
+{% extends "base.html" %}
+
+{% block title %}On-Call Schedule{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+    /* Calendar Styles */
+    .calendar-day {
+        height: 120px;
+        padding: 10px !important;
+        vertical-align: top !important;
+    }
+
+    .calendar-day.disabled {
+        background-color: #f8f9fa;
+    }
+
+    .calendar-day.today {
+        background-color: rgba(0,0,0,.05);
+    }
+
+    .calendar-day .date {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .calendar-day .event {
+        padding: 5px;
+        margin-bottom: 5px;
+        border-radius: 3px;
+        font-size: 0.85em;
+        word-break: break-word;
+    }
+
+    /* Team Colors */
+    .bg-primary { background-color: var(--bs-primary) !important; }
+    .bg-secondary { background-color: var(--bs-secondary) !important; }
+    .bg-success { background-color: var(--bs-success) !important; }
+    .bg-danger { background-color: var(--bs-danger) !important; }
+    .bg-warning { background-color: var(--bs-warning) !important; }
+    .bg-info { background-color: var(--bs-info) !important; }
+
+    /* Holiday Events */
+    .holiday-event {
+        border-radius: 0;
+        opacity: 0.3;
+    }
+
+    /* Modal Fixes */
+    .modal-backdrop {
+        z-index: 1050;
+    }
+    .modal {
+        z-index: 1055;
+    }
+    
+    /* Loading States */
+    .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+    }
+
+    /* Calendar Navigation */
+    #current-month {
+        min-width: 200px;
+    }
+
+    /* Responsive Calendar */
+    @media (max-width: 768px) {
+        .calendar-day {
+            height: auto;
+            min-height: 100px;
+        }
+        
+        .calendar-day .event {
+            font-size: 0.75em;
+        }
+    }
+
+    /* Dark Mode Adjustments */
+    [data-bs-theme="dark"] .calendar-day.disabled {
+        background-color: rgba(0,0,0,.2);
+    }
+
+    [data-bs-theme="dark"] .calendar-day.today {
+        background-color: rgba(255,255,255,.05);
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sticky-top mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Current On-Call</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="btn-group w-100 mb-3">
+                                <button class="btn btn-info">
+                                    <i class="fas fa-user me-2"></i>
+                                    <span id="current-name">No one currently on call</span>
+                                </button>
+                                <button class="btn btn-outline-info">
+                                    <i class="fas fa-phone me-1"></i>
+                                    <span id="current-phone">-</span>
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label for="team-filter">Filter by Team</label>
+                                <select class="form-control" id="team-filter">
+                                    <option value="">All Teams</option>
+                                    {% for team in teams %}
+                                    <option value="{{ team.id }}">{{ team.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {% if is_admin %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Upload Schedule</h3>
+                        </div>
+                        <div class="card-body">
+                            {% if teams %}
+                            <button type="button" class="btn btn-primary btn-block mb-3" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                <i class="fas fa-upload me-2"></i>Upload Schedule
+                            </button>
+                            <a href="{{ url_for('static', filename='templates/oncall_template.csv') }}" class="btn btn-secondary btn-block mb-3" id="manual-template">
+                                <i class="fas fa-download me-2"></i>Download Manual Template
+                            </a>
+                            <a href="{{ url_for('static', filename='templates/oncall_auto_template.csv') }}" class="btn btn-secondary btn-block mb-3" id="auto-template" style="display: none;">
+                                <i class="fas fa-download me-2"></i>Download Auto-Generate Template
+                            </a>
+                            <button type="button" class="btn btn-success btn-block mb-3" data-bs-toggle="modal" data-bs-target="#holidayModal">
+                                <i class="fas fa-calendar me-2"></i>Manage Holidays
+                            </button>
+                            {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Please create a team first before uploading a schedule.
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="card-title">Teams</h3>
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#teamModal">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush" id="team-list">
+                                {% for team in teams %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-circle text-{{ team.color }} me-2"></i>
+                                        {{ team.name }}
+                                    </div>
+                                    <div class="btn-group btn-group-sm">
+                                        <button type="button" class="btn btn-outline-secondary" onclick="editTeam({{ team.id }})">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="deleteTeam({{ team.id }})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% if not teams %}
+                                <div class="list-group-item text-center text-muted">
+                                    No teams created yet
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" id="prev-month" class="btn btn-default">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button type="button" id="current-month" class="btn btn-default">
+                                    December 2024
+                                </button>
+                                <button type="button" id="next-month" class="btn btn-default">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <button type="button" id="today" class="btn btn-default">Today</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0" id="calendar-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 14.28%">Sun</th>
+                                        <th class="text-center" style="width: 14.28%">Mon</th>
+                                        <th class="text-center" style="width: 14.28%">Tue</th>
+                                        <th class="text-center" style="width: 14.28%">Wed</th>
+                                        <th class="text-center" style="width: 14.28%">Thu</th>
+                                        <th class="text-center" style="width: 14.28%">Fri</th>
+                                        <th class="text-center" style="width: 14.28%">Sat</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendar-body">
+                                    <!-- Calendar rows will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if is_admin %}
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="upload-form" class="ajax-form" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-upload me-2"></i>Upload Schedule
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="team" class="form-label">Team</label>
+                        <select class="form-control" id="team" name="team" required>
+                            {% for team in teams %}
+                            <option value="{{ team.id }}">{{ team.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <input type="number" class="form-control" id="year" name="year" 
+                            value="{{ now.year }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="auto_generate" name="auto_generate">
+                            <label class="form-check-label" for="auto_generate">
+                                Auto-generate schedule
+                            </label>
+                            <small class="form-text text-muted d-block">
+                                Upload a CSV with just names and phone numbers to auto-generate a fair schedule
+                            </small>
+                        </div>
+                        <label for="file" class="form-label">CSV File</label>
+                        <input type="file" class="form-control" id="file" name="file" 
+                            accept=".csv" required>
+                        <div class="form-text" id="csv-help-text">
+                            Required columns: week, name, phone
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="upload-button">
+                        <i class="fas fa-upload me-2"></i>Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Holiday Modal -->
+<div class="modal fade" id="holidayModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-calendar me-2"></i>Manage Holidays
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="holiday-form" class="ajax-form" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <label for="holiday-file" class="form-label">Upload Holidays CSV</label>
+                        <input type="file" class="form-control" id="holiday-file" name="file" 
+                            accept=".csv" required>
+                        <div class="form-text">
+                            Required columns: name, date (YYYY-MM-DD)
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('static', filename='templates/holidays_template.csv') }}" class="btn btn-secondary">
+                            <i class="fas fa-download me-2"></i>Download Template
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-upload me-2"></i>Upload Holidays
+                        </button>
+                    </div>
+                </form>
+                <hr>
+                <div id="current-holidays" class="mt-3">
+                    <h6>Current Holidays</h6>
+                    <div class="list-group" id="holiday-list">
+                        <!-- Holidays will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Team Modal -->
+<div class="modal fade" id="teamModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="team-form" class="ajax-form">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-users me-2"></i><span id="team-modal-title">Add Team</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="team-id">
+                    <div class="mb-3">
+                        <label for="team-name" class="form-label">Team Name</label>
+                        <input type="text" class="form-control" id="team-name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Team Color</label>
+                        <div class="btn-group w-100" role="group">
+                            {% for color in ['primary', 'secondary', 'success', 'danger', 'warning', 'info'] %}
+                            <input type="radio" class="btn-check" name="team-color" id="color-{{ color }}" 
+                                   value="{{ color }}" {% if color == 'primary' %}checked{% endif %}>
+                            <label class="btn btn-outline-{{ color }}" for="color-{{ color }}">
+                                <i class="fas fa-circle"></i>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='src/js/oncall.js') }}"></script>
+{% endblock %}

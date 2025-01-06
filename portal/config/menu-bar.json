@@ -1,6 +1,16 @@
 {
   "description": "User Management",
   "summary": "Manage user access and permissions",
+  "oncall": {
+    "type": "single",
+    "img": "fas fa-calendar-alt",
+    "urls": {
+      "On-Call Schedule": {
+        "url": "oncall.php",
+        "roles": ["admin", "user"]
+      }
+    }
+  },
   "dashboard": {
     "type": "single",
     "img": "fas fa-tachometer-alt",

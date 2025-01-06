@@ -1,4 +1,12 @@
 <?php
+/**
+ * Check if user is authenticated
+ */
+function isAuthenticated() {
+    global $APP;
+    return isset($_SESSION[$APP."_user_name"]);
+}
+
 // Login and authentication handling
 if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($_POST['login_submit']))) {
     // Log login attempt

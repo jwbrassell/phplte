@@ -1,0 +1,29 @@
+{
+    "pages": {
+        "oncall.php": {
+            "link_name": "On-Call Calendar",
+            "link_type": "single",
+            "url": "oncall.php",
+            "roles": [
+                "admin",
+                "user"
+            ]
+        }
+    },
+    "categories": {},
+    "pages_table_data": [
+        [
+            "On-Call Calendar<br><button type=\"submit\" name=\"btn_edit\" id=\"btn_edit\" class=\"btn btn-sm btn-success\" onclick=\"manage_page('On-Call Calendar', 'oncall.php');\">Edit</button>",
+            "oncall.php",
+            "<span class=\"badge badge-info\">admin</span> <span class=\"badge badge-info\">user</span>"
+        ]
+    ],
+    "adom_groups": [
+        "admin",
+        "user"
+    ],
+    "roles": [
+        "admin",
+        "user"
+    ]
+}
