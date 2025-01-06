@@ -1,0 +1,1435 @@
+### init.pyu """Weblinks management blueprint."""
+
+from flask import Blueprint
+
+bp = Blueprint('weblinks', __name__, 
+              template_folder='templates',
+              static_folder='static',
+              url_prefix='/weblinks')
+
+# Import routes after blueprint creation to avoid circular imports
+from app.blueprints.weblinks import routes, models
+from .init_roles import init_weblinks_roles
+
+def init_app(app):
+    """Initialize the weblinks blueprint with the app."""
+    init_weblinks_roles()  # Initialize roles and permissions
+    app.register_blueprint(bp)
+    return True
+
+
+
+### init_roles.py 
+from app.extensions import db
+from app.models.role import Role
+from app.models.permission import Permission
+from flask import current_app
+import logging
+
+logger = logging.getLogger(__name__)
+
+def init_weblinks_roles():
+    """Initialize roles and permissions for weblinks."""
+    try:
+        # Create edit_links permission if it doesn't exist
+        edit_links_perm = Permission.query.filter_by(name='edit_links').first()
+        if not edit_links_perm:
+            edit_links_perm = Permission.create_permission(
+                name='edit_links',
+                description='Can create and edit weblinks',
+                category='weblinks',
+                created_by='system'
+            )
+            logger.info("Created edit_links permission")
+        
+        # Add permission to admin role
+        admin_role = Role.query.filter_by(name='admin').first()
+        if admin_role and edit_links_perm not in admin_role.permissions:
+            admin_role.permissions.append(edit_links_perm)
+            logger.info("Added edit_links permission to admin role")
+        
+        # Create WebLinks Editor role if it doesn't exist
+        weblinks_editor = Role.query.filter_by(name='WebLinks Editor').first()
+        if not weblinks_editor:
+            weblinks_editor = Role(
+                name='WebLinks Editor',
+                description='Can manage shared weblinks',
+                icon='fas fa-link',
+                created_by='system',
+                is_system_role=True  # Make it a system role
+            )
+            weblinks_editor.permissions.append(edit_links_perm)
+            db.session.add(weblinks_editor)
+            logger.info("Created WebLinks Editor role")
+        elif edit_links_perm not in weblinks_editor.permissions:
+            weblinks_editor.permissions.append(edit_links_perm)
+            logger.info("Added edit_links permission to WebLinks Editor role")
+        
+        db.session.commit()
+        return True
+    except Exception as e:
+        logger.error(f"Error initializing weblinks roles: {e}")
+        db.session.rollback()
+        return False
+### models.py from datetime import datetime
+from app.extensions import db
+from app.models.user import User
+from sqlalchemy import event, JSON
+
+class WebLink(db.Model):
+    __tablename__ = 'weblinks'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(500), nullable=False, unique=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text)
+    icon = db.Column(db.String(100))  # Font Awesome icon class
+    created_by = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    click_count = db.Column(db.Integer, default=0)
+    
+    # Relationships
+    tags = db.relationship('Tag', secondary='weblink_tags', backref='weblinks')
+    history = db.relationship('WebLinkHistory', backref='weblink', lazy='dynamic',
+                            cascade='all, delete-orphan')
+    creator = db.relationship(
+        'User',
+        primaryjoin='WebLink.created_by == User.id',
+        backref=db.backref('weblinks', lazy='dynamic'),
+        remote_side='User.id'
+    )
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+# Association table for many-to-many relationship between WebLinks and Tags
+weblink_tags = db.Table('weblink_tags',
+    db.Column('weblink_id', db.Integer, db.ForeignKey('weblinks.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'), primary_key=True)
+)
+
+class WebLinkHistory(db.Model):
+    __tablename__ = 'weblink_history'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    weblink_id = db.Column(db.Integer, db.ForeignKey('weblinks.id', ondelete='CASCADE'))
+    changed_by = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'), nullable=True)
+    changed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    changes = db.Column(JSON)  # Store changes as JSON
+    
+    editor = db.relationship(
+        'User',
+        primaryjoin='WebLinkHistory.changed_by == User.id',
+        backref=db.backref('weblink_edits', lazy='dynamic'),
+        remote_side='User.id'
+    )
+
+# Event listeners to ensure JSON compatibility with SQLite
+@event.listens_for(WebLinkHistory, 'before_insert')
+def convert_json_before_insert(mapper, connection, target):
+    if isinstance(target.changes, dict):
+        import json
+        target.changes = json.dumps(target.changes)
+
+@event.listens_for(WebLinkHistory, 'load')
+def convert_json_on_load(target, context):
+    if isinstance(target.changes, str):
+        import json
+        target.changes = json.loads(target.changes)
+
+### routes.py 
+from flask import render_template, request, jsonify, flash, redirect, url_for, current_app, send_file
+from flask_login import current_user, login_required
+from app.extensions import db, cache_manager
+from app.utils.rbac import requires_roles
+from .models import WebLink, Tag, WebLinkHistory, weblink_tags
+import json
+from sqlalchemy import desc, func
+from sqlalchemy.exc import OperationalError
+import os
+import re
+from . import bp
+import csv
+from io import StringIO, BytesIO
+
+@bp.route('/')
+@login_required
+def index():
+    return render_template('weblinks/index.html')
+
+@bp.route('/admin')
+@login_required
+@requires_roles('admin')
+def admin():
+    return render_template('weblinks/admin.html')
+
+@bp.route('/admin/stats')
+@login_required
+@requires_roles('admin')
+def get_stats():
+    # Get basic stats
+    total_links = WebLink.query.count()
+    total_clicks = db.session.query(func.sum(WebLink.click_count)).scalar() or 0
+    total_tags = Tag.query.count()
+    
+    # Get popular links
+    popular_links = WebLink.query.order_by(desc(WebLink.click_count)).limit(10).all()
+    
+    # Get tags distribution
+    tags_distribution = db.session.query(
+        Tag,
+        func.count(weblink_tags.c.weblink_id).label('count')
+    ).join(
+        weblink_tags
+    ).group_by(
+        Tag
+    ).all()
+    
+    return jsonify({
+        'total_links': total_links,
+        'total_clicks': total_clicks,
+        'total_tags': total_tags,
+        'popular_links': [{
+            'title': link.title,
+            'clicks': link.click_count
+        } for link in popular_links],
+        'tags_distribution': [{
+            'name': tag.name,
+            'count': count
+        } for tag, count in tags_distribution]
+    })
+
+@bp.route('/admin/template')
+@login_required
+@requires_roles('admin')
+def download_template():
+    # Create CSV template
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['url', 'title', 'description', 'icon', 'tags'])
+    writer.writerow(['https://example.com', 'Example Title', 'Description here', 'fas fa-link', 'tag1,tag2'])
+    
+    # Convert to bytes for send_file
+    bytes_output = BytesIO()
+    bytes_output.write(output.getvalue().encode('utf-8'))
+    bytes_output.seek(0)
+    
+    return send_file(
+        bytes_output,
+        mimetype='text/csv',
+        as_attachment=True,
+        download_name='weblinks_template.csv'
+    )
+
+@bp.route('/admin/bulk-upload', methods=['POST'])
+@login_required
+@requires_roles('admin')
+def bulk_upload():
+    if 'file' not in request.files:
+        return jsonify({'success': False, 'error': 'No file provided'})
+    
+    file = request.files['file']
+    if not file.filename.endswith('.csv'):
+        return jsonify({'success': False, 'error': 'File must be CSV'})
+    
+    try:
+        # Read CSV file
+        stream = StringIO(file.stream.read().decode("UTF8"), newline=None)
+        csv_reader = csv.DictReader(stream)
+        
+        for row in csv_reader:
+            # Check for required fields
+            if not row.get('url') or not row.get('title'):
+                continue
+                
+            # Create or update link
+            link = WebLink.query.filter_by(url=row['url']).first()
+            if not link:
+                link = WebLink(
+                    url=row['url'],
+                    title=row['title'],
+                    description=row.get('description', ''),
+                    icon=row.get('icon', 'fas fa-link'),
+                    created_by=current_user.id
+                )
+                db.session.add(link)
+            
+            # Handle tags
+            if row.get('tags'):
+                tags = [t.strip() for t in row['tags'].split(',')]
+                for tag_name in tags:
+                    tag = Tag.query.filter_by(name=tag_name).first()
+                    if not tag:
+                        tag = Tag(name=tag_name)
+                        db.session.add(tag)
+                    if tag not in link.tags:
+                        link.tags.append(tag)
+        
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)})
+
+@bp.route('/admin/bulk-tags', methods=['POST'])
+@login_required
+@requires_roles('admin')
+def bulk_tags():
+    data = request.json
+    if not data or 'tags' not in data:
+        return jsonify({'success': False, 'error': 'No tags provided'})
+    
+    try:
+        for tag_name in data['tags']:
+            if not Tag.query.filter_by(name=tag_name).first():
+                tag = Tag(name=tag_name)
+                db.session.add(tag)
+        
+        db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'error': str(e)})
+
+@bp.route('/get_links')
+@login_required
+def get_links():
+    try:
+        links = WebLink.query.all()
+        return jsonify([{
+            'id': link.id,
+            'url': link.url,
+            'title': link.title,
+            'description': link.description,
+            'icon': link.icon,
+            'tags': [tag.name for tag in link.tags],
+            'created_by': link.creator.username if link.creator else None,
+            'created_at': link.created_at.isoformat(),
+            'updated_at': link.updated_at.isoformat()
+        } for link in links])
+    except OperationalError:
+        return jsonify([])
+
+@bp.route('/get_common_links')
+@login_required
+def get_common_links():
+    try:
+        # Get top 10 most clicked links
+        common_links = WebLink.query.order_by(desc(WebLink.click_count)).limit(10).all()
+        
+        # Keep track of URLs we've already added to prevent duplicates
+        added_urls = {link.url for link in common_links}
+        result_links = list(common_links)
+        
+        # If we need more links, get recent ones that aren't already included
+        if len(result_links) < 10:
+            recent_links = WebLink.query.filter(~WebLink.url.in_(added_urls))\
+                .order_by(desc(WebLink.created_at))\
+                .limit(10-len(result_links)).all()
+            result_links.extend(recent_links)
+        
+        return jsonify([{
+            'id': link.id,
+            'url': link.url,
+            'title': link.title,
+            'icon': link.icon
+        } for link in result_links])
+    except OperationalError:
+        return jsonify([])
+
+@bp.route('/get_link/<int:link_id>')
+@login_required
+def get_link(link_id):
+    try:
+        link = WebLink.query.get_or_404(link_id)
+        history = [{
+            'changed_by': entry.editor.username,
+            'changed_at': entry.changed_at.isoformat(),
+            'changes': entry.changes
+        } for entry in link.history.order_by(desc(WebLinkHistory.changed_at)).all()]
+        
+        return jsonify({
+            'id': link.id,
+            'url': link.url,
+            'title': link.title,
+            'description': link.description,
+            'icon': link.icon,
+            'tags': [tag.name for tag in link.tags],
+            'created_by': link.creator.username if link.creator else None,
+            'created_at': link.created_at.isoformat(),
+            'history': history
+        })
+    except OperationalError:
+        return jsonify({'error': 'Database not initialized'}), 500
+
+@bp.route('/create_link', methods=['POST'])
+@login_required
+@requires_roles('edit_links')
+def create_link():
+    try:
+        data = request.json
+        
+        # Check for duplicate URL
+        if WebLink.query.filter_by(url=data['url']).first():
+            return jsonify({'error': 'URL already exists'}), 400
+        
+        link = WebLink(
+            url=data['url'],
+            title=data['title'],
+            description=data.get('description', ''),
+            icon=data.get('icon', 'fas fa-link'),
+            created_by=current_user.id
+        )
+        
+        # Handle tags
+        for tag_name in data.get('tags', []):
+            tag = Tag.query.filter_by(name=tag_name).first()
+            if not tag:
+                tag = Tag(name=tag_name)
+                db.session.add(tag)
+            link.tags.append(tag)
+        
+        db.session.add(link)
+        db.session.commit()
+        
+        return jsonify({'id': link.id}), 201
+    except OperationalError:
+        return jsonify({'error': 'Database not initialized'}), 500
+
+@bp.route('/update_link/<int:link_id>', methods=['PUT'])
+@login_required
+@requires_roles('edit_links')
+def update_link(link_id):
+    try:
+        link = WebLink.query.get_or_404(link_id)
+        data = request.json
+        changes = {}
+        
+        # Track changes
+        if data.get('url') and data['url'] != link.url:
+            changes['url'] = {'old': link.url, 'new': data['url']}
+            link.url = data['url']
+        
+        if data.get('title') and data['title'] != link.title:
+            changes['title'] = {'old': link.title, 'new': data['title']}
+            link.title = data['title']
+        
+        if 'description' in data and data['description'] != link.description:
+            changes['description'] = {'old': link.description, 'new': data['description']}
+            link.description = data['description']
+        
+        if data.get('icon') and data['icon'] != link.icon:
+            changes['icon'] = {'old': link.icon, 'new': data['icon']}
+            link.icon = data['icon']
+        
+        # Handle tags
+        if 'tags' in data:
+            old_tags = set(tag.name for tag in link.tags)
+            new_tags = set(data['tags'])
+            if old_tags != new_tags:
+                changes['tags'] = {'old': list(old_tags), 'new': list(new_tags)}
+                link.tags = []
+                for tag_name in new_tags:
+                    tag = Tag.query.filter_by(name=tag_name).first()
+                    if not tag:
+                        tag = Tag(name=tag_name)
+                        db.session.add(tag)
+                    link.tags.append(tag)
+        
+        if changes:
+            history = WebLinkHistory(
+                weblink_id=link.id,
+                changed_by=current_user.id,
+                changes=changes
+            )
+            db.session.add(history)
+        
+        db.session.commit()
+        return jsonify({'success': True})
+    except OperationalError:
+        return jsonify({'error': 'Database not initialized'}), 500
+
+@bp.route('/record_click/<int:link_id>', methods=['POST'])
+@login_required
+def record_click(link_id):
+    try:
+        link = WebLink.query.get_or_404(link_id)
+        link.click_count += 1
+        db.session.commit()
+        return jsonify({'success': True})
+    except OperationalError:
+        return jsonify({'error': 'Database not initialized'}), 500
+
+@bp.route('/get_tags')
+@login_required
+def get_tags():
+    try:
+        tags = Tag.query.all()
+        return jsonify([{
+            'id': tag.id,
+            'name': tag.name
+        } for tag in tags])
+    except OperationalError:
+        return jsonify([])
+
+@cache_manager.cached(timeout=3600, key_prefix='fontawesome_icons')
+def get_cached_fontawesome_icons():
+    # Load icons from Font Awesome CSS file
+    icons = []
+    try:
+        with open(os.path.join(current_app.static_folder, 'fontawesome/css/all.css'), 'r') as f:
+            content = f.read()
+            # Find all .fa-* class definitions
+            matches = re.findall(r'\.fa-([a-z0-9-]+):before', content)
+            icons = ['fas fa-' + match for match in matches]
+    except:
+        # Fallback to basic icons if file not found
+        icons = [
+            'fas fa-link', 'fas fa-globe', 'fas fa-book', 'fas fa-file',
+            'fas fa-code', 'fas fa-database', 'fas fa-server', 'fas fa-cloud',
+            'fas fa-cog', 'fas fa-users', 'fas fa-folder', 'fas fa-search',
+            'fas fa-star', 'fas fa-heart', 'fas fa-home', 'fas fa-clock',
+            'fas fa-calendar', 'fas fa-chart-bar', 'fas fa-envelope',
+            'fas fa-phone'
+        ]
+    return icons
+
+@bp.route('/search_icons')
+@login_required
+def search_icons():
+    query = request.args.get('q', '').lower()
+    page = int(request.args.get('page', 1))
+    per_page = 20
+    
+    all_icons = get_cached_fontawesome_icons()
+    
+    if query:
+        filtered_icons = [icon for icon in all_icons if query in icon.lower()]
+    else:
+        filtered_icons = all_icons
+    
+    start_idx = (page - 1) * per_page
+    end_idx = start_idx + per_page
+    
+    return jsonify({
+        'icons': filtered_icons[start_idx:end_idx],
+        'has_more': end_idx < len(filtered_icons)
+    })
+
+@bp.route('/get_icons')
+@login_required
+def get_icons():
+    icons = get_cached_fontawesome_icons()
+    return jsonify(icons)
+
+### admin.html 
+{% extends "base.html" %}
+
+{% block title %}Weblinks Admin{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <!-- Statistics Cards -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3 id="totalLinks">0</h3>
+                <p>Total Links</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-link"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3 id="totalClicks">0</h3>
+                <p>Total Clicks</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-mouse-pointer"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3 id="totalTags">0</h3>
+                <p>Total Tags</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-tags"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3 id="avgClicksPerLink">0</h3>
+                <p>Avg. Clicks per Link</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Charts -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Most Popular Links</h3>
+            </div>
+            <div class="card-body">
+                <div id="popularLinksChart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Tags Distribution</h3>
+            </div>
+            <div class="card-body">
+                <div id="tagsChart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Bulk Upload Section -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Bulk Upload Links</h3>
+            </div>
+            <div class="card-body">
+                <p>Download the template and fill it with your links:</p>
+                <a href="{{ url_for('weblinks.download_template') }}" class="btn btn-primary mb-3 no-loader">
+                    <i class="fas fa-download"></i> Download Template
+                </a>
+                
+                <form id="bulkUploadForm" enctype="multipart/form-data" class="ajax-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="form-group">
+                        <label for="csvFile">Upload CSV File</label>
+                        <input type="file" class="form-control" id="csvFile" accept=".csv">
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="fas fa-upload"></i> Upload Links
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Tags Section -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Bulk Upload Tags</h3>
+            </div>
+            <div class="card-body">
+                <form id="bulkTagsForm" class="ajax-form">
+                    <div class="form-group">
+                        <label for="tagsList">Enter Tags (one per line)</label>
+                        <textarea class="form-control" id="tagsList" rows="5" placeholder="tag1&#10;tag2&#10;tag3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="fas fa-tags"></i> Upload Tags
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    // Function to load statistics
+    function loadStats() {
+        showAjaxLoader();
+        fetch('/weblinks/admin/stats')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalLinks').textContent = data.total_links;
+                document.getElementById('totalClicks').textContent = data.total_clicks;
+                document.getElementById('totalTags').textContent = data.total_tags;
+                document.getElementById('avgClicksPerLink').textContent = 
+                    (data.total_clicks / (data.total_links || 1)).toFixed(1);
+                
+                // Popular Links Chart
+                Highcharts.chart('popularLinksChart', {
+                    chart: { type: 'bar' },
+                    title: { text: null },
+                    xAxis: {
+                        categories: data.popular_links.map(l => l.title),
+                        title: { text: null }
+                    },
+                    yAxis: {
+                        title: { text: 'Clicks' }
+                    },
+                    series: [{
+                        name: 'Clicks',
+                        data: data.popular_links.map(l => l.clicks)
+                    }],
+                    credits: { enabled: false }
+                });
+
+                // Tags Distribution Chart
+                Highcharts.chart('tagsChart', {
+                    chart: { type: 'pie' },
+                    title: { text: null },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Links',
+                        data: data.tags_distribution.map(t => ({
+                            name: t.name,
+                            y: t.count
+                        }))
+                    }],
+                    credits: { enabled: false }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading stats:', error);
+                toastr.error('Failed to load statistics');
+            })
+            .finally(() => {
+                hideAjaxLoader();
+            });
+    }
+
+    // Bulk upload links
+    document.getElementById('bulkUploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showAjaxLoader();
+        const formData = new FormData();
+        formData.append('csrf_token', csrfToken);
+        formData.append('file', document.getElementById('csvFile').files[0]);
+
+        fetch('/weblinks/admin/bulk-upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toastr.success('Links uploaded successfully');
+                document.getElementById('csvFile').value = '';
+                loadStats();
+            } else {
+                toastr.error(data.error || 'Upload failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading links:', error);
+            toastr.error('Failed to upload links');
+        })
+        .finally(() => {
+            hideAjaxLoader();
+        });
+    });
+
+    // Bulk upload tags
+    document.getElementById('bulkTagsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showAjaxLoader();
+        const tags = document.getElementById('tagsList').value
+            .split('\n')
+            .map(t => t.trim())
+            .filter(t => t);
+
+        fetch('/weblinks/admin/bulk-tags', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ tags })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toastr.success('Tags uploaded successfully');
+                document.getElementById('tagsList').value = '';
+                loadStats();
+            } else {
+                toastr.error(data.error || 'Upload failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading tags:', error);
+            toastr.error('Failed to upload tags');
+        })
+        .finally(() => {
+            hideAjaxLoader();
+        });
+    });
+
+    // Initial load
+    loadStats();
+});
+</script>
+{% endblock %}
+
+### index.html 
+
+{% extends "base.html" %}
+
+{% block title %}WebLinks{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('weblinks.static', filename='weblinks.css') }}">
+{% endblock %}
+
+{% block page_content %}
+<!-- Common Links -->
+<div class="common-links">
+    <h5>Common Links</h5>
+    <div id="commonLinks" class="d-flex flex-wrap">
+        <!-- Populated dynamically -->
+    </div>
+</div>
+
+<!-- Main Links -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Links</h5>
+        {% if current_user.has_permission('edit_links') %}
+        <button class="btn btn-primary" onclick="showAddLinkModal()">
+            <i class="fas fa-plus"></i> Add Link
+        </button>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <table id="linksTable" class="table" data-can-edit="{{ current_user.has_permission('edit_links')|tojson }}">
+            <thead>
+                <tr>
+                    <th>Icon</th>
+                    <th>Title</th>
+                    <th>URL</th>
+                    <th>Tags</th>
+                    <th>Created By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add/Edit Link Modal -->
+<div class="modal" id="linkModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="linkModalTitle">Add Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="linkForm">
+                    <input type="hidden" id="linkId">
+                    <div class="mb-3">
+                        <label class="form-label" for="linkTitle">Title</label>
+                        <input type="text" class="form-control" id="linkTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="linkUrl">URL</label>
+                        <input type="url" class="form-control" id="linkUrl" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="linkDescription">Description</label>
+                        <textarea class="form-control" id="linkDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="linkIcon">Icon</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i id="iconPreview" class="fas fa-link"></i>
+                            </span>
+                            <select class="form-control" id="linkIcon">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <small class="form-text text-muted">Start typing to search for icons</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="linkTags">Tags</label>
+                        <select class="form-control" id="linkTags" multiple>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveLink()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Link Modal -->
+<div class="modal" id="viewLinkModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Link Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="linkDetails">
+                    <!-- Populated dynamically -->
+                </div>
+                <div class="accordion mt-3">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#historyAccordion">
+                                Change History
+                            </button>
+                        </h2>
+                        <div id="historyAccordion" class="accordion-collapse collapse">
+                            <div class="accordion-body history-scroll">
+                                <div id="linkHistory">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('weblinks.static', filename='weblinks.js') }}"></script>
+<script>
+// Set up CSRF token for all AJAX requests
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", $('meta[name="csrf-token"]').attr('content'));
+        }
+    }
+});
+</script>
+{% endblock %}
+
+### weblinks.css
+/* Common Links Section */
+.common-links {
+    margin: 20px 0;
+    padding: 15px;
+    background: var(--bs-body-bg);
+    border-radius: 8px;
+    border: 1px solid var(--bs-border-color);
+}
+
+#commonLinks {
+    margin: -0.5rem;
+}
+
+/* Info Box Styling */
+.info-box {
+    display: block;
+    padding: 1rem;
+    margin: 0.5rem;
+    background: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.25rem;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    min-width: 10px;
+}
+
+.info-box:hover {
+    text-decoration: none;
+    border-color: var(--bs-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+    transform: translateY(-2px);
+}
+
+.info-box-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.info-box-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bs-info);
+    color: white;
+    border-radius: 8px;
+}
+
+.info-box-icon i {
+    font-size: 24px;
+}
+
+.info-box-text {
+    font-size: 0.875rem;
+    color: var(--bs-body-color);
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.2;
+    text-align: center;
+}
+
+/* Modal Styling */
+.modal-header {
+    background: var(--bs-tertiary-bg);
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.modal-footer {
+    background: var(--bs-tertiary-bg);
+    border-top: 1px solid var(--bs-border-color);
+}
+
+/* History Styling */
+.history-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.history-meta {
+    font-size: 0.875rem;
+    color: var(--bs-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.history-date {
+    margin-left: 1rem;
+}
+
+.history-changes {
+    margin-left: 1.5rem;
+}
+
+.history-change {
+    margin: 0.25rem 0;
+}
+
+.history-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Icon Preview */
+.icon-preview {
+    margin-right: 0.5rem;
+}
+
+/* Badge Spacing */
+.badge + .badge {
+    margin-left: 0.25rem;
+}
+
+/* Table Button Spacing */
+.btn-sm + .btn-sm {
+    margin-left: 0.25rem;
+}
+
+### weblinks.js 
+// Icon Search and Loading
+function initializeIconSearch() {
+    $('#linkIcon').select2({
+        theme: 'bootstrap4',
+        templateResult: formatIconOption,
+        templateSelection: formatIconOption,
+        dropdownParent: $('#linkModal'),
+        ajax: {
+            url: '/weblinks/search_icons',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term || '',
+                    page: params.page || 1
+                };
+            },
+            processResults: function(data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.icons.map(icon => ({
+                        id: icon,
+                        text: icon
+                    })),
+                    pagination: {
+                        more: data.has_more
+                    }
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0,
+        placeholder: 'Search icons...'
+    }).on('select2:select', function(e) {
+        // Update icon preview when selection changes
+        $('#iconPreview').attr('class', e.params.data.id);
+    });
+}
+
+function formatIconOption(icon) {
+    if (!icon.id) return icon.text;
+    return $(`<span><i class="${icon.id} icon-preview"></i> ${icon.text}</span>`);
+}
+
+// Tag Management
+function initializeTagSelect() {
+    $('#linkTags').select2({
+        theme: 'bootstrap4',
+        tags: true,
+        tokenSeparators: [',', ' '],
+        placeholder: 'Select or add tags',
+        dropdownParent: $('#linkModal'),
+        templateSelection: function(data) {
+            if (!data.id) return data.text;
+            return $(`<span class="badge bg-info">${data.text}</span>`);
+        }
+    });
+}
+
+// Create Link Card
+function createLinkCard(link) {
+    return `
+        <div class="col d-flex justify-content-center align-items-center">
+            <a href="${link.url}" target="_blank" class="info-box" onclick="recordClick(${link.id})" title="${link.title}">
+                <div class="info-box-content">
+                    <div class="info-box-icon bg-info elevation-1">
+                        <i class="${link.icon || 'fas fa-link'}"></i>
+                    </div>
+                    <span class="info-box-text">${link.title}</span>
+                    ${(link.tags || []).length > 0 ? `
+                        <div class="info-box-tags">
+                            ${link.tags.map(tag => `<span class="badge bg-secondary">${tag}</span>`).join(' ')}
+                        </div>
+                    ` : ''}
+                </div>
+            </a>
+        </div>
+    `;
+}
+
+// DataTable Initialization
+function initializeDataTable() {
+    return $('#linksTable').DataTable({
+        ajax: {
+            url: "/weblinks/get_links",
+            dataSrc: ''
+        },
+        columns: [
+            { 
+                data: 'icon',
+                render: function(data) {
+                    return `<i class="${data || 'fas fa-link'} fa-lg"></i>`;
+                }
+            },
+            { data: 'title' },
+            { 
+                data: 'url',
+                render: function(data) {
+                    return `<a href="${data}" target="_blank">${data}</a>`;
+                }
+            },
+            { 
+                data: 'tags',
+                render: function(data) {
+                    return (data || []).map(tag => 
+                        `<span class="badge bg-info">${tag}</span>`
+                    ).join(' ');
+                }
+            },
+            { data: 'created_by' },
+            {
+                data: null,
+                render: function(data, type, row) {
+                    let buttons = `<button class="btn btn-sm btn-info" onclick="viewLink(${row.id})" title="View Details">
+                        <i class="fas fa-eye"></i>
+                    </button>`;
+                    if (hasPermission()) {
+                        buttons += `
+                            <button class="btn btn-sm btn-primary ms-1" onclick="editLink(${row.id})" title="Edit Link">
+                                <i class="fas fa-edit"></i>
+                            </button>`;
+                    }
+                    return buttons;
+                }
+            }
+        ]
+    });
+}
+
+// Common Links
+function loadCommonLinks() {
+    $.get("/weblinks/get_common_links", function(links) {
+        const container = $('#commonLinks');
+        container.empty();
+        links.forEach(link => {
+            container.append(createLinkCard(link));
+        });
+    });
+}
+
+// Modal Management
+let currentLinkId = null;
+let lastFocusedElement = null;
+
+function initializeModals() {
+    const linkModalEl = document.getElementById('linkModal');
+    const viewLinkModalEl = document.getElementById('viewLinkModal');
+
+    // Initialize modals with proper focus management
+    const linkModal = new bootstrap.Modal(linkModalEl, {
+        backdrop: 'static',
+        keyboard: true
+    });
+
+    const viewLinkModal = new bootstrap.Modal(viewLinkModalEl, {
+        backdrop: 'static',
+        keyboard: true
+    });
+
+    // Store last focused element before modal opens
+    linkModalEl.addEventListener('show.bs.modal', function () {
+        lastFocusedElement = document.activeElement;
+    });
+
+    viewLinkModalEl.addEventListener('show.bs.modal', function () {
+        lastFocusedElement = document.activeElement;
+    });
+
+    // Return focus to the last focused element when modal closes
+    linkModalEl.addEventListener('hidden.bs.modal', function () {
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+        }
+    });
+
+    viewLinkModalEl.addEventListener('hidden.bs.modal', function () {
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+        }
+    });
+
+    // Store modal instances
+    window.linkModal = linkModal;
+    window.viewLinkModal = viewLinkModal;
+}
+
+// Edit Link
+function editLink(id) {
+    currentLinkId = id;
+    $('#linkModalTitle').text('Edit Link');
+    
+    $.get(`/weblinks/get_link/${id}`, function(link) {
+        $('#linkTitle').val(link.title);
+        $('#linkUrl').val(link.url);
+        $('#linkDescription').val(link.description);
+        
+        // Set icon with proper data structure for Select2
+        const iconOption = new Option(link.icon, link.icon, true, true);
+        $('#linkIcon')
+            .empty()
+            .append(iconOption)
+            .trigger('change');
+        $('#iconPreview').attr('class', link.icon);
+        
+        // Set tags with proper data structure for Select2
+        const tagOptions = (link.tags || []).map(tag => new Option(tag, tag, true, true));
+        $('#linkTags')
+            .empty()
+            .append(tagOptions)
+            .trigger('change');
+        
+        linkModal.show();
+    });
+}
+
+// View Link
+function viewLink(id) {
+    $.get(`/weblinks/get_link/${id}`, function(link) {
+        const details = $('#linkDetails');
+        details.html(`
+            <div class="mb-3">
+                <h6>Title</h6>
+                <p>${link.title}</p>
+            </div>
+            <div class="mb-3">
+                <h6>URL</h6>
+                <p><a href="${link.url}" target="_blank">${link.url}</a></p>
+            </div>
+            <div class="mb-3">
+                <h6>Description</h6>
+                <p>${link.description || 'No description'}</p>
+            </div>
+            <div class="mb-3">
+                <h6>Icon</h6>
+                <p><i class="${link.icon}"></i> ${link.icon}</p>
+            </div>
+            <div class="mb-3">
+                <h6>Tags</h6>
+                <p>${(link.tags || []).map(tag => 
+                    `<span class="badge bg-info">${tag}</span>`
+                ).join(' ') || 'No tags'}</p>
+            </div>
+        `);
+
+        const history = $('#linkHistory');
+        history.empty();
+        link.history.forEach(entry => {
+            const changes = formatChanges(entry.changes);
+            if (changes.length > 0) {
+                history.append(`
+                    <div class="history-item">
+                        <div class="history-meta">
+                            <i class="fas fa-user"></i> ${entry.changed_by}
+                            <span class="history-date">
+                                <i class="fas fa-clock"></i> ${new Date(entry.changed_at).toLocaleString()}
+                            </span>
+                        </div>
+                        <div class="history-changes">
+                            ${changes.map(change => `<div class="history-change">${change}</div>`).join('')}
+                        </div>
+                    </div>
+                `);
+            }
+        });
+
+        viewLinkModal.show();
+    });
+}
+
+// Format Changes for History
+function formatChanges(changes) {
+    let formattedChanges = [];
+    
+    // Handle icon changes specially since they're nested
+    if (changes.icon) {
+        const iconChange = changes.icon;
+        if (iconChange.new && iconChange.old) {
+            formattedChanges.push(`Icon changed from "${iconChange.old}" to "${iconChange.new}"`);
+        } else if (iconChange.new) {
+            formattedChanges.push(`Icon set to "${iconChange.new}"`);
+        }
+    }
+    
+    // Handle other direct changes
+    for (const [key, value] of Object.entries(changes)) {
+        if (key === 'icon') continue; // Skip icon as it's already handled
+        
+        if (typeof value === 'object' && value !== null) {
+            if (value.new && value.old) {
+                // Format arrays nicely
+                if (Array.isArray(value.new) && Array.isArray(value.old)) {
+                    formattedChanges.push(`${key.charAt(0).toUpperCase() + key.slice(1)} changed from [${value.old.join(', ')}] to [${value.new.join(', ')}]`);
+                } else {
+                    formattedChanges.push(`${key.charAt(0).toUpperCase() + key.slice(1)} changed from "${value.old}" to "${value.new}"`);
+                }
+            } else if (value.new) {
+                if (Array.isArray(value.new)) {
+                    formattedChanges.push(`${key.charAt(0).toUpperCase() + key.slice(1)} set to [${value.new.join(', ')}]`);
+                } else {
+                    formattedChanges.push(`${key.charAt(0).toUpperCase() + key.slice(1)} set to "${value.new}"`);
+                }
+            }
+        }
+    }
+    
+    return formattedChanges;
+}
+
+function recordClick(id) {
+    $.post(`/weblinks/record_click/${id}`);
+}
+
+function showAddLinkModal() {
+    currentLinkId = null;
+    $('#linkModalTitle').text('Add Link');
+    $('#linkForm')[0].reset();
+    $('#linkTags').val(null).trigger('change');
+    $('#linkIcon').val('fas fa-link').trigger('change');
+    linkModal.show();
+}
+
+function saveLink() {
+    const data = {
+        title: $('#linkTitle').val(),
+        url: $('#linkUrl').val(),
+        description: $('#linkDescription').val(),
+        icon: $('#linkIcon').val(),
+        tags: $('#linkTags').val() || []
+    };
+
+    const url = currentLinkId ? 
+        `/weblinks/update_link/${currentLinkId}` :
+        "/weblinks/create_link";
+    
+    $.ajax({
+        url: url,
+        method: currentLinkId ? 'PUT' : 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function() {
+            linkModal.hide();
+            if (window.linksTable) {
+                window.linksTable.ajax.reload();
+            }
+            loadCommonLinks();
+        },
+        error: function(xhr) {
+            alert(xhr.responseJSON?.error || 'Error saving link');
+        }
+    });
+}
+
+function hasPermission() {
+    return $('#linksTable').data('canEdit');
+}
+
+// Initialize everything when document is ready
+$(document).ready(function() {
+    initializeModals();
+    initializeIconSearch();
+    initializeTagSelect();
+    window.linksTable = initializeDataTable();
+    loadCommonLinks();
+});

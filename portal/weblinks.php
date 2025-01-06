@@ -1,36 +1,13 @@
 <?php
-require_once 'config.php';
-require_once 'header.php';
+// Suppress deprecation warnings for clean JSON output
+error_reporting(E_ALL & ~E_DEPRECATED);
+ini_set('display_errors', '0');
 
+session_start();
+require_once 'config.php';
 global $APP;
 
-// Debug request and session state
-debug_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
-debug_log("Request URI: " . $_SERVER['REQUEST_URI']);
-debug_log("Script Name: " . $_SERVER['SCRIPT_NAME']);
-debug_log("PHP Self: " . $_SERVER['PHP_SELF']);
-debug_log("Document Root: " . $_SERVER['DOCUMENT_ROOT']);
-debug_log("Current Directory: " . getcwd());
-debug_log("Session state: " . print_r($_SESSION, true));
-
-// Verify file locations
-$script_path = realpath(dirname(__FILE__) . "/../shared/scripts/modules/weblinks/weblinks.py");
-$data_path = realpath(dirname(__FILE__) . "/../shared/data/weblinks/weblinks.json");
-debug_log("Python Script Path: " . ($script_path ?: 'not found'));
-debug_log("Data File Path: " . ($data_path ?: 'not found'));
-
-// Check if user is logged in and has access
-require_once 'includes/auth.php';
-if (!check_access('weblinks')) {
-    debug_log("Access denied to weblinks");
-    header('Location: 403.php');
-    exit();
-}
-
-$_SESSION['user'] = $_SESSION[$APP."_user_name"];
-debug_log("User authenticated: " . $_SESSION['user']);
-
-// Function to execute Python script and return JSON response
+// Function definitions
 function execute_weblinks_command($command, $args = []) {
     $python_script = realpath(dirname(__FILE__) . "/../shared/scripts/modules/weblinks/weblinks.py");
     if (!file_exists($python_script)) {
@@ -58,75 +35,43 @@ function execute_weblinks_command($command, $args = []) {
         error_log("WebLinks Error: Empty output from Python script");
         return ['error' => 'Empty response from Python script'];
     }
-    
-    // Clean and parse output
-    $output = trim($output);
-    if (empty($output)) {
-        error_log("WebLinks Error: Empty output from Python script");
-        return ['error' => 'Empty response from Python script'];
+
+    // Handle hex-encoded output
+    if (ctype_xdigit($output)) {
+        $output = hex2bin($output);
     }
 
-    // Try to parse JSON with different cleanup steps
-    $result = null;
-    $attempts = [
-        // First attempt: raw output
-        function($out) { return $out; },
-        // Second attempt: remove control characters
-        function($out) { return preg_replace('/[\x00-\x1F\x7F]/', '', $out); },
-        // Third attempt: remove newlines and extra whitespace
-        function($out) { return preg_replace('/\s+/', ' ', $out); },
-        // Fourth attempt: try to fix common JSON issues
-        function($out) { 
-            $out = str_replace(['}{', '}{', '}[', '[}'], ['},{', '},{', '},[', '[,{'], $out);
-            return preg_replace('/(["\]}])(["\[{])/', '$1,$2', $out);
-        }
-    ];
-
-    foreach ($attempts as $attempt) {
-        $cleaned = $attempt($output);
-        $result = json_decode($cleaned, true);
-        if ($result !== null) {
-            break;
-        }
-    }
-
+    // Parse JSON response
+    $result = json_decode($output, true);
     if ($result === null) {
-        error_log("WebLinks JSON decode error: " . json_last_error_msg());
+        error_log("WebLinks Error decoding JSON: " . json_last_error_msg());
         error_log("WebLinks Raw output: " . bin2hex($output));
         return ['error' => 'Invalid response from Python script'];
-    }
-
-    // Return the result, handling different wrapper formats
-    if (isset($result['items'])) {
-        return $result['items'];
-    } elseif (isset($result['error'])) {
-        return ['error' => $result['error']];
-    } elseif (isset($result['value'])) {
-        return $result['value'];
     }
 
     return $result;
 }
 
-// Debug logging function
 function debug_log($message) {
     error_log("WebLinks Debug: $message");
 }
 
-debug_log("Request URI: " . $_SERVER['REQUEST_URI']);
-debug_log("Session user: " . ($_SESSION['user'] ?? 'not set'));
-debug_log("Session roles: " . json_encode($_SESSION['roles'] ?? []));
-
-// Handle AJAX requests
+// Handle AJAX requests first, before any HTML output
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     header('Content-Type: application/json');
     
+    // Process AJAX request
     $action = $_GET['action'] ?? '';
     
     switch ($action) {
         case 'get_links':
             $result = execute_weblinks_command('get_all_links');
-            echo json_encode($result);
+            // Ensure we return an array for DataTable
+            if (isset($result['items'])) {
+                echo json_encode($result['items']);
+            } else {
+                echo json_encode([]);
+            }
             break;
             
         case 'get_link':
@@ -140,7 +85,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         case 'create_link':
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data = json_decode(file_get_contents('php://input'), true);
-                $data['created_by'] = $_SESSION['user'];
+                $data['created_by'] = $_SESSION[$APP."_user_name"];
                 $result = execute_weblinks_command('create_link', $data);
                 echo json_encode($result);
             }
@@ -151,10 +96,23 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 $id = $_GET['id'] ?? null;
                 if ($id) {
                     $data = json_decode(file_get_contents('php://input'), true);
-                    $data['changed_by'] = $_SESSION['user'];
+                    $data['changed_by'] = $_SESSION[$APP."_user_name"];
                     $result = execute_weblinks_command('update_link', [
                         'id' => intval($id),
                         'updates' => $data
+                    ]);
+                    echo json_encode($result);
+                }
+            }
+            break;
+            
+        case 'delete_link':
+            if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                $id = $_GET['id'] ?? null;
+                if ($id) {
+                    $result = execute_weblinks_command('delete_link', [
+                        'id' => intval($id),
+                        'deleted_by' => $_SESSION[$APP."_user_name"]
                     ]);
                     echo json_encode($result);
                 }
@@ -171,12 +129,22 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             
         case 'get_common_links':
             $result = execute_weblinks_command('get_common_links');
-            echo json_encode($result);
+            // Ensure we return an array for common links
+            if (isset($result['items'])) {
+                echo json_encode($result['items']);
+            } else {
+                echo json_encode([]);
+            }
             break;
             
         case 'get_tags':
             $result = execute_weblinks_command('get_all_tags');
-            echo json_encode($result);
+            // Ensure we return an array for Select2
+            if (isset($result['items'])) {
+                echo json_encode($result['items']);
+            } else {
+                echo json_encode([]);
+            }
             break;
             
         case 'add_tags':
@@ -191,56 +159,75 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $result = execute_weblinks_command('get_stats');
             echo json_encode($result);
             break;
-
-        case 'download_template':
-            header('Content-Type: text/csv');
-            header('Content-Disposition: attachment; filename="weblinks_template.csv"');
-            $output = fopen('php://output', 'w');
-            fputcsv($output, ['url', 'title', 'description', 'icon', 'tags']);
-            fputcsv($output, ['https://example.com', 'Example Title', 'Description here', 'fas fa-link', 'tag1,tag2']);
-            fclose($output);
-            exit();
-            break;
-
+            
         case 'bulk_upload':
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
-                $file = $_FILES['file'];
-                if (pathinfo($file['name'], PATHINFO_EXTENSION) !== 'csv') {
-                    echo json_encode(['success' => false, 'error' => 'File must be CSV']);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'No file uploaded or upload error']);
                     break;
                 }
 
+                $file = $_FILES['file'];
+                if ($file['type'] !== 'text/csv') {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Invalid file type. Please upload a CSV file']);
+                    break;
+                }
+
+                // Parse CSV file
                 $handle = fopen($file['tmp_name'], 'r');
-                $header = fgetcsv($handle);
-                $links = [];
-                while (($data = fgetcsv($handle)) !== false) {
-                    if (count($data) >= 2) {
-                        $links[] = [
-                            'url' => $data[0],
-                            'title' => $data[1],
-                            'description' => $data[2] ?? '',
-                            'icon' => $data[3] ?? 'fas fa-link',
-                            'tags' => isset($data[4]) ? array_map('trim', explode(',', $data[4])) : [],
-                            'created_by' => $_SESSION['user']
-                        ];
+                if (!$handle) {
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Could not read CSV file']);
+                    break;
+                }
+
+                // Get headers
+                $headers = fgetcsv($handle, 0, ",", '"', "\\");
+                if (!$headers) {
+                    fclose($handle);
+                    http_response_code(400);
+                    echo json_encode(['error' => 'Invalid CSV format']);
+                    break;
+                }
+
+                // Convert headers to lowercase for case-insensitive matching
+                $headers = array_map('strtolower', $headers);
+                
+                // Required columns
+                $required = ['url', 'title'];
+                foreach ($required as $field) {
+                    if (!in_array($field, $headers)) {
+                        fclose($handle);
+                        http_response_code(400);
+                        echo json_encode(['error' => "Missing required column: $field"]);
+                        break 2;
                     }
+                }
+
+                $links = [];
+                while (($data = fgetcsv($handle, 0, ",", '"', "\\")) !== FALSE) {
+                    $row = array_combine($headers, $data);
+                    
+                    // Handle tags column (comma-separated list)
+                    if (isset($row['tags'])) {
+                        $row['tags'] = array_map('trim', explode(',', $row['tags']));
+                    } else {
+                        $row['tags'] = [];
+                    }
+
+                    // Add metadata
+                    $row['created_by'] = $_SESSION[$APP."_user_name"];
+                    
+                    $links[] = $row;
                 }
                 fclose($handle);
 
-                $result = execute_weblinks_command('bulk_upload', ['links' => $links]);
+                $result = execute_weblinks_command('bulk_upload', [
+                    'links' => $links
+                ]);
                 echo json_encode($result);
-            }
-            break;
-
-        case 'bulk_tags':
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $data = json_decode(file_get_contents('php://input'), true);
-                if (!$data || !isset($data['tags'])) {
-                    echo json_encode(['success' => false, 'error' => 'No tags provided']);
-                    break;
-                }
-                $result = execute_weblinks_command('add_tags', ['tags' => $data['tags']]);
-                echo json_encode(['success' => $result]);
             }
             break;
             
@@ -250,6 +237,35 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     exit();
 }
+
+// Include header for non-AJAX requests
+require_once 'header.php';
+
+// Debug request and session state
+debug_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
+debug_log("Request URI: " . $_SERVER['REQUEST_URI']);
+debug_log("Script Name: " . $_SERVER['SCRIPT_NAME']);
+debug_log("PHP Self: " . $_SERVER['PHP_SELF']);
+debug_log("Document Root: " . $_SERVER['DOCUMENT_ROOT']);
+debug_log("Current Directory: " . getcwd());
+debug_log("Session state: " . print_r($_SESSION, true));
+
+// Verify file locations
+$script_path = realpath(dirname(__FILE__) . "/../shared/scripts/modules/weblinks/weblinks.py");
+$data_path = realpath(dirname(__FILE__) . "/../shared/data/weblinks/weblinks.json");
+debug_log("Python Script Path: " . ($script_path ?: 'not found'));
+debug_log("Data File Path: " . ($data_path ?: 'not found'));
+
+// Check if user is logged in and has access
+require_once 'includes/auth.php';
+if (!check_access('weblinks')) {
+    debug_log("Access denied to weblinks");
+    header('Location: 403.php');
+    exit();
+}
+
+$_SESSION['user'] = $_SESSION[$APP."_user_name"];
+debug_log("User authenticated: " . $_SESSION['user']);
 
 // Check if accessing admin page
 if (isset($_GET['admin']) && $_GET['admin'] === 'true') {
@@ -334,12 +350,14 @@ if (!is_dir($dataDir)) {
 </div>
 
 <!-- Add/Edit Link Modal -->
-<div class="modal" id="linkModal" tabindex="-1">
+<div class="modal" id="linkModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="linkModalTitle">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="linkModalTitle">Add Link</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="linkForm">
@@ -376,7 +394,7 @@ if (!is_dir($dataDir)) {
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" onclick="saveLink()">Save</button>
             </div>
         </div>
@@ -384,12 +402,14 @@ if (!is_dir($dataDir)) {
 </div>
 
 <!-- View Link Modal -->
-<div class="modal" id="viewLinkModal" tabindex="-1">
+<div class="modal" id="viewLinkModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="viewLinkModalTitle">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Link Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div id="linkDetails">
@@ -398,7 +418,7 @@ if (!is_dir($dataDir)) {
                 <div class="accordion mt-3">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#historyAccordion">
+                            <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#historyAccordion">
                                 Change History
                             </button>
                         </h2>

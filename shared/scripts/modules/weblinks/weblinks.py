@@ -46,10 +46,33 @@ class WeblinksManager:
                 return link
         return None
 
+    def _normalize_url(self, url: str) -> str:
+        """Normalize URL for comparison by removing trailing slashes and converting to lowercase"""
+        # Remove trailing slash if present
+        url = url.rstrip('/')
+        # Convert to lowercase for case-insensitive comparison
+        url = url.lower()
+        # Remove http:// or https:// if present
+        if url.startswith('http://'):
+            url = url[7:]
+        elif url.startswith('https://'):
+            url = url[8:]
+        return url
+
+    def _is_exact_duplicate_url(self, url: str, existing_links: List[Dict]) -> bool:
+        """Check if the exact URL already exists"""
+        normalized_url = self._normalize_url(url)
+        return any(self._normalize_url(link['url']) == normalized_url for link in existing_links)
+
     def create_link(self, url: str, title: str, description: str, icon: str, 
                    tags: List[str], created_by: str) -> Dict:
         """Create a new weblink"""
         data = self._load_data()
+        
+        # Store original URL but check normalized version for duplicates
+        if self._is_exact_duplicate_url(url, data['links']):
+            raise ValueError(f"A link with the exact URL '{url}' already exists")
+            
         link_id = data['next_id']
         data['next_id'] += 1
 
@@ -82,6 +105,13 @@ class WeblinksManager:
         
         for i, link in enumerate(data['links']):
             if link['id'] == link_id:
+                # If URL is being updated, check for duplicates
+                if 'url' in updates:
+                    # Don't count the current link when checking for duplicates
+                    other_links = [l for l in data['links'] if l['id'] != link_id]
+                    if self._is_exact_duplicate_url(updates['url'], other_links):
+                        raise ValueError(f"A link with the URL '{updates['url']}' already exists")
+
                 # Track changes for history
                 changes = {}
                 for key, new_value in updates.items():
@@ -159,16 +189,19 @@ class WeblinksManager:
                 # Check for required fields
                 if not link.get('url') or not link.get('title'):
                     skipped += 1
+                    errors.append(f"Skipped link due to missing required fields: {link.get('url', '(no url)')} - {link.get('title', '(no title)')}")
                     continue
 
-                # Check for duplicate URL
+                # Look for existing link with exact URL match
                 existing_link = None
+                normalized_url = self._normalize_url(link['url'])
                 for l in data['links']:
-                    if l['url'] == link['url']:
+                    if self._normalize_url(l['url']) == normalized_url:
                         existing_link = l
                         break
 
                 if existing_link:
+                    # Only count as updated if changes were actually made
                     # Update existing link
                     changes = {}
                     for key in ['title', 'description', 'icon']:
@@ -203,6 +236,8 @@ class WeblinksManager:
                         existing_link['history'].append(history_entry)
                         existing_link['updated_at'] = datetime.utcnow().isoformat()
                         updated += 1
+                    else:
+                        added += 1  # Count as added if it's an exact match (no changes needed)
                 else:
                     # Create new link
                     link_id = data['next_id']
@@ -239,6 +274,23 @@ class WeblinksManager:
             'updated': updated,
             'skipped': skipped,
             'errors': errors
+        }
+
+    def delete_link(self, link_id: int, deleted_by: str) -> Dict:
+        """Delete a weblink"""
+        data = self._load_data()
+        for i, link in enumerate(data['links']):
+            if link['id'] == link_id:
+                deleted_link = data['links'].pop(i)
+                self._save_data(data)
+                return {
+                    'success': True,
+                    'message': f'Link "{deleted_link["title"]}" deleted successfully',
+                    'deleted_by': deleted_by
+                }
+        return {
+            'success': False,
+            'message': 'Link not found'
         }
 
     def get_stats(self) -> Dict:
@@ -329,6 +381,11 @@ if __name__ == '__main__':
             result = manager.add_tags(args.get('tags', []))
         elif command == 'get_stats':
             result = manager.get_stats()
+        elif command == 'delete_link':
+            result = manager.delete_link(
+                link_id=args.get('id'),
+                deleted_by=args.get('deleted_by', 'system')
+            )
         elif command == 'bulk_upload':
             result = manager.bulk_upload(args.get('links', []))
         else:

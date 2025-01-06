@@ -5,11 +5,6 @@ if (defined('APP_INITIALIZED')) {
 }
 define('APP_INITIALIZED', true);
 
-// Configure session settings
-ini_set('session.cookie_httponly', '1');
-ini_set('session.use_only_cookies', '1');
-ini_set('session.cookie_samesite', 'Lax');
-
 // Get the base path and domain from the current request
 $basePath = dirname(dirname($_SERVER['SCRIPT_NAME']));
 if ($basePath === '\\') $basePath = '/'; // Fix for Windows paths
@@ -19,23 +14,23 @@ if (strpos($domain, ':') !== false) {
     $domain = strstr($domain, ':', true); // Remove port number if present
 }
 
-// Configure session if not already started
+// Configure all session settings before starting the session
 if (session_status() === PHP_SESSION_NONE) {
-    session_start([
-        'cookie_path' => $basePath,
-        'cookie_domain' => $domain,
-        'cookie_httponly' => true,
-        'use_only_cookies' => true,
-        'cookie_samesite' => 'Lax'
-    ]);
-} else {
-    // Update session cookie parameters
+    // Set session cookie parameters
     session_set_cookie_params([
         'path' => $basePath,
         'domain' => $domain,
         'httponly' => true,
         'samesite' => 'Lax'
     ]);
+    
+    // Set additional session settings
+    ini_set('session.use_only_cookies', '1');
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_samesite', 'Lax');
+    
+    // Start the session with all settings configured
+    session_start();
 }
 
 date_default_timezone_set('UTC');

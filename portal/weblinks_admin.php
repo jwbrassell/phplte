@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+
 require_once 'header.php';
 
 // Check if user has access to admin functionality
@@ -55,9 +56,9 @@ if (!check_access('weblinks_admin')) {
                             <button class="btn btn-primary" onclick="uploadCSV()">
                                 <i class="fas fa-upload"></i> Upload
                             </button>
-                            <a href="weblinks.php?action=download_template" class="btn btn-secondary">
+                            <button class="btn btn-secondary" onclick="downloadTemplate()">
                                 <i class="fas fa-download"></i> Download Template
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div id="uploadResult" style="display: none;">
@@ -107,8 +108,11 @@ $(document).ready(function() {
     loadStats();
     loadTags();
 
-    // Setup file input
-    bsCustomFileInput.init();
+    // Handle custom file input display
+    $('.custom-file-input').on('change', function() {
+        var fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').html(fileName);
+    });
 });
 
 // Load and display statistics
@@ -183,6 +187,11 @@ function uploadCSV() {
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
 
+    // Show loading state
+    const uploadBtn = $('button:contains("Upload")');
+    const originalText = uploadBtn.html();
+    uploadBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Uploading...');
+
     $.ajax({
         url: 'weblinks.php?action=bulk_upload',
         type: 'POST',
@@ -190,25 +199,49 @@ function uploadCSV() {
         processData: false,
         contentType: false,
         success: function(response) {
+            // Check if response indicates success (either explicitly or by having expected properties)
+            if (response.success || (response.added !== undefined && response.updated !== undefined)) {
+                const resultHtml = `
+                    <div class="alert ${response.success ? 'alert-success' : 'alert-danger'}">
+                        <h5><i class="icon fas ${response.success ? 'fa-check' : 'fa-ban'}"></i> Upload Result</h5>
+                        <p>Added: ${response.added}</p>
+                        <p>Updated: ${response.updated}</p>
+                        <p>Skipped: ${response.skipped}</p>
+                        ${response.errors && response.errors.length ? `
+                            <p>Errors:</p>
+                            <ul>
+                                ${response.errors.map(error => `<li>${error}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                    </div>
+                `;
+                $('#uploadResult').html(resultHtml).show();
+                loadStats();
+            }
+        },
+        error: function(xhr) {
+            let errorMessage = 'Error uploading file';
+            try {
+                const response = JSON.parse(xhr.responseText);
+                errorMessage = response.error || errorMessage;
+            } catch (e) {
+                errorMessage = xhr.responseText || errorMessage;
+            }
             const resultHtml = `
-                <div class="alert ${response.success ? 'alert-success' : 'alert-danger'}">
-                    <h5><i class="icon fas ${response.success ? 'fa-check' : 'fa-ban'}"></i> Upload Result</h5>
-                    <p>Added: ${response.added}</p>
-                    <p>Updated: ${response.updated}</p>
-                    <p>Skipped: ${response.skipped}</p>
-                    ${response.errors.length ? `
-                        <p>Errors:</p>
-                        <ul>
-                            ${response.errors.map(error => `<li>${error}</li>`).join('')}
-                        </ul>
-                    ` : ''}
+                <div class="alert alert-danger">
+                    <h5><i class="icon fas fa-ban"></i> Upload Failed</h5>
+                    <p>${errorMessage}</p>
                 </div>
             `;
             $('#uploadResult').html(resultHtml).show();
-            loadStats();
         },
-        error: function(xhr) {
-            alert('Error uploading file: ' + xhr.responseText);
+        complete: function() {
+            // Reset file input
+            fileInput.value = '';
+            $('.custom-file-label').html('Choose CSV file');
+            
+            // Reset button state
+            uploadBtn.prop('disabled', false).html(originalText);
         }
     });
 }
@@ -239,6 +272,18 @@ function saveBulkTags() {
             alert('Error saving tags: ' + xhr.responseText);
         }
     });
+}
+</script>
+
+<script>
+function downloadTemplate() {
+    // Create a hidden form and submit it
+    const form = document.createElement('form');
+    form.method = 'GET';
+    form.action = 'download_template.php';
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
 }
 </script>
 

@@ -1,0 +1,608 @@
+2025-01-06 02:53:35,341 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:54:12,479 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:54:12,479 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:54:45,365 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:54:45,366 - DEBUG - Command: get_all_links
+2025-01-06 02:54:45,366 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:55:41,467 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:55:41,467 - DEBUG - Command: get_all_links
+2025-01-06 02:55:41,467 - DEBUG - Result type: <class 'list'>
+2025-01-06 02:55:41,467 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:55:44,574 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_stats']
+2025-01-06 02:55:44,574 - DEBUG - Command: get_stats
+2025-01-06 02:55:44,574 - DEBUG - Result type: <class 'dict'>
+2025-01-06 02:55:44,574 - DEBUG - Result: {'total_links': 1, 'total_clicks': 0, 'total_tags': 1, 'popular_links': [{'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}]}
+2025-01-06 02:56:23,128 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:56:23,128 - DEBUG - Command: get_all_links
+2025-01-06 02:56:23,128 - DEBUG - Result type: <class 'list'>
+2025-01-06 02:56:23,128 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:57:18,245 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:57:18,245 - DEBUG - Command: get_all_links
+2025-01-06 02:57:18,245 - DEBUG - Result type: <class 'list'>
+2025-01-06 02:57:18,245 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:57:18,245 - DEBUG - Encoded output: [
+  {
+    "id": 1,
+    "url": "https://example.com",
+    "title": "Test Link",
+    "description": "A test link",
+    "icon": "fas fa-link",
+    "tags": [
+      "test"
+    ],
+    "created_by": "system",
+    "created_at": "2025-01-06T08:51:52.291690",
+    "updated_at": "2025-01-06T08:51:52.291931",
+    "click_count": 0,
+    "history": []
+  }
+]
+2025-01-06 02:58:24,289 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:58:24,289 - DEBUG - Command: get_all_links
+2025-01-06 02:58:24,289 - DEBUG - Result type: <class 'list'>
+2025-01-06 02:58:24,289 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:59:05,216 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:59:05,217 - DEBUG - Command: get_all_links
+2025-01-06 02:59:05,217 - DEBUG - Result type: <class 'list'>
+2025-01-06 02:59:05,217 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 02:59:46,551 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 02:59:46,551 - DEBUG - Command: get_all_links
+2025-01-06 02:59:46,551 - DEBUG - Result type: <class 'list'>
+2025-01-06 02:59:46,551 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:00:40,047 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:00:40,047 - DEBUG - Command: get_all_links
+2025-01-06 03:00:40,047 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:00:40,047 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:01:59,366 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:01:59,367 - DEBUG - Command: get_all_links
+2025-01-06 03:01:59,367 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:01:59,367 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:01:59,367 - DEBUG - Raw result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:01:59,367 - DEBUG - Encoded output: [{"id": 1, "url": "https://example.com", "title": "Test Link", "description": "A test link", "icon": "fas fa-link", "tags": ["test"], "created_by": "system", "created_at": "2025-01-06T08:51:52.291690", "updated_at": "2025-01-06T08:51:52.291931", "click_count": 0, "history": []}]
+2025-01-06 03:02:46,779 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:02:46,780 - DEBUG - Command: get_all_links
+2025-01-06 03:02:46,780 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:02:46,780 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:02:46,780 - DEBUG - Prepared result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:02:46,780 - DEBUG - Encoded output: [{"id": 1, "url": "https://example.com", "title": "Test Link", "description": "A test link", "icon": "fas fa-link", "tags": ["test"], "created_by": "system", "created_at": "2025-01-06T08:51:52.291690", "updated_at": "2025-01-06T08:51:52.291931", "click_count": 0, "history": []}]
+2025-01-06 03:03:44,599 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:03:44,600 - DEBUG - Command: get_all_links
+2025-01-06 03:03:44,600 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:03:44,600 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:03:44,600 - DEBUG - Output: [{"id": 1, "url": "https://example.com", "title": "Test Link", "description": "A test link", "icon": "fas fa-link", "tags": ["test"], "created_by": "system", "created_at": "2025-01-06T08:51:52.291690", "updated_at": "2025-01-06T08:51:52.291931", "click_count": 0, "history": []}]
+2025-01-06 03:03:57,689 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:03:57,689 - DEBUG - Command: get_all_links
+2025-01-06 03:03:57,689 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:03:57,689 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:04:22,896 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_stats']
+2025-01-06 03:04:22,896 - DEBUG - Command: get_stats
+2025-01-06 03:04:22,896 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:04:22,896 - DEBUG - Result: {'total_links': 1, 'total_clicks': 0, 'total_tags': 1, 'popular_links': [{'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}]}
+2025-01-06 03:04:54,589 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:04:54,589 - DEBUG - Command: get_all_links
+2025-01-06 03:04:54,589 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:04:54,589 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:05:26,488 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:05:26,488 - DEBUG - Command: get_all_links
+2025-01-06 03:05:26,488 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:05:26,488 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:06:40,585 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:06:40,586 - DEBUG - Command: get_all_links
+2025-01-06 03:06:40,586 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:06:40,586 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:07:22,067 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:07:22,068 - DEBUG - Command: get_all_links
+2025-01-06 03:07:22,068 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:07:22,068 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:11:34,854 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:11:34,855 - DEBUG - Command: get_all_links
+2025-01-06 03:11:34,855 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:11:34,855 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:12:16,217 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_all_links']
+2025-01-06 03:12:16,217 - DEBUG - Command: get_all_links
+2025-01-06 03:12:16,217 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:12:16,217 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:13:29,569 - DEBUG - Command arguments: ['shared/scripts/modules/weblinks/weblinks.py', 'get_stats']
+2025-01-06 03:13:29,569 - DEBUG - Command: get_stats
+2025-01-06 03:13:29,569 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:13:29,569 - DEBUG - Result: {'total_links': 1, 'total_clicks': 0, 'total_tags': 1, 'popular_links': [{'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}]}
+2025-01-06 03:27:11,378 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:27:11,378 - DEBUG - Command: get_all_links
+2025-01-06 03:27:11,378 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:27:11,378 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:27:11,549 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:27:11,549 - DEBUG - Command: get_common_links
+2025-01-06 03:27:11,549 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:27:11,549 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 03:27:25,891 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:27:25,891 - DEBUG - Command: get_all_tags
+2025-01-06 03:27:25,891 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:27:25,891 - DEBUG - Result: ['test']
+2025-01-06 03:27:27,183 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:27:27,183 - DEBUG - Command: get_all_tags
+2025-01-06 03:27:27,183 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:27:27,183 - DEBUG - Result: ['test']
+2025-01-06 03:27:27,350 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:27:27,350 - DEBUG - Command: get_all_tags
+2025-01-06 03:27:27,350 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:27:27,350 - DEBUG - Result: ['test']
+2025-01-06 03:27:27,520 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:27:27,520 - DEBUG - Command: get_all_tags
+2025-01-06 03:27:27,520 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:27:27,520 - DEBUG - Result: ['test']
+2025-01-06 03:27:30,201 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'create_link', '{"url":"https:\\/\\/www.verizon.com","title":"Verizon","description":"test","icon":"fas fa-link","tags":[],"created_by":"Test User"}']
+2025-01-06 03:27:30,201 - DEBUG - Command: create_link
+2025-01-06 03:27:30,201 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:27:30,201 - DEBUG - Result: {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}
+2025-01-06 03:28:21,974 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:28:21,974 - DEBUG - Command: get_all_links
+2025-01-06 03:28:21,975 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:28:21,975 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}]
+2025-01-06 03:28:22,148 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:28:22,148 - DEBUG - Command: get_common_links
+2025-01-06 03:28:22,148 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:28:22,148 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}]
+2025-01-06 03:29:15,620 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:29:15,620 - DEBUG - Command: get_all_links
+2025-01-06 03:29:15,620 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:29:15,620 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}]
+2025-01-06 03:29:15,800 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:29:15,800 - DEBUG - Command: get_common_links
+2025-01-06 03:29:15,800 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:29:15,800 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}]
+2025-01-06 03:29:26,306 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:29:26,306 - DEBUG - Command: get_all_tags
+2025-01-06 03:29:26,306 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:29:26,306 - DEBUG - Result: ['test']
+2025-01-06 03:29:28,086 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:29:28,086 - DEBUG - Command: get_all_tags
+2025-01-06 03:29:28,086 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:29:28,086 - DEBUG - Result: ['test']
+2025-01-06 03:29:28,254 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:29:28,254 - DEBUG - Command: get_all_tags
+2025-01-06 03:29:28,254 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:29:28,254 - DEBUG - Result: ['test']
+2025-01-06 03:29:28,421 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:29:28,421 - DEBUG - Command: get_all_tags
+2025-01-06 03:29:28,421 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:29:28,421 - DEBUG - Result: ['test']
+2025-01-06 03:29:31,748 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'create_link', '{"url":"https:\\/\\/www.verizon.com","title":"Verizon","description":"test","icon":"fas fa-link","tags":[],"created_by":"Test User"}']
+2025-01-06 03:29:31,749 - DEBUG - Command: create_link
+2025-01-06 03:29:31,749 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:29:31,750 - DEBUG - Result: {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}
+2025-01-06 03:30:05,442 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'create_link', '{"url":"https:\\/\\/www.verizon.com","title":"Verizon","description":"test","icon":"fas fa-link","tags":[],"created_by":"Test User"}']
+2025-01-06 03:30:05,443 - DEBUG - Command: create_link
+2025-01-06 03:30:05,443 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:30:05,443 - DEBUG - Result: {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}
+2025-01-06 03:32:05,581 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:32:05,581 - DEBUG - Command: get_all_links
+2025-01-06 03:32:05,581 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:32:05,581 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:32:05,655 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:32:05,656 - DEBUG - Command: get_common_links
+2025-01-06 03:32:05,656 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:32:05,656 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:33:08,032 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:33:08,032 - DEBUG - Command: get_all_links
+2025-01-06 03:33:08,032 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:33:08,032 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:33:08,095 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:33:08,095 - DEBUG - Command: get_common_links
+2025-01-06 03:33:08,095 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:33:08,095 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:33:14,930 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_link', '{"id":1}']
+2025-01-06 03:33:14,930 - DEBUG - Command: get_link
+2025-01-06 03:33:14,930 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:33:14,930 - DEBUG - Result: {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}
+2025-01-06 03:34:25,635 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:34:25,636 - DEBUG - Command: get_all_links
+2025-01-06 03:34:25,636 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:34:25,636 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:34:25,714 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:34:25,714 - DEBUG - Command: get_common_links
+2025-01-06 03:34:25,714 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:34:25,714 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:35:02,594 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:35:02,594 - DEBUG - Command: get_all_links
+2025-01-06 03:35:02,594 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:35:02,594 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:35:02,670 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:35:02,670 - DEBUG - Command: get_common_links
+2025-01-06 03:35:02,670 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:35:02,670 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:35:07,727 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_link', '{"id":3}']
+2025-01-06 03:35:07,728 - DEBUG - Command: get_link
+2025-01-06 03:35:07,728 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:35:07,728 - DEBUG - Result: {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}
+2025-01-06 03:35:14,725 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_link', '{"id":2}']
+2025-01-06 03:35:14,725 - DEBUG - Command: get_link
+2025-01-06 03:35:14,725 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:35:14,725 - DEBUG - Result: {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}
+2025-01-06 03:39:53,225 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:39:53,225 - DEBUG - Command: get_all_links
+2025-01-06 03:39:53,225 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:39:53,225 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:39:53,289 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:39:53,289 - DEBUG - Command: get_common_links
+2025-01-06 03:39:53,289 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:39:53,289 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 2, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:27:30.201328', 'updated_at': '2025-01-06T09:27:30.201446', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:39:57,883 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'delete_link', '{"id":2,"deleted_by":null}']
+2025-01-06 03:39:57,884 - DEBUG - Command: delete_link
+2025-01-06 03:39:57,884 - DEBUG - Result type: <class 'bool'>
+2025-01-06 03:39:57,884 - DEBUG - Result: True
+2025-01-06 03:43:09,791 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:43:09,791 - DEBUG - Command: get_all_links
+2025-01-06 03:43:09,791 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:43:09,792 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:43:09,871 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:43:09,871 - DEBUG - Command: get_common_links
+2025-01-06 03:43:09,872 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:43:09,872 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 3, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:29:31.748911', 'updated_at': '2025-01-06T09:29:31.749018', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:43:14,625 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'delete_link', '{"id":3,"deleted_by":"Test User"}']
+2025-01-06 03:43:14,625 - DEBUG - Command: delete_link
+2025-01-06 03:43:14,625 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:43:14,625 - DEBUG - Result: {'success': True, 'message': 'Link "Verizon" deleted successfully', 'deleted_by': 'Test User'}
+2025-01-06 03:43:14,689 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:43:14,690 - DEBUG - Command: get_all_links
+2025-01-06 03:43:14,690 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:43:14,690 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:43:14,750 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:43:14,750 - DEBUG - Command: get_common_links
+2025-01-06 03:43:14,750 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:43:14,751 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:46:00,875 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:46:00,875 - DEBUG - Command: get_all_links
+2025-01-06 03:46:00,875 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:46:00,876 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:46:00,940 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:46:00,940 - DEBUG - Command: get_common_links
+2025-01-06 03:46:00,940 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:46:00,940 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:46:03,112 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:46:03,112 - DEBUG - Command: get_all_links
+2025-01-06 03:46:03,112 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:46:03,112 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:46:03,173 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:46:03,173 - DEBUG - Command: get_common_links
+2025-01-06 03:46:03,173 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:46:03,173 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:54:07,855 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:54:07,856 - DEBUG - Command: get_all_links
+2025-01-06 03:54:07,856 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:54:07,856 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:54:07,929 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:54:07,929 - DEBUG - Command: get_common_links
+2025-01-06 03:54:07,929 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:54:07,929 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:56:11,881 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:56:11,881 - DEBUG - Command: get_all_links
+2025-01-06 03:56:11,881 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:11,881 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:56:11,945 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:56:11,945 - DEBUG - Command: get_common_links
+2025-01-06 03:56:11,945 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:11,945 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}]
+2025-01-06 03:56:37,177 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:37,177 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:37,177 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:37,177 - DEBUG - Result: ['test']
+2025-01-06 03:56:38,905 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:38,906 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:38,906 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:38,906 - DEBUG - Result: ['test']
+2025-01-06 03:56:39,210 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:39,210 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:39,210 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:39,210 - DEBUG - Result: ['test']
+2025-01-06 03:56:40,090 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:40,090 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:40,090 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:40,090 - DEBUG - Result: ['test']
+2025-01-06 03:56:40,298 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:40,298 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:40,298 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:40,298 - DEBUG - Result: ['test']
+2025-01-06 03:56:40,485 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:40,485 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:40,485 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:40,485 - DEBUG - Result: ['test']
+2025-01-06 03:56:40,686 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:40,686 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:40,686 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:40,686 - DEBUG - Result: ['test']
+2025-01-06 03:56:40,778 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:40,778 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:40,779 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:40,779 - DEBUG - Result: ['test']
+2025-01-06 03:56:40,896 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:40,896 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:40,896 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:40,896 - DEBUG - Result: ['test']
+2025-01-06 03:56:41,181 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:41,181 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:41,181 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:41,181 - DEBUG - Result: ['test']
+2025-01-06 03:56:44,488 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:44,488 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:44,488 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:44,488 - DEBUG - Result: ['test']
+2025-01-06 03:56:44,615 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:44,615 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:44,615 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:44,615 - DEBUG - Result: ['test']
+2025-01-06 03:56:44,863 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:44,863 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:44,863 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:44,863 - DEBUG - Result: ['test']
+2025-01-06 03:56:45,077 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:45,077 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:45,077 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:45,077 - DEBUG - Result: ['test']
+2025-01-06 03:56:45,330 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 03:56:45,330 - DEBUG - Command: get_all_tags
+2025-01-06 03:56:45,330 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:45,330 - DEBUG - Result: ['test']
+2025-01-06 03:56:48,552 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'create_link', '{"url":"https:\\/\\/www.amazon.com","title":"amazom","description":"amazon","icon":"fas fa-link","tags":["shopping","news"],"created_by":"Test User"}']
+2025-01-06 03:56:48,553 - DEBUG - Command: create_link
+2025-01-06 03:56:48,553 - DEBUG - Result type: <class 'dict'>
+2025-01-06 03:56:48,553 - DEBUG - Result: {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}
+2025-01-06 03:56:48,623 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:56:48,623 - DEBUG - Command: get_all_links
+2025-01-06 03:56:48,623 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:48,623 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 03:56:48,680 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:56:48,680 - DEBUG - Command: get_common_links
+2025-01-06 03:56:48,680 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:56:48,681 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 03:57:36,844 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 03:57:36,845 - DEBUG - Command: get_all_links
+2025-01-06 03:57:36,845 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:57:36,845 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 03:57:36,904 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 03:57:36,904 - DEBUG - Command: get_common_links
+2025-01-06 03:57:36,904 - DEBUG - Result type: <class 'list'>
+2025-01-06 03:57:36,904 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:02:55,055 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:02:55,055 - DEBUG - Command: get_all_links
+2025-01-06 04:02:55,055 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:02:55,055 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:02:55,117 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:02:55,117 - DEBUG - Command: get_common_links
+2025-01-06 04:02:55,117 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:02:55,117 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:05:35,618 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:05:35,619 - DEBUG - Command: get_all_links
+2025-01-06 04:05:35,619 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:05:35,619 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:05:35,682 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:05:35,682 - DEBUG - Command: get_common_links
+2025-01-06 04:05:35,682 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:05:35,683 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:05:38,534 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:05:38,534 - DEBUG - Command: get_stats
+2025-01-06 04:05:38,534 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:05:38,534 - DEBUG - Result: {'total_links': 3, 'total_clicks': 0, 'total_tags': 3, 'popular_links': [{'title': 'Test Link', 'clicks': 0}, {'title': 'Verizon', 'clicks': 0}, {'title': 'amazom', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:05:38,595 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:05:38,595 - DEBUG - Command: get_all_tags
+2025-01-06 04:05:38,595 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:05:38,595 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:05:46,681 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:05:46,681 - DEBUG - Command: get_all_links
+2025-01-06 04:05:46,681 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:05:46,681 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:05:46,741 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:05:46,741 - DEBUG - Command: get_common_links
+2025-01-06 04:05:46,741 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:05:46,741 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:08:59,326 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:08:59,326 - DEBUG - Command: get_stats
+2025-01-06 04:08:59,326 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:08:59,326 - DEBUG - Result: {'total_links': 3, 'total_clicks': 0, 'total_tags': 3, 'popular_links': [{'title': 'Test Link', 'clicks': 0}, {'title': 'Verizon', 'clicks': 0}, {'title': 'amazom', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:08:59,389 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:08:59,389 - DEBUG - Command: get_all_tags
+2025-01-06 04:08:59,390 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:08:59,390 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:09:01,414 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:09:01,414 - DEBUG - Command: get_stats
+2025-01-06 04:09:01,414 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:09:01,414 - DEBUG - Result: {'total_links': 3, 'total_clicks': 0, 'total_tags': 3, 'popular_links': [{'title': 'Test Link', 'clicks': 0}, {'title': 'Verizon', 'clicks': 0}, {'title': 'amazom', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:09:01,471 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:09:01,471 - DEBUG - Command: get_all_tags
+2025-01-06 04:09:01,471 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:09:01,471 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:09:39,885 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:09:39,886 - DEBUG - Command: get_all_links
+2025-01-06 04:09:39,886 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:09:39,886 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:09:39,947 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:09:39,947 - DEBUG - Command: get_common_links
+2025-01-06 04:09:39,947 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:09:39,947 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 0, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 0, 'history': []}]
+2025-01-06 04:09:42,326 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'record_click', '{"id":5}']
+2025-01-06 04:09:42,327 - DEBUG - Command: record_click
+2025-01-06 04:09:42,327 - DEBUG - Result type: <class 'bool'>
+2025-01-06 04:09:42,327 - DEBUG - Result: True
+2025-01-06 04:09:45,641 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'record_click', '{"id":4}']
+2025-01-06 04:09:45,642 - DEBUG - Command: record_click
+2025-01-06 04:09:45,642 - DEBUG - Result type: <class 'bool'>
+2025-01-06 04:09:45,642 - DEBUG - Result: True
+2025-01-06 04:09:50,556 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:09:50,556 - DEBUG - Command: get_all_links
+2025-01-06 04:09:50,556 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:09:50,556 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}]
+2025-01-06 04:09:50,621 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:09:50,621 - DEBUG - Command: get_common_links
+2025-01-06 04:09:50,621 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:09:50,621 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 04:09:53,856 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:09:53,856 - DEBUG - Command: get_stats
+2025-01-06 04:09:53,856 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:09:53,856 - DEBUG - Result: {'total_links': 3, 'total_clicks': 2, 'total_tags': 3, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:09:53,911 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:09:53,911 - DEBUG - Command: get_all_tags
+2025-01-06 04:09:53,911 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:09:53,911 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:10:25,813 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:10:25,814 - DEBUG - Command: get_stats
+2025-01-06 04:10:25,814 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:10:25,814 - DEBUG - Result: {'total_links': 3, 'total_clicks': 2, 'total_tags': 3, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:10:25,871 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:10:25,871 - DEBUG - Command: get_all_tags
+2025-01-06 04:10:25,871 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:10:25,871 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:10:27,893 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:10:27,893 - DEBUG - Command: get_stats
+2025-01-06 04:10:27,893 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:10:27,893 - DEBUG - Result: {'total_links': 3, 'total_clicks': 2, 'total_tags': 3, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:10:27,951 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:10:27,951 - DEBUG - Command: get_all_tags
+2025-01-06 04:10:27,951 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:10:27,951 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:11:45,236 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:11:45,236 - DEBUG - Command: get_stats
+2025-01-06 04:11:45,236 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:11:45,236 - DEBUG - Result: {'total_links': 3, 'total_clicks': 2, 'total_tags': 3, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:11:45,296 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:11:45,296 - DEBUG - Command: get_all_tags
+2025-01-06 04:11:45,296 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:11:45,296 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:24:03,954 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:24:03,954 - DEBUG - Command: get_all_links
+2025-01-06 04:24:03,954 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:24:03,954 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}]
+2025-01-06 04:24:04,014 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:24:04,014 - DEBUG - Command: get_common_links
+2025-01-06 04:24:04,014 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:24:04,014 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 04:24:21,595 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:24:21,596 - DEBUG - Command: get_stats
+2025-01-06 04:24:21,596 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:24:21,596 - DEBUG - Result: {'total_links': 3, 'total_clicks': 2, 'total_tags': 3, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}]}
+2025-01-06 04:24:21,653 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:24:21,653 - DEBUG - Command: get_all_tags
+2025-01-06 04:24:21,653 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:24:21,653 - DEBUG - Result: ['test', 'shopping', 'news']
+2025-01-06 04:24:33,836 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'bulk_upload', '{"links":[{"url":"https:\\/\\/www.kroger.com","title":"Example Link","description":"Description of the link","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"},{"url":"https:\\/\\/www.bestbuy.com","title":"Best buy","description":"Best Buy","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"}]}']
+2025-01-06 04:24:33,836 - DEBUG - Command: bulk_upload
+2025-01-06 04:24:33,836 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:24:33,836 - DEBUG - Result: {'success': True, 'added': 2, 'updated': 0, 'skipped': 0, 'errors': []}
+2025-01-06 04:26:56,343 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:26:56,344 - DEBUG - Command: get_stats
+2025-01-06 04:26:56,344 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:26:56,344 - DEBUG - Result: {'total_links': 5, 'total_clicks': 2, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}, {'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}
+2025-01-06 04:26:56,401 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:26:56,401 - DEBUG - Command: get_all_tags
+2025-01-06 04:26:56,401 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:26:56,401 - DEBUG - Result: ['test', 'shopping', 'news', 'tag1', 'tag2', 'tag3']
+2025-01-06 04:27:02,750 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'bulk_upload', '{"links":[{"url":"https:\\/\\/www.kroger.com","title":"Example Link","description":"Description of the link","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"},{"url":"https:\\/\\/www.bestbuy.com","title":"Best buy","description":"Best Buy","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"}]}']
+2025-01-06 04:27:02,751 - DEBUG - Command: bulk_upload
+2025-01-06 04:27:02,751 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:27:02,751 - DEBUG - Result: {'success': True, 'added': 0, 'updated': 0, 'skipped': 2, 'errors': ['Skipped duplicate URL: https://www.kroger.com', 'Skipped duplicate URL: https://www.bestbuy.com']}
+2025-01-06 04:27:02,813 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:27:02,813 - DEBUG - Command: get_stats
+2025-01-06 04:27:02,813 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:27:02,813 - DEBUG - Result: {'total_links': 5, 'total_clicks': 2, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}, {'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}
+2025-01-06 04:27:47,917 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:27:47,917 - DEBUG - Command: get_all_links
+2025-01-06 04:27:47,917 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:27:47,917 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}, {'id': 7, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836350', 'updated_at': '2025-01-06T10:24:33.836350', 'click_count': 0, 'history': []}]
+2025-01-06 04:27:47,978 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:27:47,978 - DEBUG - Command: get_common_links
+2025-01-06 04:27:47,978 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:27:47,978 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}, {'id': 7, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836350', 'updated_at': '2025-01-06T10:24:33.836350', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:07,550 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:29:07,551 - DEBUG - Command: get_stats
+2025-01-06 04:29:07,551 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:07,551 - DEBUG - Result: {'total_links': 5, 'total_clicks': 2, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}, {'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}
+2025-01-06 04:29:07,609 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:29:07,609 - DEBUG - Command: get_all_tags
+2025-01-06 04:29:07,609 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:07,609 - DEBUG - Result: ['test', 'shopping', 'news', 'tag1', 'tag2', 'tag3']
+2025-01-06 04:29:10,389 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:29:10,389 - DEBUG - Command: get_stats
+2025-01-06 04:29:10,389 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:10,389 - DEBUG - Result: {'total_links': 5, 'total_clicks': 2, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}, {'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}
+2025-01-06 04:29:10,452 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:29:10,452 - DEBUG - Command: get_all_tags
+2025-01-06 04:29:10,452 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:10,452 - DEBUG - Result: ['test', 'shopping', 'news', 'tag1', 'tag2', 'tag3']
+2025-01-06 04:29:22,922 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'bulk_upload', '{"links":[{"url":"https:\\/\\/www.kroger.com","title":"Example Link","description":"Description of the link","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"},{"url":"https:\\/\\/www.bestbuy.com","title":"Best buy","description":"Best Buy","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"}]}']
+2025-01-06 04:29:22,923 - DEBUG - Command: bulk_upload
+2025-01-06 04:29:22,923 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:22,923 - DEBUG - Result: {'success': True, 'added': 2, 'updated': 0, 'skipped': 0, 'errors': []}
+2025-01-06 04:29:22,984 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:29:22,985 - DEBUG - Command: get_stats
+2025-01-06 04:29:22,985 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:22,985 - DEBUG - Result: {'total_links': 5, 'total_clicks': 2, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'amazom', 'clicks': 1}, {'title': 'Test Link', 'clicks': 0}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'test', 'count': 1}, {'name': 'shopping', 'count': 1}, {'name': 'news', 'count': 1}, {'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}
+2025-01-06 04:29:31,108 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:29:31,108 - DEBUG - Command: get_all_links
+2025-01-06 04:29:31,108 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:31,108 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}, {'id': 7, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836350', 'updated_at': '2025-01-06T10:24:33.836350', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:31,167 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:29:31,167 - DEBUG - Command: get_common_links
+2025-01-06 04:29:31,167 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:31,167 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 5, 'url': 'https://www.amazon.com', 'title': 'amazom', 'description': 'amazon', 'icon': 'fas fa-link', 'tags': ['shopping', 'news'], 'created_by': 'Test User', 'created_at': '2025-01-06T09:56:48.552237', 'updated_at': '2025-01-06T09:56:48.552353', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}, {'id': 7, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836350', 'updated_at': '2025-01-06T10:24:33.836350', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:36,201 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'delete_link', '{"id":5,"deleted_by":"Test User"}']
+2025-01-06 04:29:36,201 - DEBUG - Command: delete_link
+2025-01-06 04:29:36,201 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:36,201 - DEBUG - Result: {'success': True, 'message': 'Link "amazom" deleted successfully', 'deleted_by': 'Test User'}
+2025-01-06 04:29:36,265 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:29:36,265 - DEBUG - Command: get_all_links
+2025-01-06 04:29:36,265 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:36,265 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}, {'id': 7, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836350', 'updated_at': '2025-01-06T10:24:33.836350', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:36,325 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:29:36,325 - DEBUG - Command: get_common_links
+2025-01-06 04:29:36,325 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:36,325 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}, {'id': 7, 'url': 'https://www.bestbuy.com', 'title': 'Best buy', 'description': 'Best Buy', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836350', 'updated_at': '2025-01-06T10:24:33.836350', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:38,944 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'delete_link', '{"id":7,"deleted_by":"Test User"}']
+2025-01-06 04:29:38,944 - DEBUG - Command: delete_link
+2025-01-06 04:29:38,944 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:38,945 - DEBUG - Result: {'success': True, 'message': 'Link "Best buy" deleted successfully', 'deleted_by': 'Test User'}
+2025-01-06 04:29:39,005 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:29:39,005 - DEBUG - Command: get_all_links
+2025-01-06 04:29:39,005 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:39,005 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:39,063 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:29:39,063 - DEBUG - Command: get_common_links
+2025-01-06 04:29:39,063 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:39,063 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 6, 'url': 'https://www.kroger.com', 'title': 'Example Link', 'description': 'Description of the link', 'icon': 'fas fa-link', 'tags': ['tag1', 'tag2', 'tag3'], 'created_by': 'Test User', 'created_at': '2025-01-06T10:24:33.836197', 'updated_at': '2025-01-06T10:24:33.836341', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:41,133 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'delete_link', '{"id":6,"deleted_by":"Test User"}']
+2025-01-06 04:29:41,134 - DEBUG - Command: delete_link
+2025-01-06 04:29:41,134 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:41,134 - DEBUG - Result: {'success': True, 'message': 'Link "Example Link" deleted successfully', 'deleted_by': 'Test User'}
+2025-01-06 04:29:41,195 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:29:41,195 - DEBUG - Command: get_all_links
+2025-01-06 04:29:41,195 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:41,195 - DEBUG - Result: [{'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}, {'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}]
+2025-01-06 04:29:41,253 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:29:41,254 - DEBUG - Command: get_common_links
+2025-01-06 04:29:41,254 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:41,254 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}, {'id': 1, 'url': 'https://example.com', 'title': 'Test Link', 'description': 'A test link', 'icon': 'fas fa-link', 'tags': ['test'], 'created_by': 'system', 'created_at': '2025-01-06T08:51:52.291690', 'updated_at': '2025-01-06T08:51:52.291931', 'click_count': 0, 'history': []}]
+2025-01-06 04:29:43,461 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'delete_link', '{"id":1,"deleted_by":"Test User"}']
+2025-01-06 04:29:43,462 - DEBUG - Command: delete_link
+2025-01-06 04:29:43,462 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:43,462 - DEBUG - Result: {'success': True, 'message': 'Link "Test Link" deleted successfully', 'deleted_by': 'Test User'}
+2025-01-06 04:29:43,523 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_links', '[]']
+2025-01-06 04:29:43,523 - DEBUG - Command: get_all_links
+2025-01-06 04:29:43,523 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:43,523 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}]
+2025-01-06 04:29:43,580 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_common_links', '[]']
+2025-01-06 04:29:43,580 - DEBUG - Command: get_common_links
+2025-01-06 04:29:43,580 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:43,580 - DEBUG - Result: [{'id': 4, 'url': 'https://www.verizon.com', 'title': 'Verizon', 'description': 'test', 'icon': 'fas fa-link', 'tags': [], 'created_by': 'Test User', 'created_at': '2025-01-06T09:30:05.442991', 'updated_at': '2025-01-06T09:30:05.443122', 'click_count': 1, 'history': []}]
+2025-01-06 04:29:46,534 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:29:46,534 - DEBUG - Command: get_stats
+2025-01-06 04:29:46,534 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:46,534 - DEBUG - Result: {'total_links': 1, 'total_clicks': 1, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}], 'tags_distribution': []}
+2025-01-06 04:29:46,591 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_all_tags', '[]']
+2025-01-06 04:29:46,592 - DEBUG - Command: get_all_tags
+2025-01-06 04:29:46,592 - DEBUG - Result type: <class 'list'>
+2025-01-06 04:29:46,592 - DEBUG - Result: ['test', 'shopping', 'news', 'tag1', 'tag2', 'tag3']
+2025-01-06 04:29:57,746 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'bulk_upload', '{"links":[{"url":"https:\\/\\/www.kroger.com","title":"Example Link","description":"Description of the link","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"},{"url":"https:\\/\\/www.bestbuy.com","title":"Best buy","description":"Best Buy","icon":"fas fa-link","tags":["tag1","tag2","tag3"],"created_by":"Test User"}]}']
+2025-01-06 04:29:57,747 - DEBUG - Command: bulk_upload
+2025-01-06 04:29:57,747 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:57,747 - DEBUG - Result: {'success': True, 'added': 2, 'updated': 0, 'skipped': 0, 'errors': []}
+2025-01-06 04:29:57,808 - DEBUG - Command arguments: ['/Users/justin/Downloads/phpadminlte/shared/scripts/modules/weblinks/weblinks.py', 'get_stats', '[]']
+2025-01-06 04:29:57,808 - DEBUG - Command: get_stats
+2025-01-06 04:29:57,808 - DEBUG - Result type: <class 'dict'>
+2025-01-06 04:29:57,808 - DEBUG - Result: {'total_links': 3, 'total_clicks': 1, 'total_tags': 6, 'popular_links': [{'title': 'Verizon', 'clicks': 1}, {'title': 'Example Link', 'clicks': 0}, {'title': 'Best buy', 'clicks': 0}], 'tags_distribution': [{'name': 'tag1', 'count': 2}, {'name': 'tag2', 'count': 2}, {'name': 'tag3', 'count': 2}]}

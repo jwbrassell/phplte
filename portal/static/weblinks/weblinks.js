@@ -1,18 +1,45 @@
 // Initialize DataTable and Select2 when document is ready
 $(document).ready(function() {
-    // Initialize Select2 for tags
+    // Initialize Select2 for tags with enhanced configuration
     $('#linkTags').select2({
         theme: 'bootstrap4',
         tags: true,
-        tokenSeparators: [',', ' '],
-        placeholder: 'Select or type tags',
+        multiple: true,
+        tokenSeparators: [',', ' ', ';'],
+        placeholder: 'Select or type tags, press Enter to add',
+        allowClear: true,
         ajax: {
             url: 'weblinks.php?action=get_tags',
             processResults: function(data) {
                 return {
                     results: data.map(tag => ({ id: tag, text: tag }))
                 };
+            },
+            cache: true
+        },
+        createTag: function(params) {
+            const term = $.trim(params.term);
+            if (term === '') {
+                return null;
             }
+            
+            // Convert tag to lowercase and remove special characters
+            const cleanTag = term.toLowerCase().replace(/[^a-z0-9-_]/g, '');
+            
+            if (cleanTag.length === 0) {
+                return null;
+            }
+            
+            return {
+                id: cleanTag,
+                text: cleanTag,
+                newTag: true
+            };
+        }
+    }).on('select2:select', function(e) {
+        if (e.params.data.newTag) {
+            // Automatically focus back on the input after adding a new tag
+            $(this).select2('open');
         }
     });
 
@@ -75,6 +102,9 @@ $(document).ready(function() {
                             <button class="btn btn-sm btn-primary" onclick="editLink(${data.id})">
                                 <i class="fas fa-edit"></i>
                             </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteLink(${data.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>
                     `;
                 }
@@ -118,6 +148,23 @@ function loadCommonLinks() {
     });
 }
 
+// Delete link
+function deleteLink(id) {
+    if (confirm('Are you sure you want to delete this link? This action cannot be undone.')) {
+        $.ajax({
+            url: `weblinks.php?action=delete_link&id=${id}`,
+            method: 'DELETE',
+            success: function(response) {
+                $('#linksTable').DataTable().ajax.reload();
+                loadCommonLinks();
+            },
+            error: function(xhr) {
+                alert('Error deleting link: ' + xhr.responseText);
+            }
+        });
+    }
+}
+
 // Record link click
 function recordClick(id) {
     $.get(`weblinks.php?action=record_click&id=${id}`);
@@ -130,7 +177,17 @@ function showAddLinkModal() {
     $('#linkTags').val(null).trigger('change');
     $('#linkIcon').val('fas fa-link').trigger('change');
     $('#linkModalTitle').text('Add Link');
-    $('#linkModal').modal('show');
+    const $modal = $('#linkModal');
+    const $lastFocus = $(document.activeElement);
+    
+    $modal
+        .one('shown.bs.modal', function () {
+            $('#linkTitle').trigger('focus');
+        })
+        .one('hidden.bs.modal', function () {
+            $lastFocus.trigger('focus');
+        })
+        .modal('show');
 }
 
 // Show edit link modal
@@ -154,7 +211,17 @@ function editLink(id) {
         $('#linkTags').val(link.tags).trigger('change');
         
         $('#linkModalTitle').text('Edit Link');
-        $('#linkModal').modal('show');
+        const $modal = $('#linkModal');
+        const $lastFocus = $(document.activeElement);
+        
+        $modal
+            .one('shown.bs.modal', function () {
+                $('#linkTitle').trigger('focus');
+            })
+            .one('hidden.bs.modal', function () {
+                $lastFocus.trigger('focus');
+            })
+            .modal('show');
     });
 }
 
@@ -205,26 +272,55 @@ function viewLink(id) {
         `).join('');
         $('#linkHistory').html(history);
         
-        $('#viewLinkModal').modal('show');
+        const $modal = $('#viewLinkModal');
+        const $lastFocus = $(document.activeElement);
+        
+        $modal
+            .one('shown.bs.modal', function () {
+                $(this).find('.close').trigger('focus');
+            })
+            .one('hidden.bs.modal', function () {
+                $lastFocus.trigger('focus');
+            })
+            .modal('show');
     });
 }
 
 // Save link (create or update)
 function saveLink() {
     const id = $('#linkId').val();
+    // Validate and clean the form data
+    const url = $('#linkUrl').val().trim();
+    const title = $('#linkTitle').val().trim();
+    const description = $('#linkDescription').val().trim();
+    const icon = $('#linkIcon').val();
+    const tags = ($('#linkTags').val() || []).map(tag => tag.toLowerCase().trim());
+    
+    // Basic validation
+    if (!url || !title) {
+        alert('URL and Title are required fields');
+        return;
+    }
+    
+    // Ensure URL format
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        alert('URL must start with http:// or https://');
+        return;
+    }
+    
     const data = {
-        url: $('#linkUrl').val(),
-        title: $('#linkTitle').val(),
-        description: $('#linkDescription').val(),
-        icon: $('#linkIcon').val(),
-        tags: $('#linkTags').val() || []
+        url: url,
+        title: title,
+        description: description,
+        icon: icon,
+        tags: tags
     };
     
     const method = id ? 'PUT' : 'POST';
-    const url = id ? `weblinks.php?action=update_link&id=${id}` : 'weblinks.php?action=create_link';
+    const endpoint = id ? `weblinks.php?action=update_link&id=${id}` : 'weblinks.php?action=create_link';
     
     $.ajax({
-        url: url,
+        url: endpoint,
         method: method,
         contentType: 'application/json',
         data: JSON.stringify(data),

@@ -1,5 +1,47 @@
 <?php
 /**
+ * Check if user has access to a specific feature/page
+ */
+function check_access($feature) {
+    global $APP;
+    if (!isset($_SESSION[$APP."_adom_groups"])) {
+        return false;
+    }
+    
+    $adom_groups_string = $_SESSION[$APP."_adom_groups"];
+    $adom_groups = explode(",", str_replace(["[", "]", "'", " "], "", $adom_groups_string));
+    
+    // Get menu configuration
+    $menuFile = dirname(__FILE__) . '/../config/menu-bar.json';
+    if (!file_exists($menuFile)) {
+        return false;
+    }
+    
+    $menuData = json_decode(file_get_contents($menuFile), true);
+    if (!$menuData) {
+        return false;
+    }
+    
+    // Check each menu category for the feature
+    foreach ($menuData as $category => $value) {
+        if (isset($value['urls'])) {
+            foreach ($value['urls'] as $title => $info) {
+                if (strpos($info['url'], $feature) !== false) {
+                    // Check if user has any of the required roles
+                    foreach ($adom_groups as $userRole) {
+                        if (in_array($userRole, $info['roles'])) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    return false;
+}
+
+/**
  * Check if user is authenticated
  */
 function isAuthenticated() {
