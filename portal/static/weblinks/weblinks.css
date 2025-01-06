@@ -1,0 +1,122 @@
+/* WebLinks Styles */
+.common-links {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 0.25rem;
+}
+
+.common-links .link-card {
+    margin: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    background: white;
+    display: inline-block;
+    min-width: 200px;
+}
+
+.common-links .link-card:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.link-card .link-icon {
+    margin-right: 0.5rem;
+    color: #007bff;
+}
+
+.link-card .link-title {
+    font-weight: 500;
+    color: #212529;
+}
+
+.link-card .link-meta {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+.tag-badge {
+    margin: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: #e9ecef;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    color: #495057;
+    display: inline-block;
+}
+
+.history-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-entry {
+    padding: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.history-entry:last-child {
+    border-bottom: none;
+}
+
+.history-entry .change-time {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.history-entry .change-details {
+    margin-top: 0.5rem;
+}
+
+.history-entry .change-field {
+    font-weight: 500;
+}
+
+.history-entry .change-old {
+    color: #dc3545;
+    text-decoration: line-through;
+}
+
+.history-entry .change-new {
+    color: #28a745;
+}
+
+/* Modal Styles */
+.modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+/* Table Styles */
+.table td {
+    vertical-align: middle;
+}
+
+.table .link-actions {
+    white-space: nowrap;
+}
+
+.table .link-actions .btn {
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.25rem;
+}
+
+/* Icon Preview */
+#iconPreview {
+    min-width: 1rem;
+    text-align: center;
+}
+
+/* Select2 Customization */
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+    background-color: #007bff;
+    border-color: #0056b3;
+    color: white;
+    padding: 0.25rem 0.5rem;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice__remove {
+    color: white;
+    margin-right: 0.25rem;
+}
