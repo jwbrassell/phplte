@@ -62,5 +62,19 @@
         "roles": ["admin", "user"]
       }
     }
+  },
+  "examples": {
+    "type": "category",
+    "img": "fas fa-list",
+    "urls": {
+      "Datatable List Example": {
+        "url": "e_datatable_from_json_list_of_lists.php",
+        "roles": ["admin", "user"]
+      },
+      "Datatable Dictionary Example": {
+        "url": "e_datatable_from_json_dictionary.php",
+        "roles": ["admin", "user"]
+      }
+    }
   }
 }

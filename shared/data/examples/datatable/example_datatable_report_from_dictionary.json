@@ -1,0 +1,147 @@
+{
+    "title": "Prehistoric Dinosaur Catalog",
+    "last_updated": "2025-01-06",
+    "headers": ["Common Name", "Scientific Name", "Species Type", "Period", "Length (meters)", "Diet"],
+    "data": {
+        "Tyrannosaurus Rex": {
+            "scientific_name": "Tyrannosaurus rex",
+            "species_type": "Theropod",
+            "period": "Late Cretaceous",
+            "length": "12",
+            "diet": "Carnivore"
+        },
+        "Velociraptor": {
+            "scientific_name": "Velociraptor mongoliensis",
+            "species_type": "Dromaeosaurid",
+            "period": "Late Cretaceous",
+            "length": "2",
+            "diet": "Carnivore"
+        },
+        "Stegosaurus": {
+            "scientific_name": "Stegosaurus stenops",
+            "species_type": "Stegosaur",
+            "period": "Late Jurassic",
+            "length": "9",
+            "diet": "Herbivore"
+        },
+        "Triceratops": {
+            "scientific_name": "Triceratops horridus",
+            "species_type": "Ceratopsian",
+            "period": "Late Cretaceous",
+            "length": "9",
+            "diet": "Herbivore"
+        },
+        "Brachiosaurus": {
+            "scientific_name": "Brachiosaurus altithorax",
+            "species_type": "Sauropod",
+            "period": "Late Jurassic",
+            "length": "25",
+            "diet": "Herbivore"
+        },
+        "Ankylosaurus": {
+            "scientific_name": "Ankylosaurus magniventris",
+            "species_type": "Ankylosaur",
+            "period": "Late Cretaceous",
+            "length": "8",
+            "diet": "Herbivore"
+        },
+        "Spinosaurus": {
+            "scientific_name": "Spinosaurus aegyptiacus",
+            "species_type": "Theropod",
+            "period": "Late Cretaceous",
+            "length": "15",
+            "diet": "Carnivore"
+        },
+        "Diplodocus": {
+            "scientific_name": "Diplodocus carnegii",
+            "species_type": "Sauropod",
+            "period": "Late Jurassic",
+            "length": "27",
+            "diet": "Herbivore"
+        },
+        "Allosaurus": {
+            "scientific_name": "Allosaurus fragilis",
+            "species_type": "Theropod",
+            "period": "Late Jurassic",
+            "length": "12",
+            "diet": "Carnivore"
+        },
+        "Pteranodon": {
+            "scientific_name": "Pteranodon longiceps",
+            "species_type": "Pterosaur",
+            "period": "Late Cretaceous",
+            "length": "7",
+            "diet": "Carnivore"
+        },
+        "Parasaurolophus": {
+            "scientific_name": "Parasaurolophus walkeri",
+            "species_type": "Hadrosaurid",
+            "period": "Late Cretaceous",
+            "length": "10",
+            "diet": "Herbivore"
+        },
+        "Carnotaurus": {
+            "scientific_name": "Carnotaurus sastrei",
+            "species_type": "Theropod",
+            "period": "Late Cretaceous",
+            "length": "7.5",
+            "diet": "Carnivore"
+        },
+        "Archaeopteryx": {
+            "scientific_name": "Archaeopteryx lithographica",
+            "species_type": "Avialae",
+            "period": "Late Jurassic",
+            "length": "0.5",
+            "diet": "Carnivore"
+        },
+        "Therizinosaurus": {
+            "scientific_name": "Therizinosaurus cheloniformis",
+            "species_type": "Theropod",
+            "period": "Late Cretaceous",
+            "length": "12",
+            "diet": "Herbivore"
+        },
+        "Gallimimus": {
+            "scientific_name": "Gallimimus bullatus",
+            "species_type": "Ornithomimid",
+            "period": "Late Cretaceous",
+            "length": "6",
+            "diet": "Omnivore"
+        },
+        "Deinonychus": {
+            "scientific_name": "Deinonychus antirrhopus",
+            "species_type": "Dromaeosaurid",
+            "period": "Early Cretaceous",
+            "length": "3.4",
+            "diet": "Carnivore"
+        },
+        "Protoceratops": {
+            "scientific_name": "Protoceratops andrewsi",
+            "species_type": "Ceratopsian",
+            "period": "Late Cretaceous",
+            "length": "1.8",
+            "diet": "Herbivore"
+        },
+        "Argentinosaurus": {
+            "scientific_name": "Argentinosaurus huinculensis",
+            "species_type": "Sauropod",
+            "period": "Late Cretaceous",
+            "length": "40",
+            "diet": "Herbivore"
+        },
+        "Utahraptor": {
+            "scientific_name": "Utahraptor ostrommaysi",
+            "species_type": "Dromaeosaurid",
+            "period": "Early Cretaceous",
+            "length": "6",
+            "diet": "Carnivore"
+        },
+        "Microraptor": {
+            "scientific_name": "Microraptor gui",
+            "species_type": "Dromaeosaurid",
+            "period": "Early Cretaceous",
+            "length": "0.8",
+            "diet": "Carnivore"
+        }
+    }
+}

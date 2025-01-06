@@ -1,0 +1,66 @@
+/* DataTable header styling */
+#datatable-list-view thead tr:first-child th {
+    background-color: #f4f6f9;
+    font-weight: bold;
+    padding: 12px 8px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Filter row styling */
+#datatable-list-view thead tr.filters th {
+    padding: 8px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Filter input styling */
+#datatable-list-view thead tr.filters input {
+    width: 100%;
+    padding: 6px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+#datatable-list-view thead tr.filters input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Export buttons styling */
+.dt-buttons {
+    padding: 10px 0;
+}
+
+.dt-buttons .btn {
+    margin-left: 5px;
+}
+
+.dt-buttons .btn i {
+    margin-right: 5px;
+}
+
+/* Table cell padding */
+#datatable-list-view tbody td {
+    padding: 8px;
+    vertical-align: middle;
+}
+
+/* Responsive table */
+@media screen and (max-width: 767px) {
+    #datatable-list-view thead tr.filters input {
+        font-size: 0.8rem;
+        padding: 4px;
+    }
+    
+    .dt-buttons {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .dt-buttons .btn {
+        margin: 2px;
+    }
+}
