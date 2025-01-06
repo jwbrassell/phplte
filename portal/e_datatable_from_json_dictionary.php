@@ -29,6 +29,22 @@ $category = "Examples";
 // Include header
 include('header.php');
 
+// Add breadcrumbs
+?>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="e_datatable_from_json_dictionary.php">Datatable Dictionary</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+
 // Add required DataTables CSS
 ?>
 <!-- DataTables -->

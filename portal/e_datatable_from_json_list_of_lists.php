@@ -29,6 +29,22 @@ $category = "Examples";
 // Include header
 include('header.php');
 
+// Add breadcrumbs
+?>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                    <li class="breadcrumb-item"><a href="e_datatable_from_json_list_of_lists.php">Datatable Lists of Lists</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+
 // Render the datatable list
 echo render_datatable_list('example_datatable_report.json', $page_title, $category);
 
