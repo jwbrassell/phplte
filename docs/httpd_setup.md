@@ -10,8 +10,8 @@ This guide provides step-by-step instructions for setting up Apache (httpd) with
 
 ## 1. Install Required Packages
 ```bash
-# Install Apache, PHP, and SSL module
-dnf install httpd php php-cli php-ldap mod_ssl
+# Install Apache, PHP, and required modules
+dnf install httpd php php-cli php-ldap mod_ssl php-json php-xml php-mbstring php-mysqlnd php-gd
 
 # Ensure SSL module is loaded
 ln -s /etc/httpd/conf.modules.d/00-ssl.conf /etc/httpd/conf.modules.d/ssl.conf
@@ -105,7 +105,7 @@ cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak
 # Remove default SSL config to avoid port conflicts
 mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.disabled
 
-# Create new config (replace dogcrayons.com with your actual domain)
+# Create main config (replace dogcrayons.com with your actual domain)
 cat > /etc/httpd/conf/httpd.conf << 'EOL'
 ServerRoot "/etc/httpd"
 Listen 443 https
@@ -138,7 +138,15 @@ DocumentRoot "/var/www/html"
 </Directory>
 
 <IfModule dir_module>
-    DirectoryIndex index.html
+    DirectoryIndex index.php index.html
+</IfModule>
+
+# PHP Configuration
+<IfModule php_module>
+    AddHandler application/x-httpd-php .php
+    DirectoryIndex index.php
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
 </IfModule>
 
 # SSL Configuration
@@ -157,12 +165,20 @@ Listen 80
 # HTTPS Virtual Host Configuration
 <VirtualHost *:443>
     ServerName dogcrayons.com
+    DocumentRoot "/var/www/html"
+    
     SSLEngine on
     SSLCertificateFile /etc/httpd/ssl/selfsigned.crt
     SSLCertificateKeyFile /etc/httpd/ssl/selfsigned.key
     SSLHonorCipherOrder on
     SSLCipherSuite PROFILE=SYSTEM
     SSLProxyCipherSuite PROFILE=SYSTEM
+
+    <Directory "/var/www/html">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
     <FilesMatch "\.(cgi|shtml|phtml|php)$">
         SSLOptions +StdEnvVars
@@ -216,6 +232,27 @@ Include conf.d/*.conf
 EOL
 ```
 
+# Create portal-specific config
+cat > /etc/httpd/conf.d/portal.conf << 'EOL'
+<Directory "/var/www/html/portal">
+    Options FollowSymLinks
+    AllowOverride All
+    Require all granted
+</Directory>
+
+# Allow following symlinks for dist and plugins directories
+<Directory "/var/www/html/dist">
+    Options FollowSymLinks
+    Require all granted
+</Directory>
+
+<Directory "/var/www/html/plugins">
+    Options FollowSymLinks
+    Require all granted
+</Directory>
+EOL
+```
+
 ## 8. Install Python Requirements
 ```bash
 # Activate virtual environment and install packages
@@ -265,6 +302,51 @@ rm /var/www/html/test.php
 ```
 
 ## Troubleshooting
+
+### PHP Not Working
+If only the test page works but other PHP pages don't, you may need to update your Apache configuration with proper PHP handling. Add or update the following sections in `/etc/httpd/conf/httpd.conf`:
+
+1. Enable PHP module and secure sessions:
+```apache
+<IfModule php_module>
+    AddHandler php-script .php
+    AddType text/html .php
+    DirectoryIndex index.php
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
+</IfModule>
+```
+
+2. Update DirectoryIndex to prioritize PHP:
+```apache
+<IfModule dir_module>
+    DirectoryIndex index.php index.html
+</IfModule>
+```
+
+3. Ensure proper DocumentRoot and Directory settings in SSL VirtualHost:
+```apache
+<VirtualHost *:443>
+    ServerName your-domain.com
+    DocumentRoot "/var/www/html"
+    
+    <Directory "/var/www/html">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    # ... rest of SSL configuration ...
+</VirtualHost>
+```
+
+After making these changes:
+```bash
+# Test the configuration
+apachectl configtest
+
+# If test passes, restart Apache
+systemctl restart httpd
+```
 
 ### Common Commands
 ```bash
