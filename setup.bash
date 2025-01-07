@@ -49,12 +49,7 @@ log "Starting permission and ownership setup..."
 log "Creating required directories..."
 mkdir -p $WEB_ROOT/portal/logs/{access,errors,client,python}
 mkdir -p $WEB_ROOT/shared/venv
-mkdir -p $WEB_ROOT/shared/data/oncall_calendar/uploads
-
-# Set specific permissions for oncall calendar directories
-log "Setting oncall calendar directory permissions..."
-chown -R $APACHE_USER:$APACHE_GROUP "$WEB_ROOT/shared/data/oncall_calendar"
-chmod -R 775 "$WEB_ROOT/shared/data/oncall_calendar"
+mkdir -p $WEB_ROOT/shared/data/oncall_calendar/{uploads,backups}
 
 # Set base ownership and permissions
 log "Setting base ownership and permissions..."
@@ -62,10 +57,33 @@ chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT
 find $WEB_ROOT -type d -exec chmod 755 {} \;
 find $WEB_ROOT -type f -exec chmod 644 {} \;
 
-# Set specific permissions for log directories
-log "Setting log directory permissions..."
+# Set specific directory permissions
+log "Setting specific directory permissions..."
+# Log directories
 chmod -R 775 $WEB_ROOT/portal/logs
 chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT/portal/logs
+
+# OnCall Calendar directories
+log "Setting oncall calendar directory permissions..."
+chmod -R 775 "$WEB_ROOT/shared/data/oncall_calendar"
+chown -R $APACHE_USER:$APACHE_GROUP "$WEB_ROOT/shared/data/oncall_calendar"
+
+# Create initial JSON files if they don't exist
+log "Setting up initial calendar files..."
+TEAMS_JSON="$WEB_ROOT/shared/data/oncall_calendar/teams.json"
+ROTATIONS_JSON="$WEB_ROOT/shared/data/oncall_calendar/rotations.json"
+
+if [ ! -f "$TEAMS_JSON" ]; then
+    echo '{"teams":[]}' > "$TEAMS_JSON"
+    chown $APACHE_USER:$APACHE_GROUP "$TEAMS_JSON"
+    chmod 664 "$TEAMS_JSON"
+fi
+
+if [ ! -f "$ROTATIONS_JSON" ]; then
+    echo '{"rotations":[]}' > "$ROTATIONS_JSON"
+    chown $APACHE_USER:$APACHE_GROUP "$ROTATIONS_JSON"
+    chmod 664 "$ROTATIONS_JSON"
+fi
 
 # Make Python scripts executable
 log "Setting Python script permissions..."

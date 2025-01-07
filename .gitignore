@@ -23,6 +23,18 @@ portal/logs/*.log
 shared/data/logs/system/*/*.json
 !shared/data/logs/system/*/.gitkeep
 !shared/data/logs/system/.gitkeep
+
+# Ensure oncall calendar structure is tracked
+!shared/data/oncall_calendar/
+!shared/data/oncall_calendar/teams.json
+!shared/data/oncall_calendar/rotations.json
+!shared/data/oncall_calendar/backups/
+!shared/data/oncall_calendar/uploads/
+shared/data/oncall_calendar/backups/*
+shared/data/oncall_calendar/uploads/*
+!shared/data/oncall_calendar/backups/.gitkeep
+!shared/data/oncall_calendar/uploads/.gitkeep
+
 *.sql
 *.sqlite
 
