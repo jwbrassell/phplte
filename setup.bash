@@ -45,6 +45,15 @@ fi
 
 log "Starting permission and ownership setup..."
 
+# Detect environment
+IS_PRODUCTION=false
+if [ "$WEB_ROOT" = "/var/www/html" ]; then
+    IS_PRODUCTION=true
+    log "Running in production environment"
+else
+    log "Running in development environment"
+fi
+
 # Create necessary directories if they don't exist
 log "Creating required directories..."
 mkdir -p $WEB_ROOT/portal/logs/{access,errors,client,python}
@@ -52,45 +61,73 @@ mkdir -p $WEB_ROOT/shared/venv
 mkdir -p $WEB_ROOT/shared/data/oncall_calendar/{uploads,backups}
 mkdir -p $WEB_ROOT/shared/scripts/modules/oncall_calendar
 
-# Create initial Python module directory structure
+# Set up calendar data directory
+log "Setting up calendar data..."
+CALENDAR_DATA="$WEB_ROOT/shared/data/oncall_calendar"
+TEAMS_JSON="$CALENDAR_DATA/teams.json"
+ROTATIONS_JSON="$CALENDAR_DATA/rotations.json"
+
+# Create initial JSON files
+for file in "$TEAMS_JSON" "$ROTATIONS_JSON"; do
+    if [ ! -f "$file" ]; then
+        content='{"'$(basename "$file" .json)'"":[]}'
+        echo "$content" > "$file"
+        if [ "$IS_PRODUCTION" = true ]; then
+            chown $APACHE_USER:$APACHE_GROUP "$file"
+        else
+            chmod 666 "$file"  # More permissive for development
+        fi
+    fi
+done
+
+# Set up permissions based on environment
+log "Setting up permissions..."
+if [ "$IS_PRODUCTION" = true ]; then
+    # Production permissions
+    log "Applying production permissions..."
+    
+    # Set base permissions
+    chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT
+    find $WEB_ROOT -type d -exec chmod 755 {} \;
+    find $WEB_ROOT -type f -exec chmod 644 {} \;
+    
+    # Set specific directory permissions
+    chmod -R 775 $WEB_ROOT/portal/logs
+    chmod -R 775 "$CALENDAR_DATA"
+    chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT/portal/logs
+    chown -R $APACHE_USER:$APACHE_GROUP "$CALENDAR_DATA"
+    
+    # Set Python script permissions
+    find "$WEB_ROOT" -name "*.py" -type f -exec chmod 755 {} \;
+    find "$WEB_ROOT" -name "*.py" -type f -exec chown $APACHE_USER:$APACHE_GROUP {} \;
+else
+    # Development permissions
+    log "Applying development permissions..."
+    
+    # More permissive permissions for development
+    chmod -R 777 "$CALENDAR_DATA"
+    chmod -R 777 $WEB_ROOT/portal/logs
+    find "$WEB_ROOT" -name "*.py" -type f -exec chmod 755 {} \;
+    
+    # Create Python virtual environment if it doesn't exist
+    if [ ! -d "$WEB_ROOT/shared/venv" ]; then
+        log "Creating development virtual environment..."
+        python3 -m venv "$WEB_ROOT/shared/venv"
+        source "$WEB_ROOT/shared/venv/bin/activate"
+        pip install -r requirements.txt
+        deactivate
+    fi
+fi
+
+# Create initial Python module structure if needed
 log "Setting up Python module structure..."
-touch "$WEB_ROOT/shared/scripts/modules/oncall_calendar/__init__.py"
-touch "$WEB_ROOT/shared/scripts/modules/oncall_calendar/calendar_api.py"
-touch "$WEB_ROOT/shared/scripts/modules/oncall_calendar/csv_handler.py"
-
-# Set base ownership and permissions
-log "Setting base ownership and permissions..."
-chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT
-find $WEB_ROOT -type d -exec chmod 755 {} \;
-find $WEB_ROOT -type f -exec chmod 644 {} \;
-
-# Set specific directory permissions
-log "Setting specific directory permissions..."
-# Log directories
-chmod -R 775 $WEB_ROOT/portal/logs
-chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT/portal/logs
-
-# OnCall Calendar directories
-log "Setting oncall calendar directory permissions..."
-chmod -R 775 "$WEB_ROOT/shared/data/oncall_calendar"
-chown -R $APACHE_USER:$APACHE_GROUP "$WEB_ROOT/shared/data/oncall_calendar"
-
-# Create initial JSON files if they don't exist
-log "Setting up initial calendar files..."
-TEAMS_JSON="$WEB_ROOT/shared/data/oncall_calendar/teams.json"
-ROTATIONS_JSON="$WEB_ROOT/shared/data/oncall_calendar/rotations.json"
-
-if [ ! -f "$TEAMS_JSON" ]; then
-    echo '{"teams":[]}' > "$TEAMS_JSON"
-    chown $APACHE_USER:$APACHE_GROUP "$TEAMS_JSON"
-    chmod 664 "$TEAMS_JSON"
-fi
-
-if [ ! -f "$ROTATIONS_JSON" ]; then
-    echo '{"rotations":[]}' > "$ROTATIONS_JSON"
-    chown $APACHE_USER:$APACHE_GROUP "$ROTATIONS_JSON"
-    chmod 664 "$ROTATIONS_JSON"
-fi
+for file in "__init__.py" "calendar_api.py" "csv_handler.py"; do
+    module_file="$WEB_ROOT/shared/scripts/modules/oncall_calendar/$file"
+    if [ ! -f "$module_file" ]; then
+        touch "$module_file"
+        chmod +x "$module_file"
+    fi
+done
 
 # Make Python scripts executable
 log "Setting Python script permissions..."
@@ -218,9 +255,18 @@ fi
 
 # Verify directory permissions
 log "Verifying directory permissions..."
-sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar" || error "Apache user cannot write to oncall_calendar directory"
-sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar/uploads" || error "Apache user cannot write to oncall_calendar uploads directory"
-sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar/backups" || error "Apache user cannot write to oncall_calendar backups directory"
+sudo -u $APACHE_USER test -w "$CALENDAR_DATA" || error "Apache user cannot write to oncall_calendar directory"
+sudo -u $APACHE_USER test -w "$CALENDAR_DATA/uploads" || error "Apache user cannot write to oncall_calendar uploads directory"
+sudo -u $APACHE_USER test -w "$CALENDAR_DATA/backups" || error "Apache user cannot write to oncall_calendar backups directory"
+
+# Verify file permissions
+log "Verifying calendar file permissions..."
+sudo -u $APACHE_USER test -w "$TEAMS_JSON" || error "Apache user cannot write to teams.json"
+sudo -u $APACHE_USER test -w "$ROTATIONS_JSON" || error "Apache user cannot write to rotations.json"
+
+# Make Python scripts executable
+log "Setting calendar script permissions..."
+chmod +x "$WEB_ROOT/shared/scripts/modules/oncall_calendar/"*.py
 
 # Verify file permissions
 log "Verifying file permissions..."

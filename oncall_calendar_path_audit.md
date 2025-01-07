@@ -359,22 +359,40 @@ in /var/www/html/portal/includes/OnCallCalendar.php:26
      * Uses realpath() for dynamic path resolution
      * Relative paths from project root
      * PYTHONPATH includes both modules and parent directory
+     * More permissive permissions (777 for directories)
+     * Local Python virtual environment
    - Production (nginx/apache):
      * Uses fixed /var/www/html base path
      * Absolute paths for consistent resolution
      * Python module imports handled via PYTHONPATH
+     * Strict permissions (775 for directories, apache:apache ownership)
+     * System-wide Python virtual environment
    - Python Script Behavior:
      * Uses __file__ for self-location
      * Adds parent directory to sys.path
      * Uses pathlib.Path for file operations
 
+7. Setup Scripts
+   - Production (setup.bash):
+     * Requires root privileges
+     * Sets up apache:apache ownership
+     * Creates system-wide virtual environment
+     * Handles SELinux configuration
+   - Development (setup_dev.bash):
+     * No root privileges required
+     * Sets local file permissions
+     * Creates local virtual environment
+     * Initializes calendar data files
+
 ### Next Steps
 
 1. Testing
-   - Test in local environment (port 8000)
-   - Test directory permissions
-   - Verify error messages are helpful
-   - Check log output for debugging info
+   - [x] Created development setup script
+   - [x] Updated permission handling
+   - [ ] Test in local environment (port 8000)
+   - [ ] Test directory permissions
+   - [ ] Verify error messages are helpful
+   - [ ] Check log output for debugging info
 
 2. Monitoring
    - Review error logs for path resolution issues
