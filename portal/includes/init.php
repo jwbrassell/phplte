@@ -43,18 +43,15 @@ require_once(__DIR__ . "/../config.php");
 // Initialize logging system
 require_once(__DIR__ . '/logging_bootstrap.php');
 
+// Include authentication functions and checks
+require_once(__DIR__ . '/auth.php');
+
 // Get current page name and URI from URL
 $PAGE = basename($_SERVER['PHP_SELF']);
 $URI = str_replace('%20', ' ', $_SERVER['REQUEST_URI']);
 
 // Log page access
 logAccess($PAGE, $_SERVER['REQUEST_METHOD']);
-
-// Function to check authentication status
-function isAuthenticated() {
-    global $APP;
-    return isset($_SESSION[$APP."_user_name"]);
-}
 
 // Handle authentication redirects
 if (!isAuthenticated() && $PAGE !== 'login.php' && $PAGE !== '403.php' && $PAGE !== '404.php') {

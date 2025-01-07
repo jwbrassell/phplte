@@ -49,6 +49,17 @@ function isAuthenticated() {
     return isset($_SESSION[$APP."_user_name"]);
 }
 
+// Get current page from URL if not already set
+if (!isset($PAGE)) {
+    $PAGE = basename($_SERVER['PHP_SELF']);
+}
+
+// Get base path if not already set
+if (!isset($basePath)) {
+    $basePath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+    if ($basePath === '\\') $basePath = '/';
+}
+
 // Login and authentication handling
 if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($_POST['login_submit']))) {
     // Log login attempt
@@ -65,7 +76,7 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
         $_SESSION[$APP."_is_admin"] = true;
         
         logActivity('login_success', ['username' => 'test', 'type' => 'test_account']);
-        header("Location: index.php");
+        header("Location: " . $basePath . "/index.php");
         exit;
     } else {
         // Use project relative path for verifyuser.php
@@ -126,7 +137,7 @@ if (!$pageExists) {
         'page' => $PAGE,
         'referrer' => $_SERVER['HTTP_REFERER'] ?? 'direct'
     ]);
-    header("Location: /404.php?page=".urlencode($PAGE));
+    header("Location: " . $basePath . "/404.php?page=".urlencode($PAGE));
     exit;
 }
 
@@ -138,22 +149,25 @@ if (!$pageAllowed) {
         'referrer' => $referrer,
         'user_groups' => $_SESSION[$APP."_adom_groups"] ?? 'none'
     ]);
-    header("Location: /403.php?page=".urlencode($PAGE)."&referrer=".urlencode($referrer));
+    header("Location: " . $basePath . "/403.php?page=".urlencode($PAGE)."&referrer=".urlencode($referrer));
     exit;
 }
 
 // Handle login redirects
 if (($PAGE == "login.php") && (isset($_SESSION[$APP."_user_name"]))) {
+    $destination = isset($_POST['next']) ? $_POST['next'] : (isset($_GET['next']) ? $_GET['next'] : 'index.php');
     logActivity('redirect_logged_in_user', [
         'username' => $_SESSION[$APP."_user_name"],
-        'destination' => isset($_GET['next']) ? $_GET['next'] : 'index.php'
+        'destination' => $destination
     ]);
-    if (isset($_GET['next'])) {
-        $next_url = $_GET['next'];
-        header("location: $next_url");
+    
+    if ($destination !== 'index.php') {
+        $next_url = filter_var(urldecode($destination), FILTER_SANITIZE_URL);
+        header("Location: " . $next_url);
     } else {
-        header("location: index.php");
+        header("Location: " . $basePath . "/index.php");
     }
+    exit;
 }
 
 // Set user session variables
