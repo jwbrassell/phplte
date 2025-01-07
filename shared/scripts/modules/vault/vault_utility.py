@@ -1,4 +1,4 @@
-#!/opt/python-venv/bin/python3
+#!../../venv/bin/python3
 """
 Vault Utility
 Manages interactions with HashiCorp Vault for secret management
@@ -62,15 +62,33 @@ class VaultUtility:
             Exception: If file loading fails
         """
         try:
+            logging.error(f"Attempting to load env file from: {filepath}")
+            if not os.path.exists(filepath):
+                logging.error(f"Environment file does not exist: {filepath}")
+                raise Exception(f"Environment file not found: {filepath}")
+            
+            if not os.access(filepath, os.R_OK):
+                logging.error(f"Cannot read environment file: {filepath}")
+                logging.error(f"File permissions: {oct(os.stat(filepath).st_mode)}")
+                logging.error(f"Current process user: {os.getuid()}")
+                logging.error(f"Current process group: {os.getgid()}")
+                raise Exception(f"Cannot read environment file: {filepath}")
+            
             with open(filepath) as f:
-                for line in f:
+                content = f.read()
+                logging.error(f"Successfully read env file. Content length: {len(content)}")
+                for line in content.splitlines():
                     if line.strip() and not line.startswith('#'):
                         key, value = line.strip().split('=', 1)
                         key = key.replace('export ', '')
                         value = value.replace('\n', '')
                         os.environ[key] = value
+                        logging.error(f"Set environment variable: {key}")
         except Exception as e:
-            raise Exception(f"Failed to load environment variables from {filepath}: {e}")
+            logging.error(f"Failed to load environment variables from {filepath}")
+            logging.error(f"Error details: {str(e)}")
+            logging.error(f"Error type: {type(e)}")
+            raise
 
     def authenticate_vault(self, vault_url, token):
         """
