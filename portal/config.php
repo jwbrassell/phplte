@@ -20,10 +20,10 @@ define('IS_PRODUCTION',
     strpos($serverSoftware, 'apache') !== false
 );
 
-// error_log("Environment Detection:");
-// error_log("- Hostname: " . $hostname);
-// error_log("- Server Software: " . $serverSoftware);
-// error_log("- Is Production: " . (IS_PRODUCTION ? 'true' : 'false'));
+error_log("Environment Detection:");
+error_log("- Hostname: " . $hostname);
+error_log("- Server Software: " . $serverSoftware);
+error_log("- Is Production: " . (IS_PRODUCTION ? 'true' : 'false'));
 
 // Path Configuration
 $DIR = __DIR__;  // Current directory (portal)
@@ -70,13 +70,13 @@ foreach ($venvPaths as $venvPath) {
 
 define('VENV_DIR', $activeVenv);
 
-// error_log("Directory Structure:");
-// error_log("- Current Dir: " . $DIR);
-// error_log("- Project Root: " . PROJECT_ROOT);
-// error_log("- Shared Dir: " . SHARED_DIR);
-// error_log("- Scripts Dir: " . SCRIPTS_DIR);
-// error_log("- Modules Dir: " . MODULES_DIR);
-// error_log("- Active Venv: " . ($activeVenv ?: 'Not Found'));
+error_log("Directory Structure:");
+error_log("- Current Dir: " . $DIR);
+error_log("- Project Root: " . PROJECT_ROOT);
+error_log("- Shared Dir: " . SHARED_DIR);
+error_log("- Scripts Dir: " . SCRIPTS_DIR);
+error_log("- Modules Dir: " . MODULES_DIR);
+error_log("- Active Venv: " . ($activeVenv ?: 'Not Found'));
 
 // Helper function for path resolution
 function resolvePath($path, $type = 'shared') {
@@ -106,11 +106,11 @@ function resolvePath($path, $type = 'shared') {
     
     $absolutePath = $base . '/' . $cleanPath;
     
-    // error_log("Path Resolution:");
-    // error_log("- Input: " . $path);
-    // error_log("- Clean: " . $cleanPath);
-    // error_log("- Base: " . $base);
-    // error_log("- Output: " . $absolutePath);
+    error_log("Path Resolution:");
+    error_log("- Input: " . $path);
+    error_log("- Clean: " . $cleanPath);
+    error_log("- Base: " . $base);
+    error_log("- Output: " . $absolutePath);
     
     return realpath($absolutePath) ?: $absolutePath;
 }
@@ -122,11 +122,11 @@ $REFRESH = 300;  // Default refresh time in seconds
 $TITLE = "Southlake NMC";  // Default page title
 
 // Debug logging for path resolution
-// error_log("Environment Configuration:");
-// error_log("IS_PRODUCTION: " . (IS_PRODUCTION ? 'true' : 'false'));
-// error_log("PROJECT_ROOT: " . PROJECT_ROOT);
-// error_log("BASE_PATH: " . BASE_PATH);
-// error_log("SHARED_DIR: " . SHARED_DIR);
-// error_log("DATA_DIR: " . DATA_DIR);
-// error_log("SCRIPTS_DIR: " . SCRIPTS_DIR);
+error_log("Environment Configuration:");
+error_log("IS_PRODUCTION: " . (IS_PRODUCTION ? 'true' : 'false'));
+error_log("PROJECT_ROOT: " . PROJECT_ROOT);
+error_log("BASE_PATH: " . BASE_PATH);
+error_log("SHARED_DIR: " . SHARED_DIR);
+error_log("DATA_DIR: " . DATA_DIR);
+error_log("SCRIPTS_DIR: " . SCRIPTS_DIR);
 ?>

@@ -1,7 +1,6 @@
 <?php
 /**
- * Client-side Error Logger
- * Handles logging of JavaScript errors and client-side issues
+ * Temporary simplified error logger to prevent blocking authentication
  */
 
 // Initialize error handling
@@ -14,48 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit('Method Not Allowed');
 }
 
-require_once(__DIR__ . '/includes/logging_bootstrap.php');
+// Simple logging to PHP error_log
+$type = $_POST['type'] ?? 'UNKNOWN';
+$message = $_POST['message'] ?? 'No message provided';
+$url = $_POST['url'] ?? 'No URL provided';
 
-// Validate and sanitize input
-$type = filter_input(INPUT_POST, 'type', FILTER_SANITIZE_STRING) ?: 'UNKNOWN';
-$message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING) ?: 'No message provided';
-$url = filter_input(INPUT_POST, 'url', FILTER_SANITIZE_URL) ?: 'No URL provided';
-$line = filter_input(INPUT_POST, 'line', FILTER_SANITIZE_NUMBER_INT) ?: 'No line number';
-$column = filter_input(INPUT_POST, 'column', FILTER_SANITIZE_NUMBER_INT);
-$error = filter_input(INPUT_POST, 'error', FILTER_SANITIZE_STRING);
-$page = filter_input(INPUT_POST, 'page', FILTER_SANITIZE_STRING);
-$duration = filter_input(INPUT_POST, 'duration', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+// Log to PHP error_log instead of Python logger
+error_log("Client Error [$type]: $message at $url");
 
-// Handle different types of client-side events
-switch ($type) {
-    case 'JS_ERROR':
-        $context = [
-            'url' => $url,
-            'line' => $line,
-            'column' => $column,
-            'stack_trace' => $error,
-            'page' => $page
-        ];
-        logError($message, array_filter($context));
-        break;
-
-    case 'PERFORMANCE':
-        if ($duration !== false) {
-            logPerformance('client_side_' . strtolower($message), $duration, [
-                'page' => $page,
-                'url' => $url
-            ]);
-        }
-        break;
-
-    default:
-        logActivity('client_event', [
-            'type' => $type,
-            'message' => $message,
-            'url' => $url,
-            'page' => $page
-        ]);
-}
-
+// Always return success to prevent client-side errors
 http_response_code(200);
 echo json_encode(['status' => 'success']);
