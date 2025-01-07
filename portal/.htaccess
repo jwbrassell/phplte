@@ -2,8 +2,6 @@
 RewriteEngine On
 Options +FollowSymLinks
 
-# PHP is handled by the main Apache configuration
-
 # Set default character set
 AddDefaultCharset UTF-8
 
@@ -12,16 +10,17 @@ Header set X-Content-Type-Options "nosniff"
 Header set X-Frame-Options "SAMEORIGIN"
 Header set X-XSS-Protection "1; mode=block"
 
-# Deny access to hidden files and directories
-<FilesMatch "^\.">
-    Order allow,deny
-    Deny from all
-</FilesMatch>
+# Set default index files
+DirectoryIndex index.php index.html
 
-# Protect logs directory but allow PHP scripts to access it
+# Deny access to hidden files and directories
+<Files ".*">
+    Require all denied
+</Files>
+
+# Protect logs directory
 <Files ~ "^logs/.*\.log$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </Files>
 
 # If the request is for an actual file or directory, serve it directly
@@ -31,12 +30,6 @@ RewriteRule ^ - [L]
 
 # Handle API requests - pass through to api/.htaccess
 RewriteRule ^api/ - [L]
-
-# PHP settings (using relative paths)
-php_flag display_errors off
-php_value error_reporting E_ALL
-php_flag log_errors on
-php_value error_log ../shared/data/logs/system/errors/php_error.log
 
 # Ensure proper handling of JSON responses
 AddType application/json .json

@@ -6,18 +6,49 @@
 class PythonLogger {
     private $logType;
     private $pythonScript;
+    private $projectRoot;
+    private $venvPath;
 
     public function __construct($type = 'general') {
         $validTypes = ['access', 'errors', 'client', 'audit', 'performance'];
         $this->logType = in_array($type, $validTypes) ? $type : 'general';
         
-        // Get path to Python script by navigating from current file
-        $this->pythonScript = dirname(dirname(__DIR__)) . '/shared/scripts/modules/logging/logger.py';
+        // Find project root by navigating up from current file until we find shared/ directory
+        $currentDir = __DIR__;
+        while ($currentDir !== '/' && !is_dir($currentDir . '/shared')) {
+            $currentDir = dirname($currentDir);
+        }
         
+        if (!is_dir($currentDir . '/shared')) {
+            error_log("WARNING: Could not locate project root directory");
+            return;
+        }
+        
+        $this->projectRoot = $currentDir;
+        $this->pythonScript = $this->projectRoot . '/shared/scripts/modules/logging/logger.py';
+        
+        // Look for venv in standard locations relative to project root
+        $venvLocations = [
+            $this->projectRoot . '/shared/venv/bin/python',
+            $this->projectRoot . '/venv/bin/python',
+            $this->projectRoot . '/.venv/bin/python'
+        ];
+        
+        foreach ($venvLocations as $venvPath) {
+            if (file_exists($venvPath)) {
+                $this->venvPath = $venvPath;
+                break;
+            }
+        }
+        
+        // Don't throw exception if Python setup is incomplete - we'll fallback to PHP logging
         if (!file_exists($this->pythonScript)) {
-            // Critical error - logging system unavailable
-            error_log("CRITICAL: Logging system not properly configured - Python script missing");
-            throw new Exception("Logging system not properly configured");
+            error_log("WARNING: Python logging script not found at {$this->pythonScript}");
+            $this->pythonScript = null;
+        }
+        
+        if (!$this->venvPath) {
+            error_log("WARNING: Python virtual environment not found in standard locations");
         }
     }
 
@@ -51,12 +82,15 @@ class PythonLogger {
         $escapedMessage = escapeshellarg($message);
         $jsonContext = escapeshellarg(json_encode($context));
         
-        // Build and execute command
-        // Get path to Python virtual environment relative to project root
-        $venvPath = dirname(dirname(__DIR__)) . '/shared/venv/bin/python';
+        // If Python logging is not available, fallback to PHP logging
+        if (!$this->pythonScript || !$this->venvPath) {
+            error_log("LOG: [$this->logType] $message " . json_encode($context));
+            return false;
+        }
         
+        // Build command using discovered paths
         $command = sprintf('%s %s %s %s %s 2>&1',
-            escapeshellarg($venvPath),
+            escapeshellarg($this->venvPath),
             escapeshellarg($this->pythonScript),
             escapeshellarg($this->logType),
             $escapedMessage,
