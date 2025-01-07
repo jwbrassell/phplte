@@ -11,7 +11,7 @@ set -e
 WEB_ROOT="/var/www/html"
 APACHE_USER="apache"
 APACHE_GROUP="apache"
-PYTHON_VENV="/opt/python-venv"
+PYTHON_VENV="$WEB_ROOT/shared/venv"
 
 # Colors for output
 RED='\033[0;31m'
@@ -48,7 +48,7 @@ log "Starting permission and ownership setup..."
 # Create necessary directories if they don't exist
 log "Creating required directories..."
 mkdir -p $WEB_ROOT/portal/logs/{access,errors,client,python}
-mkdir -p $PYTHON_VENV
+mkdir -p $WEB_ROOT/shared/venv
 
 # Set base ownership and permissions
 log "Setting base ownership and permissions..."

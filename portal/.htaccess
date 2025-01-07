@@ -1,35 +1,38 @@
+# Basic Apache settings
+Options +FollowSymLinks
+DirectoryIndex index.php index.html
+
 # Enable rewrite engine
 RewriteEngine On
-Options +FollowSymLinks
-
-# Set default character set
-AddDefaultCharset UTF-8
 
 # Security headers
 Header set X-Content-Type-Options "nosniff"
 Header set X-Frame-Options "SAMEORIGIN"
 Header set X-XSS-Protection "1; mode=block"
 
-# Set default index files
-DirectoryIndex index.php index.html
-
-# Deny access to hidden files and directories
-<Files ".*">
+# File protection
+<FilesMatch "^\.(?!htaccess)">
     Require all denied
-</Files>
-
-# Protect logs directory
-<Files ~ "^logs/.*\.log$">
+</FilesMatch>
+<FilesMatch "^logs/.*\.log$">
     Require all denied
-</Files>
+</FilesMatch>
 
-# If the request is for an actual file or directory, serve it directly
+# Rewrite rules
+# 1. If the file/directory exists, serve it directly
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Handle API requests - pass through to api/.htaccess
+# 2. API passthrough
 RewriteRule ^api/ - [L]
 
-# Ensure proper handling of JSON responses
+# 3. All other requests go to PHP files
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteCond %{REQUEST_URI} !\.php$
+RewriteRule ^([^/]+)/?$ $1.php [L]
+
+# Content types
+AddDefaultCharset UTF-8
 AddType application/json .json

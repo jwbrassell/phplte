@@ -104,7 +104,7 @@ pip install -r requirements.txt
 deactivate
 ```
 
-Note: The Python virtual environment is created within the project directory to maintain portability across different environments.
+Note: The Python virtual environment is created at shared/venv to maintain consistency across all environments (development and production).
 
 ## 5. Create Log Directories
 ```bash
