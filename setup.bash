@@ -7,6 +7,19 @@
 # Exit on any error
 set -e
 
+# Disable SELinux immediately
+log "Disabling SELinux at startup..."
+if command -v setenforce >/dev/null 2>&1; then
+    setenforce 0
+    log "SELinux disabled for current session"
+fi
+
+if [ -f "/etc/selinux/config" ]; then
+    log "Permanently disabling SELinux..."
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+    log "SELinux permanently disabled (requires reboot to take full effect)"
+fi
+
 # Configuration
 WEB_ROOT="/var/www/html"
 APACHE_USER="apache"
@@ -202,8 +215,20 @@ fi
 
 # Ensure proper permissions after package installation
 log "Resetting permissions after package installation..."
-chmod -R 775 "$WEB_ROOT/shared/data/oncall_calendar"
+chmod -R 777 "$WEB_ROOT/shared/data/oncall_calendar"
 chown -R $APACHE_USER:$APACHE_GROUP "$WEB_ROOT/shared/data/oncall_calendar"
+
+# Double-check SELinux is disabled
+log "Final SELinux check and disable..."
+if command -v setenforce >/dev/null 2>&1; then
+    setenforce 0
+    log "SELinux confirmed disabled for current session"
+fi
+
+if [ -f "/etc/selinux/config" ]; then
+    log "Confirming SELinux permanently disabled..."
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+fi
 
 # Verify critical files and directories
 log "Verifying setup..."
