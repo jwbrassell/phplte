@@ -43,7 +43,13 @@ if (is_resource($process)) {
 $parts = explode('|', $ldapcheck);
 $status = array_shift($parts);
 
-if($status == "OK!") {
+error_log("Status check:");
+error_log("- Raw status: '" . $status . "'");
+error_log("- Status length: " . strlen($status));
+error_log("- Status bytes: " . bin2hex($status));
+error_log("- Comparison: " . ($status === "OK!" ? "true" : "false"));
+
+if(trim($status) === "OK!") {
     error_log("LDAP auth successful, setting up session...");
     list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = $parts;
     
@@ -74,6 +80,8 @@ if($status == "OK!") {
     
     // Log failure and redirect with error
     file_put_contents($FILE, "$TS|$ldapcheck|$uname\n", FILE_APPEND | LOCK_EX);
-    header("Location: /login.php?error=" . urlencode($ldapcheck));
+    $error = trim($ldapcheck);
+    error_log("Error message: '" . $error . "'");
+    header("Location: /login.php?error=" . urlencode($error));
     exit;
 }

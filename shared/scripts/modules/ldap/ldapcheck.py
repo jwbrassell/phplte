@@ -61,11 +61,11 @@ try:
     ldap_client.set_option(ldap.OPT_REFERRALS, 0)
     ldap_client.simple_bind_s(ldapuser, password)
 except ldap.INVALID_CREDENTIALS:
-    print("ERROR! Invalid credentials")
+    print("ERROR! Invalid credentials", end='')
     ldap_client.unbind()
     sys.exit(1)
 except ldap.SERVER_DOWN:
-    print("ERROR! LDAP issue")
+    print("ERROR! LDAP issue", end='')
     sys.exit(1)
 
 try:
@@ -95,17 +95,20 @@ try:
             output = "OK!|{0}|{1}|{2}|{3}|{4}|{5}".format(
                 employee_num, employee_name, employee_mail, 
                 cngroup, employee_vzid, adom_groups_str)
-            logger.error(f"Sending output: {output}")
-            print(output)
+            # Log and ensure no whitespace
+            logger.error(f"Raw output: '{output}'")
+            output = output.strip()
+            logger.error(f"Stripped output: '{output}'")
+            print(output, end='')  # No newline at end
         else:
-            print("ERROR! User not authorized")
+            print("ERROR! User not authorized", end='')
     else:
-        print("ERROR! User not found")
+        print("ERROR! User not found", end='')
 except KeyError as e:
-    print(f"ERROR! Missing key in LDAP results: {e}")
+    print(f"ERROR! Missing key in LDAP results: {e}", end='')
 except IndexError as e:
-    print(f"ERROR! Index error in LDAP results: {e}")
+    print(f"ERROR! Index error in LDAP results: {e}", end='')
 except Exception as error:
-    print(f"ERROR! {error}")
+    print(f"ERROR! {error}", end='')
 finally:
     ldap_client.unbind()
