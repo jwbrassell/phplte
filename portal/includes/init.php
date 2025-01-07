@@ -50,6 +50,20 @@ $URI = str_replace('%20', ' ', $_SERVER['REQUEST_URI']);
 // Log page access
 logAccess($PAGE, $_SERVER['REQUEST_METHOD']);
 
+// Function to check authentication status
+function isAuthenticated() {
+    global $APP;
+    return isset($_SESSION[$APP."_user_name"]);
+}
+
+// Handle authentication redirects
+if (!isAuthenticated() && $PAGE !== 'login.php' && $PAGE !== '403.php' && $PAGE !== '404.php') {
+    $requested_page = urlencode($_SERVER['REQUEST_URI']);
+    error_log("Redirecting unauthenticated user to login. Requested page: " . $requested_page);
+    header("Location: " . $basePath . "/login.php?next=" . $requested_page);
+    exit;
+}
+
 // Initialize session variables if not set
 if (!isset($_SESSION[$APP."_user_name"])) {
     $uswin = '';
@@ -60,6 +74,9 @@ if (!isset($_SESSION[$APP."_user_name"])) {
     $user_email = '';
     $adom_groups = array();
 }
+
+// Log session state for debugging
+error_log("Session state in init.php - Authenticated: " . (isAuthenticated() ? 'yes' : 'no'));
 
 // Initialize menu data
 $data = array();

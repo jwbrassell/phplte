@@ -26,8 +26,9 @@ echo "\nPath Verification:\n";
 echo "Python Path: $pythonPath " . (file_exists($pythonPath) ? "(exists)" : "(missing)") . "\n";
 echo "Script Path: $scriptPath " . (file_exists($scriptPath) ? "(exists)" : "(missing)") . "\n";
 
-// Set up Python command with full error output
-$cmd = sprintf('%s %s test test123 framework 2>&1',
+// Set up Python command with full error output and Python traceback
+putenv("PYTHONPATH=" . PROJECT_ROOT . "/shared/scripts/modules");
+$cmd = sprintf('%s -u %s test test123 framework 2>&1',
     escapeshellarg($pythonPath),
     escapeshellarg($scriptPath)
 );

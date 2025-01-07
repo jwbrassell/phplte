@@ -133,8 +133,9 @@ class VaultUtility:
                         )
                         result[full_path] = secret['data']['data']
                     except hvac.exceptions.InvalidPath:
-                                except Exception as e:
-                        
+                        pass
+                    except Exception as e:
+                        pass
             return result
             
         except hvac.exceptions.InvalidPath:

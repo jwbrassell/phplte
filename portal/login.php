@@ -174,6 +174,9 @@ window.addEventListener('load', function() {
         <div class="card">
             <div class="card-body login-card-body">
                 <form id="login_form" method="POST" autocomplete="off">
+                    <?php if(isset($_GET['next'])): ?>
+                    <input type="hidden" name="next" value="<?php echo htmlspecialchars($_GET['next']); ?>">
+                    <?php endif; ?>
                     <div class="input-group mb-3 form-group">
                         <select class="form-control custom-select" name="login_domain" disabled>
                             <option selected>USWIN</option>

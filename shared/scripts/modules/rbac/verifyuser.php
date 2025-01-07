@@ -1,12 +1,13 @@
 <?php
-session_start();
-
 // Get POST data and initialize variables
 $uname = $_POST["login_user"];
 $passwd = $_POST["login_passwd"];
 $APP = $_POST["APP"];
 $TS = date("Y-m-d H:i:s");
 $DATE = date("Ymd");
+
+// Debug logging
+error_log("Starting authentication process for user: " . $uname);
 
 // Include config for path resolution
 require_once(__DIR__ . '/../../../../portal/config.php');
@@ -45,9 +46,25 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         $_SESSION[$APP . "_user_email"] = $employee_email;
         $_SESSION[$APP . "_adom_groups"] = $adom_groups;
         
-        // Log success and redirect
+        // Set admin status based on groups
+        $_SESSION[$APP . "_is_admin"] = in_array('admin', explode(',', $adom_groups));
+        
+        // Log success
         file_put_contents($FILE, "$TS|SUCCESS|$uname|$adom_group\n", FILE_APPEND | LOCK_EX);
-        header("Location: /index.php");
+        
+        // Debug logging
+        error_log("Session variables set: " . print_r($_SESSION, true));
+        
+        // Handle redirection with next parameter
+        $basePath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
+        if ($basePath === '\\') $basePath = '/';
+        
+        if (isset($_POST['next'])) {
+            $next_url = filter_var(urldecode($_POST['next']), FILTER_SANITIZE_URL);
+            header("Location: " . $next_url);
+        } else {
+            header("Location: " . $basePath . "/index.php");
+        }
         exit;
     } else {
         $error = "Invalid response format";
@@ -63,5 +80,9 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
 
 // Log failure and redirect with error
 file_put_contents($FILE, "$TS|ERROR|$uname|$error\n", FILE_APPEND | LOCK_EX);
-header("Location: /login.php?error=" . urlencode($error));
+
+// Use proper base path for error redirect
+$basePath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
+if ($basePath === '\\') $basePath = '/';
+header("Location: " . $basePath . "/login.php?error=" . urlencode($error));
 exit;
