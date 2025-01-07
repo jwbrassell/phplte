@@ -54,52 +54,61 @@ else
     log "Running in development environment"
 fi
 
-# Create necessary directories if they don't exist
-log "Creating required directories..."
-mkdir -p $WEB_ROOT/portal/logs/{access,errors,client,python}
-mkdir -p $WEB_ROOT/shared/venv
-mkdir -p $WEB_ROOT/shared/data/oncall_calendar/{uploads,backups}
-mkdir -p $WEB_ROOT/shared/scripts/modules/oncall_calendar
-
-# Set up calendar data directory
-log "Setting up calendar data..."
+# Create and set permissions for required directories
+log "Creating and setting up directories..."
 CALENDAR_DATA="$WEB_ROOT/shared/data/oncall_calendar"
+
+# Create directories with proper ownership from the start
+install -d -m 775 -o $APACHE_USER -g $APACHE_GROUP "$WEB_ROOT/portal/logs/"{access,errors,client,python}
+install -d -m 775 -o $APACHE_USER -g $APACHE_GROUP "$WEB_ROOT/shared/venv"
+install -d -m 775 -o $APACHE_USER -g $APACHE_GROUP "$CALENDAR_DATA/"{uploads,backups}
+install -d -m 775 -o $APACHE_USER -g $APACHE_GROUP "$WEB_ROOT/shared/scripts/modules/oncall_calendar"
+
+# Set up calendar data files
+log "Setting up calendar data..."
 TEAMS_JSON="$CALENDAR_DATA/teams.json"
 ROTATIONS_JSON="$CALENDAR_DATA/rotations.json"
 
-# Create initial JSON files
+# Create initial JSON files with proper ownership
 for file in "$TEAMS_JSON" "$ROTATIONS_JSON"; do
     if [ ! -f "$file" ]; then
         content='{"'$(basename "$file" .json)'"":[]}'
+        # Create file with proper ownership and permissions from the start
+        install -m 664 -o $APACHE_USER -g $APACHE_GROUP /dev/null "$file"
         echo "$content" > "$file"
-        if [ "$IS_PRODUCTION" = true ]; then
-            chown $APACHE_USER:$APACHE_GROUP "$file"
-        else
-            chmod 666 "$file"  # More permissive for development
-        fi
     fi
 done
 
+# Double-check permissions recursively
+log "Verifying directory permissions..."
+chown -R $APACHE_USER:$APACHE_GROUP "$CALENDAR_DATA"
+chmod -R u+rwX,g+rwX,o+rX "$CALENDAR_DATA"
+
 # Set up permissions based on environment
-log "Setting up permissions..."
+log "Setting up remaining permissions..."
 if [ "$IS_PRODUCTION" = true ]; then
     # Production permissions
     log "Applying production permissions..."
     
-    # Set base permissions
-    chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT
+    # Set base permissions (more restrictive)
     find $WEB_ROOT -type d -exec chmod 755 {} \;
     find $WEB_ROOT -type f -exec chmod 644 {} \;
     
-    # Set specific directory permissions
-    chmod -R 775 $WEB_ROOT/portal/logs
-    chmod -R 775 "$CALENDAR_DATA"
-    chown -R $APACHE_USER:$APACHE_GROUP $WEB_ROOT/portal/logs
-    chown -R $APACHE_USER:$APACHE_GROUP "$CALENDAR_DATA"
+    # Set specific permissions for writable directories
+    find "$WEB_ROOT/portal/logs" -type d -exec chmod 775 {} \;
+    find "$CALENDAR_DATA" -type d -exec chmod 775 {} \;
     
     # Set Python script permissions
     find "$WEB_ROOT" -name "*.py" -type f -exec chmod 755 {} \;
-    find "$WEB_ROOT" -name "*.py" -type f -exec chown $APACHE_USER:$APACHE_GROUP {} \;
+    
+    # Verify apache user can write to critical directories
+    sudo -u $APACHE_USER mkdir -p "$CALENDAR_DATA/test_write"
+    if [ $? -eq 0 ]; then
+        rm -rf "$CALENDAR_DATA/test_write"
+        log "Write test successful"
+    else
+        error "Apache user cannot write to calendar directory"
+    fi
 else
     # Development permissions
     log "Applying development permissions..."

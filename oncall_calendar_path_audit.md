@@ -386,13 +386,47 @@ in /var/www/html/portal/includes/OnCallCalendar.php:26
 
 ### Next Steps
 
-1. Testing
+1. Testing ✅
    - [x] Created development setup script
    - [x] Updated permission handling
-   - [ ] Test in local environment (port 8000)
-   - [ ] Test directory permissions
-   - [ ] Verify error messages are helpful
-   - [ ] Check log output for debugging info
+   - [x] Test in local environment (port 8000)
+   - [x] Test directory permissions
+   - [x] Verify error messages are helpful
+   - [x] Check log output for debugging info
+
+2. Production Deployment Instructions
+   1. Backup current files:
+      ```bash
+      cp -r /var/www/html/shared/data/oncall_calendar /var/www/html/shared/data/oncall_calendar.bak
+      cp /var/www/html/portal/config.php /var/www/html/portal/config.php.bak
+      cp /var/www/html/portal/includes/OnCallCalendar.php /var/www/html/portal/includes/OnCallCalendar.php.bak
+      cp /var/www/html/portal/includes/PythonLogger.php /var/www/html/portal/includes/PythonLogger.php.bak
+      ```
+
+   2. Run setup script:
+      ```bash
+      cd /var/www/html
+      ./setup.bash
+      ```
+
+   3. Verify permissions:
+      ```bash
+      ls -l shared/data/oncall_calendar/
+      ls -l shared/scripts/modules/oncall_calendar/
+      ```
+      Should show apache:apache ownership and 775 permissions
+
+   4. Check Python environment:
+      ```bash
+      sudo -u apache /var/www/html/shared/venv/bin/python3 -c "import sys; print(sys.path)"
+      ```
+      Should include modules directory
+
+   5. Monitor logs after deployment:
+      ```bash
+      tail -f /var/log/httpd/error_log
+      ```
+      Watch for path resolution and permission errors
 
 2. Monitoring
    - Review error logs for path resolution issues
