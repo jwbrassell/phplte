@@ -8,12 +8,14 @@ $APP = $_POST["APP"];
 $TS = date("Y-m-d H:i:s");
 $DATE = date("Ymd");
 
-// Get the document root and set up paths
-$DOC_ROOT = isset($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : '/var/www/html';
-$FILE = $DOC_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
+// Include config for path resolution
+require_once(__DIR__ . '/../../../../portal/config.php');
+
+// Set up log file path
+$FILE = PROJECT_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
 // Execute ldapcheck and capture all output
-$cmd = $DOC_ROOT . "/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
+$cmd = MODULES_DIR . "/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
 error_log("Executing command: " . $cmd);
 $ldapcheck = trim(shell_exec($cmd . " 2>&1")); // Capture both stdout and stderr
 error_log("LDAP check output: " . $ldapcheck);
