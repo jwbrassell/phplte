@@ -49,6 +49,12 @@ log "Starting permission and ownership setup..."
 log "Creating required directories..."
 mkdir -p $WEB_ROOT/portal/logs/{access,errors,client,python}
 mkdir -p $WEB_ROOT/shared/venv
+mkdir -p $WEB_ROOT/shared/data/oncall_calendar/uploads
+
+# Set specific permissions for oncall calendar directories
+log "Setting oncall calendar directory permissions..."
+chown -R $APACHE_USER:$APACHE_GROUP "$WEB_ROOT/shared/data/oncall_calendar"
+chmod -R 775 "$WEB_ROOT/shared/data/oncall_calendar"
 
 # Set base ownership and permissions
 log "Setting base ownership and permissions..."
@@ -78,14 +84,20 @@ else
     warn "vault.env not found at $VAULT_ENV"
 fi
 
-# Set SELinux contexts if SELinux is enabled
-if command -v semanage >/dev/null 2>&1 && command -v getenforce >/dev/null 2>&1; then
-    if [ "$(getenforce)" != "Disabled" ]; then
-        log "Setting SELinux contexts..."
-        semanage fcontext -a -t httpd_sys_content_t "$WEB_ROOT(/.*)?"
-        semanage fcontext -a -t httpd_sys_rw_content_t "$WEB_ROOT/portal/logs(/.*)?"
-        restorecon -Rv $WEB_ROOT
-    fi
+# Disable SELinux
+log "Disabling SELinux..."
+if command -v setenforce >/dev/null 2>&1; then
+    setenforce 0
+    log "SELinux disabled for current session"
+fi
+
+# Permanently disable SELinux
+if [ -f "/etc/selinux/config" ]; then
+    log "Permanently disabling SELinux..."
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+    log "SELinux permanently disabled (requires reboot to take full effect)"
+else
+    warn "SELinux config file not found at /etc/selinux/config"
 fi
 
 # Install LDAP dependencies and Python packages
