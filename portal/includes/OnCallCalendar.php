@@ -9,25 +9,41 @@ class OnCallCalendar {
     private $uploadPath;
 
     public function __construct() {
-        // Check if we're in production environment (venv exists)
-        $venvPython = dirname(dirname(dirname(__DIR__))) . '/shared/venv/bin/python3';
-        $this->pythonPath = file_exists($venvPython) ? $venvPython : '/usr/bin/python3';
+        // Use virtual environment if available
+        $this->pythonPath = VENV_DIR 
+            ? VENV_DIR . '/bin/python3'
+            : '/usr/bin/python3';
         
-        // Build paths relative to current file
-        $sharedDir = dirname(dirname(dirname(__DIR__))) . '/shared';
-        $this->modulePath = $sharedDir . '/scripts/modules/oncall_calendar';
-        $this->dataPath = $sharedDir . '/data/oncall_calendar';
+        // Use type-specific path resolution for Python modules and data
+        $this->modulePath = resolvePath('oncall_calendar', 'module');
+        $this->dataPath = resolvePath('oncall_calendar', 'data');
         $this->uploadPath = $this->dataPath . '/uploads';
         
-        // Check if required directories exist and are writable
+        error_log("OnCallCalendar Configuration:");
+        error_log("- Python Path: " . $this->pythonPath . " (exists: " . (file_exists($this->pythonPath) ? "yes" : "no") . ")");
+        error_log("- Module Path: " . $this->modulePath . " (exists: " . (file_exists($this->modulePath) ? "yes" : "no") . ")");
+        error_log("- Data Path: " . $this->dataPath . " (exists: " . (file_exists($this->dataPath) ? "yes" : "no") . ")");
+        error_log("- Upload Path: " . $this->uploadPath . " (exists: " . (file_exists($this->uploadPath) ? "yes" : "no") . ")");
+        
+        // Enhanced directory checks with detailed error messages
         foreach ([$this->dataPath, $this->uploadPath] as $dir) {
             if (!file_exists($dir)) {
-                error_log("Required directory does not exist: $dir");
-                throw new Exception("Calendar storage directory not found. Please contact system administrator.");
+                error_log("Directory Check Failed - Path: $dir does not exist");
+                error_log("Current User: " . get_current_user());
+                error_log("Process Owner: " . posix_getpwuid(posix_geteuid())['name']);
+                throw new Exception(
+                    "Calendar storage directory not found: $dir. " .
+                    "Environment: " . (IS_PRODUCTION ? 'Production' : 'Development')
+                );
             }
             if (!is_writable($dir)) {
-                error_log("Directory not writable: $dir");
-                throw new Exception("Calendar storage is not writable. Please contact system administrator.");
+                error_log("Permission Check Failed - Path: $dir is not writable");
+                error_log("Current Permissions: " . substr(sprintf('%o', fileperms($dir)), -4));
+                error_log("Owner/Group: " . fileowner($dir) . "/" . filegroup($dir));
+                throw new Exception(
+                    "Calendar storage is not writable: $dir. " .
+                    "Please check directory permissions."
+                );
             }
         }
     }
@@ -52,7 +68,7 @@ class OnCallCalendar {
         }
         
         // Set PYTHONPATH to include the modules directory
-        $env = ['PYTHONPATH' => dirname($this->modulePath)];
+        $env = ['PYTHONPATH' => MODULES_DIR];
         $envStr = 'PYTHONPATH=' . escapeshellarg($env['PYTHONPATH']);
         
         // Execute command

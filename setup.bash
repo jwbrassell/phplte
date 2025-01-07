@@ -50,6 +50,13 @@ log "Creating required directories..."
 mkdir -p $WEB_ROOT/portal/logs/{access,errors,client,python}
 mkdir -p $WEB_ROOT/shared/venv
 mkdir -p $WEB_ROOT/shared/data/oncall_calendar/{uploads,backups}
+mkdir -p $WEB_ROOT/shared/scripts/modules/oncall_calendar
+
+# Create initial Python module directory structure
+log "Setting up Python module structure..."
+touch "$WEB_ROOT/shared/scripts/modules/oncall_calendar/__init__.py"
+touch "$WEB_ROOT/shared/scripts/modules/oncall_calendar/calendar_api.py"
+touch "$WEB_ROOT/shared/scripts/modules/oncall_calendar/csv_handler.py"
 
 # Set base ownership and permissions
 log "Setting base ownership and permissions..."
@@ -118,36 +125,39 @@ else
     warn "SELinux config file not found at /etc/selinux/config"
 fi
 
-# Install LDAP dependencies and Python packages
-log "Installing LDAP and Python dependencies..."
+# Install Python 3.11 and dependencies
+log "Installing Python 3.11 and dependencies..."
 if command -v dnf >/dev/null 2>&1; then
-    log "Installing python3.11-devel..."
-    dnf install -y python3.11-devel
-else
-    error "DNF package manager not found. Please install python3.11-devel manually."
-fi
-
-# Create Python virtual environment
-log "Creating Python virtual environment..."
-if command -v python3.11 >/dev/null 2>&1; then
+    log "Installing Python 3.11 and development packages..."
+    dnf install -y python3.11 python3.11-devel
+    
+    # Create Python virtual environment
+    log "Creating Python virtual environment..."
     python3.11 -m venv $PYTHON_VENV
+    
+    # Activate virtual environment and install packages
     source $PYTHON_VENV/bin/activate
     
     log "Upgrading pip..."
-    python -m pip install --upgrade pip
-
+    python3.11 -m pip install --upgrade pip
+    
     # Set CFLAGS for python-ldap installation
     export CFLAGS="-I/usr/include/python3.11"
     log "Installing python-ldap with custom flags..."
-    pip install python-ldap
+    python3.11 -m pip install python-ldap
     
     log "Installing remaining Python dependencies..."
-    pip install -r requirements.txt
+    python3.11 -m pip install -r requirements.txt
     
     deactivate
 else
-    error "Python 3.11 not found. Please install Python 3.11 before running this script."
+    error "DNF package manager not found. Please install python3.11 and python3.11-devel manually."
 fi
+
+# Ensure proper permissions after package installation
+log "Resetting permissions after package installation..."
+chmod -R 775 "$WEB_ROOT/shared/data/oncall_calendar"
+chown -R $APACHE_USER:$APACHE_GROUP "$WEB_ROOT/shared/data/oncall_calendar"
 
 # Verify critical files and directories
 log "Verifying setup..."
@@ -177,6 +187,45 @@ done
 log "Testing apache user access..."
 sudo -u $APACHE_USER test -w $WEB_ROOT/portal/logs/access || error "Apache user cannot write to logs"
 sudo -u $APACHE_USER test -x $LDAP_CHECK_SCRIPT || warn "Apache user cannot execute LDAP check script"
+
+# Verify OnCall Calendar directory permissions and paths
+log "Verifying OnCall Calendar setup..."
+
+# Debug path resolution
+PHP_TEST_SCRIPT=$(mktemp)
+cat > "$PHP_TEST_SCRIPT" << 'EOF'
+<?php
+$currentDir = __DIR__;
+$sharedDir = dirname(dirname(dirname($currentDir))) . '/shared';
+$dataPath = $sharedDir . '/data/oncall_calendar';
+$uploadPath = $dataPath . '/uploads';
+
+echo "Current Directory: $currentDir\n";
+echo "Resolved Shared Directory: $sharedDir\n";
+echo "Data Path: $dataPath\n";
+echo "Upload Path: $uploadPath\n";
+EOF
+
+log "Testing PHP path resolution..."
+sudo -u $APACHE_USER php "$PHP_TEST_SCRIPT"
+rm "$PHP_TEST_SCRIPT"
+
+# Create symlink to ensure correct path resolution
+log "Setting up shared directory symlink..."
+if [ ! -L "$WEB_ROOT/portal/shared" ]; then
+    ln -s "$WEB_ROOT/shared" "$WEB_ROOT/portal/shared"
+fi
+
+# Verify directory permissions
+log "Verifying directory permissions..."
+sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar" || error "Apache user cannot write to oncall_calendar directory"
+sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar/uploads" || error "Apache user cannot write to oncall_calendar uploads directory"
+sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar/backups" || error "Apache user cannot write to oncall_calendar backups directory"
+
+# Verify file permissions
+log "Verifying file permissions..."
+sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar/teams.json" || error "Apache user cannot write to teams.json"
+sudo -u $APACHE_USER test -w "$WEB_ROOT/shared/data/oncall_calendar/rotations.json" || error "Apache user cannot write to rotations.json"
 
 log "Setup complete! Please verify the following manually:"
 echo "1. Test LDAP authentication"

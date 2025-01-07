@@ -10,45 +10,31 @@ class PythonLogger {
     private $venvPath;
 
     public function __construct($type = 'general') {
+        global $projectRoot;
+        
         $validTypes = ['access', 'errors', 'client', 'audit', 'performance'];
         $this->logType = in_array($type, $validTypes) ? $type : 'general';
         
-        // Find project root by navigating up from current file until we find shared/ directory
-        $currentDir = __DIR__;
-        while ($currentDir !== '/' && !is_dir($currentDir . '/shared')) {
-            $currentDir = dirname($currentDir);
-        }
+        // Use centralized path configuration
+        $this->projectRoot = PROJECT_ROOT;
+        $this->pythonScript = resolvePath('logging/logger.py', 'module');
         
-        if (!is_dir($currentDir . '/shared')) {
-            error_log("WARNING: Could not locate project root directory");
-            return;
-        }
+        // Use configured virtual environment
+        $this->venvPath = VENV_DIR ? VENV_DIR . '/bin/python3' : '/usr/bin/python3';
         
-        $this->projectRoot = $currentDir;
-        $this->pythonScript = $this->projectRoot . '/shared/scripts/modules/logging/logger.py';
+        error_log("PythonLogger Configuration:");
+        error_log("- Project Root: " . $this->projectRoot);
+        error_log("- Python Script: " . $this->pythonScript);
+        error_log("- Virtual Env: " . $this->venvPath);
         
-        // Look for venv in standard locations relative to project root
-        $venvLocations = [
-            $this->projectRoot . '/shared/venv/bin/python',
-            $this->projectRoot . '/venv/bin/python',
-            $this->projectRoot . '/.venv/bin/python'
-        ];
-        
-        foreach ($venvLocations as $venvPath) {
-            if (file_exists($venvPath)) {
-                $this->venvPath = $venvPath;
-                break;
-            }
-        }
-        
-        // Don't throw exception if Python setup is incomplete - we'll fallback to PHP logging
+        // Verify Python setup
         if (!file_exists($this->pythonScript)) {
             error_log("WARNING: Python logging script not found at {$this->pythonScript}");
+            error_log("Available files in modules/logging:");
+            if (is_dir(dirname($this->pythonScript))) {
+                error_log(print_r(scandir(dirname($this->pythonScript)), true));
+            }
             $this->pythonScript = null;
-        }
-        
-        if (!$this->venvPath) {
-            error_log("WARNING: Python virtual environment not found in standard locations");
         }
     }
 
