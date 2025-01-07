@@ -3,13 +3,7 @@
 import sys
 import os
 import warnings
-import base64
-import requests
-import logging
 import ldap
-from datetime import datetime
-import pandas as pd
-import json
 
 # Suppress specific deprecation warning
 warnings.filterwarnings("ignore", category=DeprecationWarning, 
@@ -19,17 +13,6 @@ warnings.filterwarnings("ignore", category=DeprecationWarning,
 script_dir = os.path.dirname(os.path.abspath(__file__))
 modules_dir = os.path.dirname(script_dir)  # parent directory containing all modules
 sys.path.append(modules_dir)
-
-# Configure logging to show all messages
-logging.basicConfig(
-    level=logging.ERROR,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-logger.error("Starting ldapcheck.py")
-logger.error(f"Current working directory: {os.getcwd()}")
-logger.error(f"Script directory: {script_dir}")
-logger.error(f"Modules directory: {modules_dir}")
 
 from vault.vault_utility import VaultUtility
 vault_utility = VaultUtility(env_file_path='/etc/vault.env')
@@ -92,10 +75,7 @@ try:
             output = "OK!|{0}|{1}|{2}|{3}|{4}|{5}".format(
                 employee_num, employee_name, employee_mail, 
                 cngroup, employee_vzid, adom_groups_str)
-            # Log and ensure no whitespace
-            logger.error(f"Raw output: '{output}'")
             output = output.strip()
-            logger.error(f"Stripped output: '{output}'")
             print(output, end='')  # No newline at end
         else:
             print("ERROR! User not authorized", end='')

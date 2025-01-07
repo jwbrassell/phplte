@@ -7,7 +7,6 @@ Manages interactions with HashiCorp Vault for secret management
 import hvac
 import warnings
 import os
-import logging
 
 # Suppress specific deprecation warning for hvac
 warnings.filterwarnings(
@@ -31,14 +30,6 @@ class VaultUtility:
             token (str): Authentication token
             env_file_path (str): Path to environment file
         """
-        # Configure detailed logging
-        logging.basicConfig(
-            level=logging.ERROR,
-            format='%(asctime)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger(__name__)
-        self.logger.error("Initializing VaultUtility")
-        
         # Initialize connection parameters
         self.vault_url = vault_url or os.getenv('VAULT_URL', 'http://127.0.0.1:8200')
         self.token = token or os.getenv('VAULT_TOKEN')
@@ -54,7 +45,6 @@ class VaultUtility:
             self.token = os.getenv('VAULT_TOKEN')
             
             if not self.token:
-                logging.error("Failed to obtain Vault token")
                 raise Exception("VAULT_TOKEN environment variable not set")
 
         # Initialize Vault client
@@ -72,37 +62,21 @@ class VaultUtility:
             Exception: If file loading fails
         """
         try:
-            self.logger.error(f"Attempting to load env file from: {filepath}")
-            self.logger.error(f"Current working directory: {os.getcwd()}")
-            self.logger.error(f"Current process user: {os.getuid()}")
-            self.logger.error(f"Current process group: {os.getgid()}")
             if not os.path.exists(filepath):
-                self.logger.error(f"Environment file does not exist: {filepath}")
                 raise Exception(f"Environment file not found: {filepath}")
             
             if not os.access(filepath, os.R_OK):
-                self.logger.error(f"Cannot read environment file: {filepath}")
-                self.logger.error(f"File permissions: {oct(os.stat(filepath).st_mode)}")
-                self.logger.error(f"File owner: {os.stat(filepath).st_uid}")
-                self.logger.error(f"File group: {os.stat(filepath).st_gid}")
                 raise Exception(f"Cannot read environment file: {filepath}")
             
             with open(filepath) as f:
-                content = f.read()
-                self.logger.error(f"Successfully read env file. Content length: {len(content)}")
-                for line in content.splitlines():
+                for line in f:
                     if line.strip() and not line.startswith('#'):
                         key, value = line.strip().split('=', 1)
                         key = key.replace('export ', '')
                         value = value.replace('\n', '')
                         os.environ[key] = value
-                        self.logger.error(f"Set environment variable: {key}")
         except Exception as e:
-            self.logger.error(f"Failed to load environment variables from {filepath}")
-            self.logger.error(f"Error details: {str(e)}")
-            self.logger.error(f"Error type: {type(e)}")
-            self.logger.error(f"Error traceback:", exc_info=True)
-            raise
+            raise Exception(f"Failed to load environment variables: {str(e)}")
 
     def authenticate_vault(self, vault_url, token):
         """
@@ -159,17 +133,13 @@ class VaultUtility:
                         )
                         result[full_path] = secret['data']['data']
                     except hvac.exceptions.InvalidPath:
-                        logging.warning(f"Invalid path: {full_path}")
-                    except Exception as e:
-                        logging.error(f"Error reading secret at {full_path}: {str(e)}")
-            
+                                except Exception as e:
+                        
             return result
             
         except hvac.exceptions.InvalidPath:
-            logging.warning(f"Invalid path: {path}")
             return {}
         except Exception as e:
-            logging.error(f"Error listing keys: {str(e)}")
             return {}
 
     def get_kv_v2_mount_point(self):
@@ -184,19 +154,15 @@ class VaultUtility:
         """
         try:
             mounts = self.client.sys.list_mounted_secrets_engines()['data']
-            logging.debug(f"Mounted secrets engines: {mounts}")
             
             for mount_point, mount_info in mounts.items():
-                logging.debug(f"Checking mount point: {mount_point}, mount info: {mount_info}")
                 
                 if mount_info['type'] == 'kv' and mount_info['options'].get('version') == '2':
-                    logging.info(f"Found kv-v2 mount point: {mount_point.strip('/')}")
                     return mount_point.strip('/')
                     
             raise Exception("No kv-v2 secrets engine found")
             
         except Exception as e:
-            logging.error(f"Failed to get kv-v2 mount point: {e}")
             raise
 
     def get_value_for_key(self, key):
@@ -219,8 +185,6 @@ class VaultUtility:
             return value['value']
             
         except hvac.exceptions.InvalidPath:
-            logging.warning(f"Invalid path: {key}")
             return None
         except Exception as e:
-            logging.error(f"Error retrieving value for key {key}: {str(e)}")
             return None
