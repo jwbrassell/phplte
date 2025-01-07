@@ -43,7 +43,7 @@ if (is_resource($process)) {
 $parts = explode('|', $ldapcheck);
 $status = array_shift($parts);
 
-if($status == "OK!" && count($parts) == 6) {
+if($status == "OK!") {
     error_log("LDAP auth successful, setting up session...");
     list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = $parts;
     
@@ -64,7 +64,7 @@ if($status == "OK!" && count($parts) == 6) {
     // Log success and redirect
     error_log("Writing to access log and redirecting to index.php");
     file_put_contents($FILE, "$TS|SUCCESS|$uname|$adom_group\n", FILE_APPEND | LOCK_EX);
-    header("Location: /portal/index.php");
+    header("Location: /index.php");
     exit;
 } else {
     error_log("LDAP auth failed:");
@@ -74,6 +74,6 @@ if($status == "OK!" && count($parts) == 6) {
     
     // Log failure and redirect with error
     file_put_contents($FILE, "$TS|$ldapcheck|$uname\n", FILE_APPEND | LOCK_EX);
-    header("Location: /portal/login.php?error=" . urlencode($ldapcheck));
+    header("Location: /login.php?error=" . urlencode($ldapcheck));
     exit;
 }
