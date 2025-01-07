@@ -14,13 +14,21 @@ require_once(__DIR__ . '/../../../../portal/config.php');
 // Set up log file path
 $FILE = PROJECT_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
-// Execute ldapcheck and capture all output
-$cmd = "whoami && " . PROJECT_ROOT . "/shared/venv/bin/python " . PROJECT_ROOT . "/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
+// Execute ldapcheck and capture only stdout
+$cmd = PROJECT_ROOT . "/shared/venv/bin/python " . PROJECT_ROOT . "/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
 error_log("Executing command: " . $cmd);
-$output = trim(shell_exec($cmd . " 2>&1")); // Capture both stdout and stderr
-error_log("Command output: " . $output);
-$ldapcheck = explode("\n", $output)[1] ?? $output; // Get second line if whoami was successful
-error_log("LDAP check output: " . $ldapcheck);
+$descriptorspec = array(
+   0 => array("pipe", "r"),  // stdin
+   1 => array("pipe", "w"),  // stdout
+   2 => array("file", PROJECT_ROOT . "/portal/logs/python/ldap_debug.log", "a")  // stderr to file
+);
+$process = proc_open($cmd, $descriptorspec, $pipes);
+if (is_resource($process)) {
+    $ldapcheck = trim(stream_get_contents($pipes[1]));
+    fclose($pipes[1]);
+    proc_close($process);
+    error_log("LDAP check output: " . $ldapcheck);
+}
 
 // Parse the response
 $parts = explode('|', $ldapcheck);
