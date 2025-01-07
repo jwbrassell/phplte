@@ -42,6 +42,8 @@ shared/data/oncall_calendar/uploads/*
 .env
 .env.local
 .env.*.local
+private/config/vault.env
+!private/config/vault.env.template
 
 # Dependency directories
 /vendor/
