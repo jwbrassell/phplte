@@ -14,7 +14,17 @@ This guide provides step-by-step instructions for setting up Apache (httpd) with
 dnf install httpd php php-fpm php-cli php-ldap mod_ssl php-json php-xml php-mbstring php-mysqlnd php-gd
 
 # Enable required Apache modules
-cat > /etc/httpd/conf.modules.d/00-proxy.conf << 'EOL'
+cat > /etc/httpd/conf.modules.d/00-mpm.conf << 'EOL'
+LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+LoadModule unixd_module modules/mod_unixd.so
+EOL
+
+cat > /etc/httpd/conf.modules.d/01-base.conf << 'EOL'
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule headers_module modules/mod_headers.so
+EOL
+
+cat > /etc/httpd/conf.modules.d/10-proxy.conf << 'EOL'
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
 EOL
@@ -136,17 +146,17 @@ cp /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak
 # Remove default SSL config to avoid port conflicts
 mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.disabled
 
-# Create main config (replace dogcrayons.com with your actual domain)
+# Create minimal main config
 cat > /etc/httpd/conf/httpd.conf << 'EOL'
 ServerRoot "/etc/httpd"
-Listen 443 https
 Include conf.modules.d/*.conf
 
 # User and Group Settings
 User apache
 Group apache
 
-ServerAdmin root@localhost
+ServerName localhost
+DocumentRoot "/var/www/html"
 
 # Default Directory Settings
 <Directory />
@@ -154,112 +164,45 @@ ServerAdmin root@localhost
     Require all denied
 </Directory>
 
-ServerName dogcrayons.com
-DocumentRoot "/var/www/html"
-
-<Directory "/var/www">
+<Directory "/var/www/html">
+    Options Indexes FollowSymLinks
     AllowOverride None
     Require all granted
 </Directory>
 
-<Directory "/var/www/html">
-    Options Indexes FollowSymLinks
-    AllowOverride All
-    Require all granted
-</Directory>
+# Basic Logging
+ErrorLog "logs/error_log"
+LogLevel warn
+CustomLog "logs/access_log" combined
 
-<IfModule dir_module>
-    DirectoryIndex index.php index.html
-</IfModule>
+# Include other configs
+Include conf.d/*.conf
+EOL
 
-# PHP Configuration
-<IfModule php_module>
-    AddHandler application/x-httpd-php .php
-    DirectoryIndex index.php
-    php_value session.cookie_httponly 1
-    php_value session.cookie_secure 1
-</IfModule>
+# Create SSL config
+cat > /etc/httpd/conf.d/ssl.conf << 'EOL'
+Listen 443 https
 
-# SSL Configuration
 SSLPassPhraseDialog exec:/usr/libexec/httpd-ssl-pass-dialog
 SSLSessionCache shmcb:/run/httpd/sslcache(512000)
 SSLSessionCacheTimeout 300
 SSLCryptoDevice builtin
 
-# HTTP to HTTPS Redirection
-Listen 80
-<VirtualHost *:80>
-    ServerName dogcrayons.com
-    Redirect permanent / https://dogcrayons.com/
-</VirtualHost>
-
-# HTTPS Virtual Host Configuration
 <VirtualHost *:443>
-    ServerName dogcrayons.com
     DocumentRoot "/var/www/html"
-    
     SSLEngine on
     SSLCertificateFile /etc/httpd/ssl/selfsigned.crt
     SSLCertificateKeyFile /etc/httpd/ssl/selfsigned.key
-    SSLHonorCipherOrder on
-    SSLCipherSuite PROFILE=SYSTEM
-    SSLProxyCipherSuite PROFILE=SYSTEM
-
-    <Directory "/var/www/html">
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    <FilesMatch "\.(cgi|shtml|phtml|php)$">
-        SSLOptions +StdEnvVars
-    </FilesMatch>
-
-    BrowserMatch "MSIE [2-5]" \
-        nokeepalive ssl-unclean-shutdown \
-        downgrade-1.0 force-response-1.0
-
-    CustomLog logs/ssl_request_log \
-        "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 </VirtualHost>
+EOL
 
-# Files Configuration
-<Files ".ht*">
-    Require all granted
-</Files>
-
-# Logging Configuration
-ErrorLog "logs/error_log"
-LogLevel warn
-
-<IfModule log_config_module>
-    LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-    LogFormat "%h %l %u %t \"%r\" %>s %b" common
-
-    <IfModule logio_module>
-        LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
-    </IfModule>
-
-    CustomLog "logs/access_log" combined
-</IfModule>
-
-# MIME Configuration
-<IfModule mime_module>
-    TypesConfig /etc/mime.types
-    AddType application/x-compress .Z
-    AddType application/x-gzip .gz .tgz
-    AddType text/html .shtml
-    AddOutputFilter INCLUDES .shtml
-</IfModule>
-
-AddDefaultCharset UTF-8
-
-<IfModule mime_magic_module>
-    MIMEMagicFile conf/magic
-</IfModule>
-
-EnableSendfile on
-Include conf.d/*.conf
+# Create HTTP to HTTPS redirect
+cat > /etc/httpd/conf.d/redirect.conf << 'EOL'
+Listen 80
+<VirtualHost *:80>
+    DocumentRoot "/var/www/html"
+    Redirect permanent / https://localhost/
+</VirtualHost>
 EOL
 ```
 
@@ -267,20 +210,60 @@ EOL
 cat > /etc/httpd/conf.d/portal.conf << 'EOL'
 <Directory "/var/www/html/portal">
     Options FollowSymLinks
-    AllowOverride All
+    AllowOverride None
     Require all granted
+    
+    # Security headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    
+    # Enable rewrite engine
+    RewriteEngine On
+    RewriteBase /portal/
+    
+    # If the file/directory exists, serve it directly
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # API passthrough
+    RewriteRule ^api/ - [L]
+    
+    # All other requests go to PHP files
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d 
+    RewriteCond %{REQUEST_URI} !\.php$
+    RewriteRule ^([^/]+)/?$ $1.php [L]
+    
+    # File protection
+    <FilesMatch "^\.(?!htaccess)">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "^logs/.*\.log$">
+        Require all denied
+    </FilesMatch>
 </Directory>
 
 # Allow following symlinks for dist and plugins directories
 <Directory "/var/www/html/dist">
     Options FollowSymLinks
+    AllowOverride None
     Require all granted
 </Directory>
 
 <Directory "/var/www/html/plugins">
     Options FollowSymLinks
+    AllowOverride None
     Require all granted
 </Directory>
+
+# Error documents
+ErrorDocument 403 /portal/403.php
+ErrorDocument 404 /portal/404.php
+ErrorDocument 500 "Internal Server Error"
+ErrorDocument 503 "Service Temporarily Unavailable"
 EOL
 ```
 
