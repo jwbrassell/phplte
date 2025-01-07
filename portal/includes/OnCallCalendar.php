@@ -14,16 +14,15 @@ class OnCallCalendar {
         $this->dataPath = __DIR__ . '/../../shared/data/oncall_calendar';
         $this->uploadPath = $this->dataPath . '/uploads';
         
-        // Ensure directories exist with proper permissions
+        // Check if required directories exist and are writable
         foreach ([$this->dataPath, $this->uploadPath] as $dir) {
             if (!file_exists($dir)) {
-                if (!mkdir($dir, 0777, true)) {
-                    error_log("Failed to create directory: $dir");
-                    throw new Exception("Failed to initialize calendar storage");
-                }
-                chmod($dir, 0777);
-            } elseif (!is_writable($dir)) {
-                chmod($dir, 0777);
+                error_log("Required directory does not exist: $dir");
+                throw new Exception("Calendar storage directory not found. Please contact system administrator.");
+            }
+            if (!is_writable($dir)) {
+                error_log("Directory not writable: $dir");
+                throw new Exception("Calendar storage is not writable. Please contact system administrator.");
             }
         }
     }
