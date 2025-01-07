@@ -4,28 +4,6 @@
 # Sets up proper permissions and ownership for the portal application
 # Must be run as root
 
-# Exit on any error
-set -e
-
-# Disable SELinux immediately
-log "Disabling SELinux at startup..."
-if command -v setenforce >/dev/null 2>&1; then
-    setenforce 0
-    log "SELinux disabled for current session"
-fi
-
-if [ -f "/etc/selinux/config" ]; then
-    log "Permanently disabling SELinux..."
-    sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
-    log "SELinux permanently disabled (requires reboot to take full effect)"
-fi
-
-# Configuration
-WEB_ROOT="/var/www/html"
-APACHE_USER="apache"
-APACHE_GROUP="apache"
-PYTHON_VENV="$WEB_ROOT/shared/venv"
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -45,6 +23,33 @@ error() {
 warn() {
     echo -e "${YELLOW}[$(date +'%Y-%m-%d %H:%M:%S')] WARNING:${NC} $1"
 }
+
+# Exit on any error
+set -e
+
+# Disable SELinux immediately
+log "Disabling SELinux at startup..."
+if command -v setenforce >/dev/null 2>&1; then
+    setenforce 0
+    log "SELinux disabled for current session"
+fi
+
+if [ -f "/etc/selinux/config" ]; then
+    log "Permanently disabling SELinux..."
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+    log "SELinux permanently disabled (requires reboot to take full effect)"
+fi
+
+# Configuration
+DOMAIN_NAME="anydomain.com"  # Change this in production
+WEB_ROOT="/var/www/html"
+APACHE_USER="apache"
+APACHE_GROUP="apache"
+PYTHON_VENV="$WEB_ROOT/shared/venv"
+SSL_DIR="/etc/httpd/ssl"
+SSL_CERT="$SSL_DIR/selfsigned.crt"
+SSL_KEY="$SSL_DIR/selfsigned.key"
+
 
 # Check if running as root
 if [ "$EUID" -ne 0 ]; then
@@ -183,6 +188,86 @@ if [ -f "/etc/selinux/config" ]; then
 else
     warn "SELinux config file not found at /etc/selinux/config"
 fi
+
+# Set up SSL certificates
+log "Setting up SSL certificates..."
+if [ ! -d "$SSL_DIR" ]; then
+    install -d -m 755 "$SSL_DIR"
+fi
+
+if [ ! -f "$SSL_CERT" ] || [ ! -f "$SSL_KEY" ]; then
+    log "Generating self-signed SSL certificate..."
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout "$SSL_KEY" -out "$SSL_CERT" \
+        -subj "/CN=$DOMAIN_NAME/O=Self Signed/C=US"
+    chmod 600 "$SSL_KEY"
+    chmod 644 "$SSL_CERT"
+fi
+
+# Install nginx and php-fpm if not present
+log "Installing required packages..."
+if command -v dnf >/dev/null 2>&1; then
+    dnf install -y nginx php-fpm
+fi
+
+# Configure nginx
+log "Configuring nginx..."
+cat > /etc/nginx/conf.d/default.conf << EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
+    return 301 https://\$server_name\$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name $DOMAIN_NAME www.$DOMAIN_NAME;
+    
+    ssl_certificate $SSL_CERT;
+    ssl_certificate_key $SSL_KEY;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    
+    root $WEB_ROOT/portal;
+    index index.php;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location /shared {
+        alias $WEB_ROOT/shared;
+        try_files \$uri \$uri/ =404;
+    }
+
+    location ~ \.php\$ {
+        try_files \$uri =404;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+EOF
+
+# Configure firewall
+log "Configuring firewall..."
+if command -v firewall-cmd >/dev/null 2>&1; then
+    firewall-cmd --permanent --add-service=http
+    firewall-cmd --permanent --add-service=https
+    firewall-cmd --reload
+fi
+
+# Enable and start services
+log "Starting services..."
+systemctl enable nginx php-fpm
+systemctl start php-fpm
+
+# Restart nginx
+log "Restarting nginx..."
+systemctl restart nginx
 
 # Install Python 3.11 and dependencies
 log "Installing Python 3.11 and dependencies..."
