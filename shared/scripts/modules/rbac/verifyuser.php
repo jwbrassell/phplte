@@ -15,7 +15,7 @@ require_once(__DIR__ . '/../../../../portal/config.php');
 $FILE = PROJECT_ROOT . "/portal/logs/access/" . $DATE . "_access.log";
 
 // Execute ldapcheck and capture all output
-$cmd = "whoami && " . PROJECT_ROOT . "/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
+$cmd = "whoami && " . PROJECT_ROOT . "/shared/venv/bin/python " . PROJECT_ROOT . "/shared/scripts/modules/ldap/ldapcheck.py " . escapeshellarg($uname) . " " . escapeshellarg($passwd) . " " . escapeshellarg($APP);
 error_log("Executing command: " . $cmd);
 $output = trim(shell_exec($cmd . " 2>&1")); // Capture both stdout and stderr
 error_log("Command output: " . $output);
