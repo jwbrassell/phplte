@@ -81,8 +81,19 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
 // Log failure and redirect with error
 file_put_contents($FILE, "$TS|ERROR|$uname|$error\n", FILE_APPEND | LOCK_EX);
 
+// Debug log the LDAP response
+error_log("LDAP authentication failed. Response: " . $ldapcheck);
+
+// Get the current domain and protocol
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+$domain = $_SERVER['HTTP_HOST'];
+
 // Use proper base path for error redirect
 $basePath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
 if ($basePath === '\\') $basePath = '/';
-header("Location: " . $basePath . "/login.php?error=" . urlencode($error));
+
+// Construct full URL for redirect
+$redirectUrl = $protocol . $domain . $basePath . "/login.php?error=" . urlencode($error);
+error_log("Redirecting to: " . $redirectUrl);
+header("Location: " . $redirectUrl);
 exit;

@@ -5,6 +5,12 @@ require_once(__DIR__ . '/header.php');
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
+// Get error from query parameter if it exists
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+    error_log("Login error received: " . $error);
+}
+
 // Check for session hijacking
 if(isset($_SESSION[$APP."_user_session"])) {
     if(!isset($_SESSION['ip']) || !isset($_SESSION['user_agent'])) {
@@ -185,7 +191,7 @@ window.addEventListener('load', function() {
 
                     <div class="input-group mb-3 form-group">
                         <input type="text" 
-                               class="form-control" 
+                               class="form-control <?php if(isset($error)) { echo 'is-invalid'; } ?>" 
                                name="login_user" 
                                <?php if(!isset($uname)) { 
                                    echo 'placeholder="SampleOrganization ID"';
@@ -212,7 +218,7 @@ window.addEventListener('load', function() {
                             </div>
                         </div>
                         <div class="invalid-feedback">
-                            <?php if(isset($error)) { echo $error; } ?>
+                            <?php if(isset($error)) { echo htmlspecialchars($error); } ?>
                         </div>
                     </div>
 
