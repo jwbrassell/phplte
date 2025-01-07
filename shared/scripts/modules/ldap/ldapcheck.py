@@ -1,4 +1,4 @@
-#!../../venv/bin/python3
+#!/var/www/html/shared/venv/bin/python3
 
 import sys
 import os
