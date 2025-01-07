@@ -12,8 +12,7 @@ class PythonLogger {
         $this->logType = in_array($type, $validTypes) ? $type : 'general';
         
         // Get path to Python script by navigating from current file
-        $portalDir = dirname(dirname(__DIR__)); // Up from includes to portal to root
-        $this->pythonScript = $portalDir . '/shared/scripts/modules/logging/logger.py';
+        $this->pythonScript = dirname(dirname(__DIR__)) . '/shared/scripts/modules/logging/logger.py';
         
         if (!file_exists($this->pythonScript)) {
             // Critical error - logging system unavailable
@@ -54,7 +53,7 @@ class PythonLogger {
         
         // Build and execute command
         // Get path to Python virtual environment relative to project root
-        $venvPath = $portalDir . '/shared/venv/bin/python';
+        $venvPath = dirname(dirname(__DIR__)) . '/shared/venv/bin/python';
         
         $command = sprintf('%s %s %s %s %s 2>&1',
             escapeshellarg($venvPath),

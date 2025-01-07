@@ -11,10 +11,41 @@ This guide provides step-by-step instructions for setting up Apache (httpd) with
 ## 1. Install Required Packages
 ```bash
 # Install Apache, PHP, and required modules
-dnf install httpd php php-cli php-ldap mod_ssl php-json php-xml php-mbstring php-mysqlnd php-gd
+dnf install httpd php php-fpm php-cli php-ldap mod_ssl php-json php-xml php-mbstring php-mysqlnd php-gd
 
-# Ensure SSL module is loaded
-ln -s /etc/httpd/conf.modules.d/00-ssl.conf /etc/httpd/conf.modules.d/ssl.conf
+# Enable required Apache modules
+cat > /etc/httpd/conf.modules.d/00-proxy.conf << 'EOL'
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_fcgi_module modules/mod_proxy_fcgi.so
+EOL
+
+# Configure PHP-FPM
+systemctl enable php-fpm
+systemctl start php-fpm
+
+# Create PHP-FPM configuration for Apache
+cat > /etc/httpd/conf.d/php-fpm.conf << 'EOL'
+DirectoryIndex index.php index.html
+
+# Enable PHP-FPM
+<FilesMatch \.php$>
+    SetHandler "proxy:fcgi://127.0.0.1:9000"
+</FilesMatch>
+EOL
+
+# Configure PHP-FPM to listen on TCP port
+cat > /etc/php-fpm.d/www.conf << 'EOL'
+[www]
+user = apache
+group = apache
+listen = 127.0.0.1:9000
+listen.allowed_clients = 127.0.0.1
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+EOL
 
 # Install Python 3.11 and development tools
 dnf install python3.11 python3.11-devel
