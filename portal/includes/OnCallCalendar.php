@@ -9,9 +9,14 @@ class OnCallCalendar {
     private $uploadPath;
 
     public function __construct() {
-        $this->pythonPath = '/usr/bin/python3';
-        $this->modulePath = __DIR__ . '/../../shared/scripts/modules/oncall_calendar';
-        $this->dataPath = __DIR__ . '/../../shared/data/oncall_calendar';
+        // Check if we're in production environment (venv exists)
+        $venvPython = dirname(dirname(dirname(__DIR__))) . '/shared/venv/bin/python3';
+        $this->pythonPath = file_exists($venvPython) ? $venvPython : '/usr/bin/python3';
+        
+        // Build paths relative to current file
+        $sharedDir = dirname(dirname(dirname(__DIR__))) . '/shared';
+        $this->modulePath = $sharedDir . '/scripts/modules/oncall_calendar';
+        $this->dataPath = $sharedDir . '/data/oncall_calendar';
         $this->uploadPath = $this->dataPath . '/uploads';
         
         // Check if required directories exist and are writable

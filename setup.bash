@@ -97,16 +97,26 @@ else
     error "DNF package manager not found. Please install python3.11-devel manually."
 fi
 
-if [ -f "$PYTHON_VENV/bin/pip3" ]; then
+# Create Python virtual environment
+log "Creating Python virtual environment..."
+if command -v python3.11 >/dev/null 2>&1; then
+    python3.11 -m venv $PYTHON_VENV
+    source $PYTHON_VENV/bin/activate
+    
+    log "Upgrading pip..."
+    python -m pip install --upgrade pip
+
     # Set CFLAGS for python-ldap installation
     export CFLAGS="-I/usr/include/python3.11"
     log "Installing python-ldap with custom flags..."
-    $PYTHON_VENV/bin/pip3 install python-ldap
+    pip install python-ldap
     
     log "Installing remaining Python dependencies..."
-    $PYTHON_VENV/bin/pip3 install -r requirements.txt
+    pip install -r requirements.txt
+    
+    deactivate
 else
-    warn "Python virtual environment not found at $PYTHON_VENV. Please set up virtual environment manually."
+    error "Python 3.11 not found. Please install Python 3.11 before running this script."
 fi
 
 # Verify critical files and directories
