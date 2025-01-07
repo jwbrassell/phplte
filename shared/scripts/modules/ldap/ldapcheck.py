@@ -15,16 +15,24 @@ import json
 warnings.filterwarnings("ignore", category=DeprecationWarning, 
     message="The raise_on_deleted_version parameter will change its default value to False in hvac v3.0.0.")
 
-# Configure logging to suppress debug output
-logging.basicConfig(level=logging.ERROR)
-
 # Add the directory containing modules to the Python path
 script_dir = os.path.dirname(os.path.abspath(__file__))
 modules_dir = os.path.dirname(script_dir)  # parent directory containing all modules
 sys.path.append(modules_dir)
 
+# Configure logging to show all messages
+logging.basicConfig(
+    level=logging.ERROR,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+logger.error("Starting ldapcheck.py")
+logger.error(f"Current working directory: {os.getcwd()}")
+logger.error(f"Script directory: {script_dir}")
+logger.error(f"Modules directory: {modules_dir}")
+
 from vault.vault_utility import VaultUtility
-vault_utility = VaultUtility()
+vault_utility = VaultUtility(env_file_path='/etc/vault.env')
 
 # Get LDAP configuration from vault
 ldap_user = vault_utility.get_value_for_key("wens/portal/framework/config/ldap/username")

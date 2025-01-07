@@ -22,7 +22,7 @@ class VaultUtility:
     Handles authentication, secret management, and key-value operations
     """
     
-    def __init__(self, vault_url=None, token=None, env_file_path='/etc/vault.env'):
+    def __init__(self, vault_url=None, token=None, env_file_path=None):
         """
         Initialize VaultUtility with connection parameters
         
@@ -31,8 +31,13 @@ class VaultUtility:
             token (str): Authentication token
             env_file_path (str): Path to environment file
         """
-        # Set logging to ERROR only
-        logging.basicConfig(level=logging.ERROR)
+        # Configure detailed logging
+        logging.basicConfig(
+            level=logging.ERROR,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+        self.logger = logging.getLogger(__name__)
+        self.logger.error("Initializing VaultUtility")
         
         # Initialize connection parameters
         self.vault_url = vault_url or os.getenv('VAULT_URL', 'http://127.0.0.1:8200')
@@ -40,7 +45,12 @@ class VaultUtility:
 
         # Load environment variables if token not provided
         if not self.token:
-            self.load_env_file(env_file_path)
+            # Default to /etc/vault.env if no path provided
+            env_path = env_file_path if env_file_path else '/etc/vault.env'
+            # Clean up the path
+            env_path = os.path.normpath(env_path)
+            
+            self.load_env_file(env_path)
             self.token = os.getenv('VAULT_TOKEN')
             
             if not self.token:
@@ -62,32 +72,36 @@ class VaultUtility:
             Exception: If file loading fails
         """
         try:
-            logging.error(f"Attempting to load env file from: {filepath}")
+            self.logger.error(f"Attempting to load env file from: {filepath}")
+            self.logger.error(f"Current working directory: {os.getcwd()}")
+            self.logger.error(f"Current process user: {os.getuid()}")
+            self.logger.error(f"Current process group: {os.getgid()}")
             if not os.path.exists(filepath):
-                logging.error(f"Environment file does not exist: {filepath}")
+                self.logger.error(f"Environment file does not exist: {filepath}")
                 raise Exception(f"Environment file not found: {filepath}")
             
             if not os.access(filepath, os.R_OK):
-                logging.error(f"Cannot read environment file: {filepath}")
-                logging.error(f"File permissions: {oct(os.stat(filepath).st_mode)}")
-                logging.error(f"Current process user: {os.getuid()}")
-                logging.error(f"Current process group: {os.getgid()}")
+                self.logger.error(f"Cannot read environment file: {filepath}")
+                self.logger.error(f"File permissions: {oct(os.stat(filepath).st_mode)}")
+                self.logger.error(f"File owner: {os.stat(filepath).st_uid}")
+                self.logger.error(f"File group: {os.stat(filepath).st_gid}")
                 raise Exception(f"Cannot read environment file: {filepath}")
             
             with open(filepath) as f:
                 content = f.read()
-                logging.error(f"Successfully read env file. Content length: {len(content)}")
+                self.logger.error(f"Successfully read env file. Content length: {len(content)}")
                 for line in content.splitlines():
                     if line.strip() and not line.startswith('#'):
                         key, value = line.strip().split('=', 1)
                         key = key.replace('export ', '')
                         value = value.replace('\n', '')
                         os.environ[key] = value
-                        logging.error(f"Set environment variable: {key}")
+                        self.logger.error(f"Set environment variable: {key}")
         except Exception as e:
-            logging.error(f"Failed to load environment variables from {filepath}")
-            logging.error(f"Error details: {str(e)}")
-            logging.error(f"Error type: {type(e)}")
+            self.logger.error(f"Failed to load environment variables from {filepath}")
+            self.logger.error(f"Error details: {str(e)}")
+            self.logger.error(f"Error type: {type(e)}")
+            self.logger.error(f"Error traceback:", exc_info=True)
             raise
 
     def authenticate_vault(self, vault_url, token):
