@@ -12,22 +12,15 @@ if (file_exists(__DIR__ . '/Logger.php')) {
     unlink(__DIR__ . '/Logger.php');
 }
 
-// Remove old log directory and its contents
-$oldLogDir = dirname(dirname(__DIR__)) . '/portal/logs';
-if (file_exists($oldLogDir)) {
-    $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($oldLogDir, RecursiveDirectoryIterator::SKIP_DOTS),
-        RecursiveIteratorIterator::CHILD_FIRST
-    );
-    
-    foreach ($files as $file) {
-        if ($file->isDir()) {
-            rmdir($file->getRealPath());
-        } else {
-            unlink($file->getRealPath());
-        }
+// Ensure log directories exist
+$logTypes = ['access', 'errors', 'client', 'audit', 'performance', 'rbac'];
+$baseLogDir = dirname(dirname(__DIR__)) . '/shared/data/logs/system';
+
+foreach ($logTypes as $type) {
+    $dir = $baseLogDir . '/' . $type;
+    if (!file_exists($dir)) {
+        mkdir($dir, 0755, true);
     }
-    rmdir($oldLogDir);
 }
 
 // Start output buffering to capture response code
