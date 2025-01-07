@@ -4,7 +4,7 @@
  * Generates dynamic DataTables with search, sort, and export capabilities
  */
 
-include('../config.php');
+include(__DIR__ . '/../config.php');
 
 // Get configuration data
 if (!isset($posted_data) || !is_array($posted_data)) {
@@ -44,8 +44,15 @@ $file_path = __DIR__ . "/../$root_data_dir/$TYPE.json";
 $file_contents = file_get_contents($file_path);
 $file_data = json_decode($file_contents, true);
 
-$table_data = $file_data[$data_key];
-$headers = isset($posted_data['header_key']) ? $file_data[$posted_data['header_key']] : $file_data['headers'];
+if ($TYPE === 'rbac_config') {
+    // Get data from rbac_config.json for pages table
+    $table_data = $file_data['pages_config']['pages_table_data'];
+    $headers = $file_data['pages_config']['pages_table_headers'];
+} else {
+    // Default behavior for other tables
+    $table_data = $file_data[$data_key];
+    $headers = isset($posted_data['header_key']) ? $file_data[$posted_data['header_key']] : $file_data['headers'];
+}
 ?>
 
 <script>

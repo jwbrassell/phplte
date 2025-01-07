@@ -1,0 +1,64 @@
+{
+  "pages": {
+    "index.php": {
+      "name": "Dashboard",
+      "type": "single",
+      "roles": ["admin", "user"],
+      "category": "Dashboard"
+    },
+    "oncall.php": {
+      "name": "On-Call Schedule",
+      "type": "single",
+      "roles": ["admin", "user"],
+      "category": "Dashboard"
+    },
+    "user_admin.php": {
+      "name": "User Admin",
+      "type": "single",
+      "roles": ["admin"],
+      "category": "Admin"
+    },
+    "admin_logs.php": {
+      "name": "System Logs",
+      "type": "single",
+      "roles": ["admin"],
+      "category": "Admin"
+    },
+    "weblinks_admin.php": {
+      "name": "WebLinks Admin",
+      "type": "single",
+      "roles": ["admin"],
+      "category": "Admin"
+    },
+    "settings.php": {
+      "name": "System Settings",
+      "type": "single",
+      "roles": ["admin"],
+      "category": "Settings"
+    },
+    "user_settings.php": {
+      "name": "User Settings",
+      "type": "single",
+      "roles": ["admin", "user"],
+      "category": "Settings"
+    },
+    "weblinks.php": {
+      "name": "WebLinks",
+      "type": "single",
+      "roles": ["admin", "user"],
+      "category": "Dashboard"
+    },
+    "e_datatable_from_json_list_of_lists.php": {
+      "name": "Datatable List Example",
+      "type": "single",
+      "roles": ["admin", "user"],
+      "category": "Examples"
+    },
+    "e_datatable_from_json_dictionary.php": {
+      "name": "Datatable Dictionary Example",
+      "type": "single",
+      "roles": ["admin", "user"],
+      "category": "Examples"
+    }
+  }
+}

@@ -3,7 +3,7 @@ include('header.php');
 
 // Configure datatable
 $posted_data = [
-    'type' => 'rbac_pages',
+    'type' => 'rbac_config',  // Changed from rbac_pages to rbac_config
     'data_directory' => '',
     'root_data_dir' => 'config',
     'data_key' => 'pages_table_data',
@@ -325,7 +325,7 @@ function sendRequest(script_directory = null) {
 // Initialize on page load
 $(function() {
     // Apply word wrap to Type column after table is loaded
-    $('table#table_rbac_pages td:nth-child(3)').addClass('custom-word-wrap');
+    $('table#table_rbac_config td:nth-child(3)').addClass('custom-word-wrap');
 });
 </script>
 <?php
