@@ -53,7 +53,11 @@ class PythonLogger {
         $jsonContext = escapeshellarg(json_encode($context));
         
         // Build and execute command
-        $command = sprintf('/opt/python-venv/bin/python %s %s %s %s 2>&1',
+        // Get path to Python virtual environment relative to project root
+        $venvPath = $portalDir . '/shared/venv/bin/python';
+        
+        $command = sprintf('%s %s %s %s %s 2>&1',
+            escapeshellarg($venvPath),
             escapeshellarg($this->pythonScript),
             escapeshellarg($this->logType),
             $escapedMessage,
