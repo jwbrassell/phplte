@@ -42,9 +42,6 @@ ldap_intl_server = vault_utility.get_value_for_key("wens/portal/framework/config
 ldap_base_dn = vault_utility.get_value_for_key("wens/portal/framework/config/ldap/base_dn")
 ldap_user_fqdn = vault_utility.get_value_for_key("wens/portal/framework/config/ldap/user_fqdn")
 
-# Import file operations from modules directory
-from file_operations import FileLock
-
 # Check command line arguments
 if len(sys.argv) != 4:
     print("Usage: %s <username> <password> <app>" % (sys.argv[0]))
