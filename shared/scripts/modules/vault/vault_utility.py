@@ -1,4 +1,4 @@
-#!/var/www/html/shared/venv/bin/python3
+#!/var/www/html/shared/venv/bin/python
 """
 Vault Utility
 Manages interactions with HashiCorp Vault for secret management
