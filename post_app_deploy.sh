@@ -46,6 +46,12 @@ LOG_DIRS=(
     "portal/logs/errors"
     "portal/logs/client"
     "portal/logs/python"
+    "shared/data/logs/system/access"
+    "shared/data/logs/system/errors"
+    "shared/data/logs/system/client"
+    "shared/data/logs/system/audit"
+    "shared/data/logs/system/performance"
+    "shared/data/logs/system/rbac"
 )
 
 for dir in "${LOG_DIRS[@]}"; do
@@ -96,6 +102,7 @@ log "Verifying critical files..."
 CRITICAL_FILES=(
     "shared/scripts/modules/ldap/ldapcheck.py"
     "shared/scripts/modules/vault/vault_utility.py"
+    "shared/scripts/modules/logging/logger.py"
 )
 
 for file in "${CRITICAL_FILES[@]}"; do

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/var/www/html/shared/venv/bin/python
 import json
 import os
 from datetime import datetime
@@ -28,7 +28,7 @@ class Logger:
         """Ensure the log directory exists with proper permissions"""
         try:
             self.log_dir.mkdir(parents=True, exist_ok=True)
-            os.chmod(self.log_dir, 0o755)
+            os.chmod(self.log_dir, 0o2775)  # setgid + rwxrwxr-x
             
             # Check if directory is writable
             if not os.access(self.log_dir, os.W_OK):
@@ -45,7 +45,7 @@ class Logger:
         
         # Ensure proper permissions (644 for files)
         if log_file.exists():
-            os.chmod(log_file, 0o644)
+            os.chmod(log_file, 0o664)  # rw-rw-r--
         
         return log_file
 
@@ -53,7 +53,7 @@ class Logger:
         """Ensure the log file exists and has proper permissions"""
         if not log_file.exists():
             log_file.touch()
-            os.chmod(log_file, 0o644)
+            os.chmod(log_file, 0o664)  # rw-rw-r--
         
         # Initialize file with empty array if new
         if log_file.stat().st_size == 0:
@@ -104,7 +104,7 @@ class Logger:
             os.replace(temp_file.name, log_file)
             
             # Set file permissions to 644
-            os.chmod(log_file, 0o644)
+            os.chmod(log_file, 0o664)  # rw-rw-r--
             
         except Exception as e:
             sys.stderr.write(f"CRITICAL: Failed to write log: {str(e)}\n")

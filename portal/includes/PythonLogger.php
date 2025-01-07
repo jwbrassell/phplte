@@ -83,15 +83,17 @@ class PythonLogger {
             $jsonContext
         );
 
+        error_log("Executing logger command: " . $command);
         exec($command, $output, $returnCode);
         
         if ($returnCode !== 0) {
-            // Only log critical failures
-            if ($returnCode !== 1) { // Ignore minor failures
-                error_log("CRITICAL: Logging system failure");
-            }
+            error_log("Logger command failed with code $returnCode");
+            error_log("Logger output: " . implode("\n", $output));
+            // Fall back to PHP error_log
+            error_log("LOG FALLBACK: [$this->logType] $message " . json_encode($context));
             return false;
         }
+        error_log("Logger command succeeded");
         
         return true;
     }
