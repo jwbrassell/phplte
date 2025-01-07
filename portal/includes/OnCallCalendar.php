@@ -67,9 +67,14 @@ class OnCallCalendar {
             }
         }
         
-        // Set PYTHONPATH to include the modules directory
-        $env = ['PYTHONPATH' => MODULES_DIR];
+        // Set PYTHONPATH to include both the modules directory and its parent
+        $moduleParent = dirname(MODULES_DIR);
+        $env = ['PYTHONPATH' => $moduleParent . ':' . MODULES_DIR];
         $envStr = 'PYTHONPATH=' . escapeshellarg($env['PYTHONPATH']);
+        
+        error_log("Python Command:");
+        error_log("- Command: " . $command);
+        error_log("- PYTHONPATH: " . $env['PYTHONPATH']);
         
         // Execute command
         $output = [];

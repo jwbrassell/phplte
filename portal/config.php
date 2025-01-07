@@ -9,17 +9,35 @@ $APP = "framework";
 
 // Environment detection
 $hostname = php_uname('n');
-define('IS_PRODUCTION', strpos($hostname, 'ip-') === 0); // AWS EC2 instances start with 'ip-'
+$serverSoftware = $_SERVER['SERVER_SOFTWARE'] ?? '';
+
+// Check for production environment:
+// 1. Running on AWS EC2 (hostname starts with 'ip-')
+// 2. Running under nginx/apache
+define('IS_PRODUCTION', 
+    strpos($hostname, 'ip-') === 0 || 
+    strpos($serverSoftware, 'nginx') !== false ||
+    strpos($serverSoftware, 'apache') !== false
+);
+
+error_log("Environment Detection:");
+error_log("- Hostname: " . $hostname);
+error_log("- Server Software: " . $serverSoftware);
+error_log("- Is Production: " . (IS_PRODUCTION ? 'true' : 'false'));
 
 // Path Configuration
 $DIR = __DIR__;  // Current directory (portal)
 $ROOTDIR = dirname($DIR);  // Up to project root
 
 // Get absolute paths
-$projectRoot = realpath($ROOTDIR);
-if (!$projectRoot) {
-    error_log("Failed to resolve project root from: " . $ROOTDIR);
-    throw new Exception("Could not resolve project root directory");
+if (IS_PRODUCTION) {
+    $projectRoot = '/var/www/html';
+} else {
+    $projectRoot = realpath($ROOTDIR);
+    if (!$projectRoot) {
+        error_log("Failed to resolve project root from: " . $ROOTDIR);
+        throw new Exception("Could not resolve project root directory");
+    }
 }
 
 // Define path constants

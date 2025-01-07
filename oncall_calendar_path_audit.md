@@ -221,11 +221,42 @@ in /var/www/html/portal/includes/OnCallCalendar.php:26
 
 ### Current Status
 
-1. Path Resolution Issues Fixed ✅
+1. Environment Detection Fixed ✅
+   - Added comprehensive production detection:
+     ```php
+     define('IS_PRODUCTION', 
+         strpos($hostname, 'ip-') === 0 || 
+         strpos($serverSoftware, 'nginx') !== false ||
+         strpos($serverSoftware, 'apache') !== false
+     );
+     ```
+   - Added detailed environment logging
+   - Fixed production path handling
+
+2. Path Resolution Issues Fixed ✅
    - Fixed project root resolution in config.php
    - Added path type handling (module, data, shared)
    - Added path cleanup to remove redundant prefixes
-   - Fixed PYTHONPATH to use correct modules directory
+   - Fixed Python module imports:
+     ```python
+     # In calendar_api.py
+     current_dir = os.path.dirname(os.path.abspath(__file__))
+     sys.path.append(os.path.dirname(current_dir))
+     ```
+   - Updated PYTHONPATH to handle module imports:
+     ```php
+     // In OnCallCalendar.php
+     $moduleParent = dirname(MODULES_DIR);
+     $env = ['PYTHONPATH' => $moduleParent . ':' . MODULES_DIR];
+     ```
+   - Added production-specific path handling:
+     ```php
+     if (IS_PRODUCTION) {
+         $projectRoot = '/var/www/html';
+     } else {
+         $projectRoot = realpath($ROOTDIR);
+     }
+     ```
 
 2. Python Environment ✅
    - Virtual environment created at shared/venv
@@ -262,6 +293,20 @@ in /var/www/html/portal/includes/OnCallCalendar.php:26
    - Logger script found at correct location and executable
    - Virtual environment properly configured
    - Path resolution consistent across components
+   - Python module dependencies:
+     ```python
+     # calendar_api.py & calendar_manager.py
+     current_dir = os.path.dirname(os.path.abspath(__file__))
+     sys.path.append(os.path.dirname(current_dir))
+     from oncall_calendar.calendar_manager import CalendarManager
+     ```
+   - File operations using pathlib:
+     ```python
+     # file_lock.py
+     from pathlib import Path
+     self.base_path = Path(base_path)
+     self.backup_path = self.base_path / 'backups'
+     ```
    - Required packages installed:
      ```
      - numpy, pandas (data processing)
@@ -285,15 +330,43 @@ in /var/www/html/portal/includes/OnCallCalendar.php:26
 
 5. Key Changes Made
    ```php
-   // Fixed path resolution in config.php
+   // Environment detection in config.php
+   $serverSoftware = $_SERVER['SERVER_SOFTWARE'] ?? '';
+   define('IS_PRODUCTION', 
+       strpos($hostname, 'ip-') === 0 || 
+       strpos($serverSoftware, 'nginx') !== false ||
+       strpos($serverSoftware, 'apache') !== false
+   );
+
+   // Enhanced Python execution logging
+   error_log("Python Command:");
+   error_log("- Command: " . $command);
+   error_log("- PYTHONPATH: " . $env['PYTHONPATH']);
+
+   // Production path handling
+   if (IS_PRODUCTION) {
+       $projectRoot = '/var/www/html';
+   }
+
+   // Path resolution improvements
    $cleanPath = preg_replace('#^scripts/modules/#', '', $cleanPath);
-   
-   // Updated PYTHONPATH in OnCallCalendar.php
    $env = ['PYTHONPATH' => MODULES_DIR];
-   
-   // Simplified path resolution in PythonLogger.php
    $this->pythonScript = resolvePath('logging/logger.py', 'module');
    ```
+
+6. Environment-Specific Behavior
+   - Development (PHP Built-in Server):
+     * Uses realpath() for dynamic path resolution
+     * Relative paths from project root
+     * PYTHONPATH includes both modules and parent directory
+   - Production (nginx/apache):
+     * Uses fixed /var/www/html base path
+     * Absolute paths for consistent resolution
+     * Python module imports handled via PYTHONPATH
+   - Python Script Behavior:
+     * Uses __file__ for self-location
+     * Adds parent directory to sys.path
+     * Uses pathlib.Path for file operations
 
 ### Next Steps
 
