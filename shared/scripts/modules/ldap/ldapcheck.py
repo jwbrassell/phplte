@@ -90,9 +90,13 @@ try:
             employee_name = results[0][1]["displayName"][0].decode("utf-8")
             employee_mail = results[0][1]["mail"][0].decode("utf-8")
             employee_vzid = results[0][1]["extensionAttribute8"][0].decode("utf-8")
-            print("OK!|{0}|{1}|{2}|{3}|{4}|{5}".format(
+            # Format adom_groups as a string
+            adom_groups_str = ','.join(adom_groups)
+            output = "OK!|{0}|{1}|{2}|{3}|{4}|{5}".format(
                 employee_num, employee_name, employee_mail, 
-                cngroup, employee_vzid, adom_groups))
+                cngroup, employee_vzid, adom_groups_str)
+            logger.error(f"Sending output: {output}")
+            print(output)
         else:
             print("ERROR! User not authorized")
     else:

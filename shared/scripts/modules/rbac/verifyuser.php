@@ -26,8 +26,17 @@ $process = proc_open($cmd, $descriptorspec, $pipes);
 if (is_resource($process)) {
     $ldapcheck = trim(stream_get_contents($pipes[1]));
     fclose($pipes[1]);
-    proc_close($process);
+    $status = proc_close($process);
     error_log("LDAP check output: " . $ldapcheck);
+    error_log("LDAP check status: " . $status);
+    
+    // Debug the response parsing
+    $parts = explode('|', $ldapcheck);
+    error_log("Number of parts: " . count($parts));
+    error_log("Status part: " . $parts[0]);
+    if (count($parts) > 1) {
+        error_log("All parts: " . print_r($parts, true));
+    }
 }
 
 // Parse the response
@@ -35,6 +44,7 @@ $parts = explode('|', $ldapcheck);
 $status = array_shift($parts);
 
 if($status == "OK!" && count($parts) == 6) {
+    error_log("LDAP auth successful, setting up session...");
     list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = $parts;
     
     // Set session variables
@@ -43,13 +53,25 @@ if($status == "OK!" && count($parts) == 6) {
     $_SESSION[$APP . "_user_name"] = $employee_name;
     $_SESSION[$APP . "_user_vzid"] = $vzid;
     $_SESSION[$APP . "_user_email"] = $employee_email;
-    $_SESSION[$APP . "_adom_groups"] = str_replace(", ", ",", $adom_groups);
+    // adom_groups is already a comma-separated string from Python
+    $_SESSION[$APP . "_adom_groups"] = $adom_groups;
+    
+    error_log("Session variables set:");
+    error_log("- user_session: " . $_SESSION[$APP . "_user_session"]);
+    error_log("- user_name: " . $_SESSION[$APP . "_user_name"]);
+    error_log("- adom_groups: " . $_SESSION[$APP . "_adom_groups"]);
     
     // Log success and redirect
+    error_log("Writing to access log and redirecting to index.php");
     file_put_contents($FILE, "$TS|SUCCESS|$uname|$adom_group\n", FILE_APPEND | LOCK_EX);
     header("Location: /portal/index.php");
     exit;
 } else {
+    error_log("LDAP auth failed:");
+    error_log("- Status: " . $status);
+    error_log("- Parts count: " . count($parts));
+    error_log("- Full response: " . $ldapcheck);
+    
     // Log failure and redirect with error
     file_put_contents($FILE, "$TS|$ldapcheck|$uname\n", FILE_APPEND | LOCK_EX);
     header("Location: /portal/login.php?error=" . urlencode($ldapcheck));
