@@ -11,24 +11,19 @@ ini_set('error_log', PROJECT_ROOT . '/portal/logs/php_errors.log');
 // Set up autoloading
 set_include_path(get_include_path() . PATH_SEPARATOR . PROJECT_ROOT);
 
+// Load required files
+require_once __DIR__ . '/logging_bootstrap.php';
+
 // Start session
 session_start();
 
-// Load required files
-require_once __DIR__ . '/logging_bootstrap.php';
+// Load additional files
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/PythonLogger.php';
 
 // Initialize global variables
 $_SESSION['authenticated'] = $_SESSION['authenticated'] ?? false;
 $_SESSION['user'] = $_SESSION['user'] ?? null;
-
-// Set up error handler
-function customErrorHandler($errno, $errstr, $errfile, $errline) {
-    error_log("Error [$errno]: $errstr in $errfile on line $errline");
-    return false;
-}
-set_error_handler("customErrorHandler");
 
 // Verify critical directories exist
 $criticalDirs = [

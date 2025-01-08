@@ -193,13 +193,33 @@ php_value[post_max_size] = 50M
 php_value[upload_max_filesize] = 50M
 EOF
 
-# Create PHP session directory
-log "Creating PHP session directory..."
+# Create and configure PHP session directory
+log "Setting up PHP session directory..."
 mkdir -p /var/lib/php/session
-chown $NGINX_USER:$NGINX_GROUP /var/lib/php/session
-chmod 775 /var/lib/php/session
-semanage fcontext -a -t httpd_sys_rw_content_t "/var/lib/php/session(/.*)?"
-restorecon -Rv /var/lib/php/session
+chown apache:apache /var/lib/php/session
+chmod 700 /var/lib/php/session
+
+# Configure SELinux for PHP sessions
+if command -v semanage >/dev/null 2>&1; then
+    log "Configuring SELinux context for session directory..."
+    semanage fcontext -a -t httpd_sess_t "/var/lib/php/session(/.*)?"
+    restorecon -Rv /var/lib/php/session
+fi
+
+# Enable necessary SELinux booleans
+if command -v setsebool >/dev/null 2>&1; then
+    log "Setting SELinux booleans..."
+    setsebool -P httpd_can_network_connect 1
+    setsebool -P httpd_unified 1
+    setsebool -P httpd_can_network_connect_db 1
+fi
+
+# Verify session directory permissions
+if [ ! -w "/var/lib/php/session" ]; then
+    warn "Session directory is not writable, applying emergency fix..."
+    chmod 777 /var/lib/php/session
+    warn "Please investigate SELinux or permission issues"
+fi
 
 # Create PHP-FPM socket directory
 log "Creating PHP-FPM socket directory..."
