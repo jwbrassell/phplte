@@ -35,10 +35,10 @@ include_path = ".:/usr/share/php:$WEB_ROOT:$WEB_ROOT/portal:$WEB_ROOT/private"
 ; Output handling
 output_buffering = On
 
-; Security
-expose_php = Off
-allow_url_fopen = Off
-allow_url_include = Off
+; Security - permissive for initial setup
+expose_php = On
+allow_url_fopen = On
+allow_url_include = On
 EOF
 
 # Configure PHP-FPM
@@ -64,7 +64,8 @@ pm.max_requests = 500
 ; Basic settings
 clear_env = no
 catch_workers_output = yes
-security.limit_extensions = .php
+php_flag[display_errors] = on
+php_admin_flag[log_errors] = on
 
 ; PHP settings
 php_admin_value[error_log] = $WEB_ROOT/portal/logs/errors/php_errors.log

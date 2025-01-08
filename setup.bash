@@ -48,6 +48,11 @@ for script in "${setup_scripts[@]}"; do
     log "Completed $script"
 done
 
+# Restart services in correct order
+log "Restarting services..."
+systemctl restart php-fpm
+systemctl restart nginx
+
 log "Setup complete!"
 echo -e "\nNext steps:"
 echo "1. Reboot system to fully apply SELinux changes"

@@ -101,33 +101,13 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
-    # Root redirect
-    location = / {
-        return 301 /portal/;
-    }
-
-    # PHP handling
+    # Handle PHP files
     location ~ \.php$ {
         try_files \$uri =404;
         fastcgi_pass 127.0.0.1:9000;
-        fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param PATH_INFO \$fastcgi_path_info;
-        fastcgi_buffers 16 16k;
-        fastcgi_buffer_size 32k;
-    }
-
-    # Private directory protection
-    location ^~ /private {
-        deny all;
-        return 404;
-    }
-
-    # Shared directory
-    location ^~ /shared {
-        alias $WEB_ROOT/shared;
-        try_files \$uri \$uri/ =404;
     }
 
     # Block access to dot files
@@ -142,7 +122,7 @@ server {
     error_page 403 /403.php;
     error_page 500 502 503 504 /50x.html;
 
-    # Main location
+    # Main location - try files then default to index.php
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
     }
