@@ -196,8 +196,10 @@ EOF
 # Create PHP session directory
 log "Creating PHP session directory..."
 mkdir -p /var/lib/php/session
-chown $APACHE_USER:$NGINX_GROUP /var/lib/php/session
-chmod 770 /var/lib/php/session
+chown $NGINX_USER:$NGINX_GROUP /var/lib/php/session
+chmod 775 /var/lib/php/session
+semanage fcontext -a -t httpd_sys_rw_content_t "/var/lib/php/session(/.*)?"
+restorecon -Rv /var/lib/php/session
 
 # Create PHP-FPM socket directory
 log "Creating PHP-FPM socket directory..."
