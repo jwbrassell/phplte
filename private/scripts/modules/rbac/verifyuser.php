@@ -1,5 +1,6 @@
 <?php
-session_start();
+// Load initialization with session config
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/portal/includes/init.php';
 
 // Get POST data
 $uname = $_POST["login_user"];
@@ -38,9 +39,12 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         $_SESSION['user_email'] = $employee_email;
         $_SESSION['user_groups'] = $adom_groups;
         
-        // Return success response with absolute path
+        // Force session write
+        session_write_close();
+        
+        // Return success response
         header('Content-Type: application/json');
-        echo json_encode(['status' => 'success', 'redirect' => '/portal/index.php']);
+        echo json_encode(['status' => 'success']);
         exit;
     }
 }

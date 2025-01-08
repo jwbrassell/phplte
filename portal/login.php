@@ -10,8 +10,15 @@ if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
 // For AJAX login requests
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
     if ($_POST['login_user'] === 'test' && $_POST['login_passwd'] === 'test123') {
+        // Set session variables
         $_SESSION['authenticated'] = true;
         $_SESSION['user_name'] = "Test User";
+        
+        // Force session write
+        session_write_close();
+        
+        // Return success response
+        header('Content-Type: application/json');
         echo json_encode(['status' => 'success']);
         exit;
     }
@@ -45,19 +52,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 },
+                dataType: 'json',
                 success: function(response) {
-                    try {
-                        if (typeof response === 'string') {
-                            response = JSON.parse(response);
-                        }
-                        
-                        if (response.status === 'success') {
-                            window.location.href = response.redirect || 'index.php';
-                        } else {
-                            alert('Login failed: ' + (response.message || 'Unknown error'));
-                        }
-                    } catch (e) {
-                        alert('Error parsing server response');
+                    if (response && response.status === 'success') {
+                        window.location.replace('index.php');
+                    } else {
+                        alert('Login failed: ' + (response.message || 'Unknown error'));
                     }
                 },
                 error: function(xhr, status, error) {
