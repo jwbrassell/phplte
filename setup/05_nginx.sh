@@ -86,7 +86,7 @@ server {
     listen [::]:443 ssl;
     server_name $DOMAIN;
     root $WEB_ROOT/portal;
-    index index.php;
+    index login.php index.php;
 
     # Error logs
     access_log $WEB_ROOT/portal/logs/access/nginx_access.log;
@@ -122,9 +122,9 @@ server {
     error_page 403 /403.php;
     error_page 500 502 503 504 /50x.html;
 
-    # Main location - try files then default to index.php
+    # Main location - try files then default to login.php
     location / {
-        try_files \$uri \$uri/ /index.php?\$query_string;
+        try_files \$uri \$uri/ /login.php?\$query_string;
     }
 }
 EOF

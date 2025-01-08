@@ -5,19 +5,33 @@ source "$(dirname "$0")/00_init.sh"
 
 log "Creating directory structure..."
 
-# Create runtime directories
-log "Creating runtime directories..."
+# Create all required directories
+log "Creating required directories..."
 
-# Create log directories with proper permissions
+# Main directories
+ensure_dir "$WEB_ROOT/portal" "755" "$NGINX_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared" "755" "$NGINX_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/private" "750" "$NGINX_USER" "$NGINX_GROUP"
+
+# Log directories
 ensure_dir "$WEB_ROOT/portal/logs/access" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/errors" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/client" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/python" "775" "$APACHE_USER" "$NGINX_GROUP"
 
-# Create PHP-FPM socket directory
-ensure_dir "$(dirname $PHP_FPM_SOCK)" "755" "$APACHE_USER" "$NGINX_GROUP"
+# Python directories
+ensure_dir "$WEB_ROOT/shared/scripts/modules" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/logging" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/vault" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/ldap" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/rbac" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/utilities" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/api" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/data_processing" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/scripts/modules/oncall_calendar" "755" "$APACHE_USER" "$NGINX_GROUP"
 
-# Create SSL directory
+# System directories
+ensure_dir "$(dirname $PHP_FPM_SOCK)" "755" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$SSL_DIR" "700" "root" "root"
 
 # Set permissions for main directories
