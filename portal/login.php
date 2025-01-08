@@ -16,7 +16,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         exit;
     }
     
-    // Include verifyuser.php for LDAP auth
     require_once "../private/scripts/modules/rbac/verifyuser.php";
     exit;
 }
@@ -47,14 +46,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'X-Requested-With': 'XMLHttpRequest'
                 },
                 success: function(response) {
-                    if (response.status === 'success') {
-                        window.location.href = 'index.php';
-                    } else {
-                        alert('Login failed');
+                    try {
+                        if (typeof response === 'string') {
+                            response = JSON.parse(response);
+                        }
+                        
+                        if (response.status === 'success') {
+                            window.location.href = response.redirect || 'index.php';
+                        } else {
+                            alert('Login failed: ' + (response.message || 'Unknown error'));
+                        }
+                    } catch (e) {
+                        alert('Error parsing server response');
                     }
                 },
-                error: function() {
-                    alert('Server error');
+                error: function(xhr, status, error) {
+                    alert('Server error: ' + error);
                 }
             });
         });

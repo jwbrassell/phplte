@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Get POST data
 $uname = $_POST["login_user"];
 $passwd = $_POST["login_passwd"];
@@ -15,13 +17,7 @@ $cmd = sprintf('%s -u %s %s %s %s',
     escapeshellarg('Portal')
 );
 
-$descriptorspec = array(
-   0 => array("pipe", "r"),
-   1 => array("pipe", "w"),
-   2 => array("pipe", "w")
-);
-
-$process = proc_open($cmd, $descriptorspec, $pipes);
+$process = proc_open($cmd, [0 => ["pipe", "r"], 1 => ["pipe", "w"], 2 => ["pipe", "w"]], $pipes);
 if (is_resource($process)) {
     $ldapcheck = trim(stream_get_contents($pipes[1]));
     fclose($pipes[1]);
@@ -42,9 +38,9 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         $_SESSION['user_email'] = $employee_email;
         $_SESSION['user_groups'] = $adom_groups;
         
-        // Return success response
+        // Return success response with absolute path
         header('Content-Type: application/json');
-        echo json_encode(['status' => 'success']);
+        echo json_encode(['status' => 'success', 'redirect' => '/portal/index.php']);
         exit;
     }
 }

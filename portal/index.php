@@ -18,7 +18,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
     <a href="logout.php">Logout</a>
     
     <div style="margin-top: 20px;">
-        <h3>Session Debug Info:</h3>
+        <h3>Session Info:</h3>
         <pre><?php print_r($_SESSION); ?></pre>
     </div>
 </body>
