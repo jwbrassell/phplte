@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Domain configuration
+DOMAIN="exampledomain.com"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -29,16 +32,162 @@ fi
 WEB_ROOT="/var/www/html"
 APACHE_USER="apache"
 APACHE_GROUP="apache"
+NGINX_USER="nginx"
+NGINX_GROUP="nginx"
+SSL_DIR="/etc/nginx/ssl"
 
-# Verify apache user exists
+# Create SSL directory
+log "Creating SSL directory..."
+mkdir -p $SSL_DIR
+chmod 700 $SSL_DIR
+
+# Generate SSL certificate
+log "Generating SSL certificate..."
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout $SSL_DIR/$DOMAIN.key \
+    -out $SSL_DIR/$DOMAIN.crt \
+    -subj "/C=US/ST=State/L=City/O=Organization/CN=$DOMAIN"
+
+chmod 600 $SSL_DIR/$DOMAIN.key
+chmod 644 $SSL_DIR/$DOMAIN.crt
+
+# Install required packages
+log "Installing required packages..."
+if command -v dnf >/dev/null 2>&1; then
+    dnf install -y \
+        nginx \
+        php-fpm \
+        php-cli \
+        php-json \
+        php-common \
+        php-mysql \
+        php-zip \
+        php-gd \
+        php-mbstring \
+        php-curl \
+        php-xml \
+        php-bcmath \
+        php-ldap \
+        python3 \
+        python3-pip \
+        python3-devel \
+        openldap-devel
+fi
+
+# Install Python packages
+log "Installing Python packages..."
+pip3 install --upgrade pip
+pip3 install \
+    python-ldap \
+    hvac \
+    requests \
+    PyYAML \
+    python-dateutil \
+    pytz
+
+# Verify users exist
 if ! id -u $APACHE_USER >/dev/null 2>&1; then
     error "Apache user ($APACHE_USER) does not exist"
+fi
+
+if ! id -u $NGINX_USER >/dev/null 2>&1; then
+    error "Nginx user ($NGINX_USER) does not exist"
 fi
 
 # Verify web root exists
 if [ ! -d "$WEB_ROOT" ]; then
     error "Web root directory $WEB_ROOT does not exist"
 fi
+
+# Configure nginx
+log "Configuring nginx..."
+cat > /etc/nginx/conf.d/portal.conf << EOF
+# HTTP server to redirect to HTTPS
+server {
+    listen 80;
+    server_name $DOMAIN;
+    return 301 https://\$server_name\$request_uri;
+}
+
+# HTTPS server
+server {
+    listen 443 ssl;
+    server_name $DOMAIN;
+    root $WEB_ROOT/portal;
+    index index.php;
+
+    ssl_certificate $SSL_DIR/$DOMAIN.crt;
+    ssl_certificate_key $SSL_DIR/$DOMAIN.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    location / {
+        try_files \$uri \$uri/ /index.php?\$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php-fpm/www.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        include fastcgi_params;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+    }
+
+    location /shared {
+        alias $WEB_ROOT/shared;
+        try_files \$uri \$uri/ =404;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    error_page 404 /404.php;
+    error_page 403 /403.php;
+}
+EOF
+
+# Configure PHP-FPM
+log "Configuring PHP-FPM..."
+cat > /etc/php-fpm.d/www.conf << EOF
+[www]
+user = $APACHE_USER
+group = $APACHE_GROUP
+listen = /var/run/php-fpm/www.sock
+listen.owner = $NGINX_USER
+listen.group = $NGINX_GROUP
+listen.mode = 0660
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+
+php_admin_value[error_log] = $WEB_ROOT/portal/logs/php_errors.log
+php_admin_flag[log_errors] = on
+php_value[session.save_handler] = files
+php_value[session.save_path] = /var/lib/php/session
+php_value[max_execution_time] = 300
+php_value[memory_limit] = 128M
+php_value[post_max_size] = 50M
+php_value[upload_max_filesize] = 50M
+EOF
+
+# Create PHP session directory
+log "Creating PHP session directory..."
+mkdir -p /var/lib/php/session
+chown $APACHE_USER:$NGINX_GROUP /var/lib/php/session
+chmod 770 /var/lib/php/session
+
+# Create PHP-FPM socket directory
+log "Creating PHP-FPM socket directory..."
+mkdir -p /var/run/php-fpm
+chown $APACHE_USER:$NGINX_GROUP /var/run/php-fpm
+chmod 755 /var/run/php-fpm
 
 # Permanently disable SELinux
 log "Permanently disabling SELinux..."
@@ -71,32 +220,6 @@ if [ -f "/etc/selinux/config" ]; then
 else
     warn "SELinux config file not found at /etc/selinux/config"
 fi
-
-# Set up critical directories
-log "Setting up critical directories..."
-CRITICAL_DIRS=(
-    "$WEB_ROOT/portal"
-    "$WEB_ROOT/portal/includes"
-    "$WEB_ROOT/portal/static/css"
-    "$WEB_ROOT/portal/static/js"
-    "$WEB_ROOT/portal/plugins"
-    "$WEB_ROOT/portal/logs"
-    "$WEB_ROOT/shared"
-    "$WEB_ROOT/shared/data"
-    "$WEB_ROOT/shared/data/oncall_calendar"
-    "$WEB_ROOT/private/config"
-)
-
-for dir in "${CRITICAL_DIRS[@]}"; do
-    if [ ! -d "$dir" ]; then
-        install -d -m 775 -o root -g $APACHE_GROUP "$dir"
-        log "Created directory: $dir"
-    else
-        chown root:$APACHE_GROUP "$dir"
-        chmod 775 "$dir"
-        log "Set permissions for $dir"
-    fi
-done
 
 # Set up vault configuration
 log "Setting up vault configuration..."
@@ -131,53 +254,25 @@ elif [ ! -f "$VAULT_ENV" ] && [ -f "$VAULT_TEMPLATE" ]; then
     warn "Please update $VAULT_ENV with your Vault credentials"
 fi
 
-# Copy critical files from old to new locations
-log "Copying critical files..."
-declare -A FILE_MAPPINGS=(
-    ["private/includes/auth/auth.php"]="portal/includes/auth.php"
-    ["private/includes/init.php"]="portal/includes/init.php"
-    ["private/includes/logging_bootstrap.php"]="portal/includes/logging_bootstrap.php"
-    ["private/includes/logging/PythonLogger.php"]="portal/includes/PythonLogger.php"
-    ["private/includes/header.php"]="portal/header.php"
-    ["private/includes/footer.php"]="portal/footer.php"
-)
+# Set permissions for project directories
+log "Setting directory permissions..."
+find "$WEB_ROOT" -type d -exec chmod 775 {} \;
+find "$WEB_ROOT" -type f -exec chmod 664 {} \;
+find "$WEB_ROOT" -type f -name "*.py" -exec chmod 775 {} \;
+chown -R root:$APACHE_GROUP "$WEB_ROOT"
 
-for src in "${!FILE_MAPPINGS[@]}"; do
-    dst="${FILE_MAPPINGS[$src]}"
-    src_path="$WEB_ROOT/$src"
-    dst_path="$WEB_ROOT/$dst"
-    
-    if [ -f "$src_path" ]; then
-        log "Copying $src to $dst"
-        cp "$src_path" "$dst_path"
-        chown root:$APACHE_GROUP "$dst_path"
-        chmod 644 "$dst_path"
-    else
-        warn "Source file not found: $src_path"
-    fi
-done
+# Create log directories if they don't exist
+log "Setting up log directories..."
+mkdir -p "$WEB_ROOT/portal/logs"/{access,errors,client,python}
+chown -R root:$APACHE_GROUP "$WEB_ROOT/portal/logs"
+chmod -R 775 "$WEB_ROOT/portal/logs"
 
-# Update environment configuration
-log "Updating environment configuration..."
-cat > "$WEB_ROOT/portal/includes/env.php" << 'EOF'
-<?php
-define('IS_PRODUCTION', true);
-define('PROJECT_ROOT', '/var/www/html');
-define('BASE_PATH', '/var/www/html');
-define('SHARED_DIR', '/var/www/html/shared');
-define('DATA_DIR', '/var/www/html/shared/data');
-define('SCRIPTS_DIR', '/var/www/html/shared/scripts');
-?>
-EOF
-
-chown root:$APACHE_GROUP "$WEB_ROOT/portal/includes/env.php"
-chmod 644 "$WEB_ROOT/portal/includes/env.php"
-
-# Fix symlinks
-log "Setting up symlinks..."
-if [ ! -L "$WEB_ROOT/portal/shared" ]; then
-    ln -sf "$WEB_ROOT/shared" "$WEB_ROOT/portal/shared"
-    log "Created shared symlink"
+# Install Python dependencies
+log "Installing Python dependencies..."
+if [ -f "requirements.txt" ]; then
+    pip3 install -r requirements.txt
+else
+    warn "requirements.txt not found"
 fi
 
 # Verify PHP-FPM is running
@@ -198,30 +293,12 @@ fi
 log "Restarting services..."
 systemctl restart php-fpm nginx
 
-# Verify paths
-log "Verifying critical paths..."
-VERIFY_FILES=(
-    "$WEB_ROOT/portal/includes/init.php"
-    "$WEB_ROOT/portal/includes/env.php"
-    "$WEB_ROOT/portal/header.php"
-    "$WEB_ROOT/portal/footer.php"
-    "$WEB_ROOT/portal/index.php"
-)
-
-for file in "${VERIFY_FILES[@]}"; do
-    if [ ! -f "$file" ]; then
-        error "Critical file missing: $file"
-    fi
-    if ! sudo -u $APACHE_USER test -r "$file"; then
-        error "Apache user cannot read: $file"
-    fi
-done
-
 log "Setup complete!"
 echo "Please verify:"
 echo "1. SELinux is disabled (getenforce)"
 echo "2. Vault token is accessible"
 echo "3. Web server is accessible"
-echo "4. Reboot system if SELinux was previously enabled"
+echo "4. Python dependencies are installed"
+echo "5. Reboot system if SELinux was previously enabled"
 
 exit 0
