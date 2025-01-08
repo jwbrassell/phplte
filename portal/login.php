@@ -52,13 +52,7 @@ if(isset($_SESSION[$APP."_user_session"])) {
                 'browser' => $browser_info["browser"],
                 'version' => $browser_info["version"] ?? 'unknown'
             ]);
-            ?>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    toastr.warning("<?php echo $error_message; ?>");
-                });
-            </script>
-            <?php
+            $_SESSION['browser_warning'] = $error_message;
         }
     } catch (Exception $e) {
         logError("Browser detection failed: " . $e->getMessage(), [
@@ -75,8 +69,58 @@ if(isset($_POST['login_submit'])) {
 }
 ?>
 
-<script>
-$(function() {
+<!-- Add required plugins -->
+<link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+
+<script src="plugins/toastr/toastr.min.js" defer></script>
+<script src="plugins/jquery-validation/jquery.validate.min.js" defer></script>
+<script src="plugins/jquery-validation/additional-methods.min.js" defer></script>
+
+<!-- Initialize scripts after jQuery loads -->
+<script type="text/javascript">
+function submitOnEnter(event) {
+    if (event.keyCode == 13) {
+        if ($('#login_form').valid()) {
+            document.getElementById("login_submit").click();
+        } else {
+            toastr.warning("Please fill in all required fields correctly.");
+        }
+    }
+}
+
+// Enhanced client-side error logging
+window.onerror = function(msg, url, line, col, error) {
+    $.post('/portal/includes/logging/log_error.php', {
+        type: 'JS_ERROR',
+        message: msg,
+        url: url,
+        line: line,
+        column: col,
+        error: error ? error.stack : 'No error object',
+        page: 'login'
+    });
+    return false;
+};
+
+// Performance monitoring
+const pageLoadStart = performance.now();
+window.addEventListener('load', function() {
+    const pageLoadTime = performance.now() - pageLoadStart;
+    $.post('/portal/includes/logging/log_error.php', {
+        type: 'PERFORMANCE',
+        message: 'Page Load Complete',
+        duration: pageLoadTime,
+        page: 'login'
+    });
+});
+
+// Initialize after jQuery loads
+document.addEventListener('DOMContentLoaded', function() {
+    <?php if(isset($_SESSION['browser_warning'])): ?>
+    toastr.warning("<?php echo htmlspecialchars($_SESSION['browser_warning']); ?>");
+    <?php unset($_SESSION['browser_warning']); ?>
+    <?php endif; ?>
+
     // Configure toastr
     toastr.options = {
         "closeButton": true,
@@ -131,44 +175,6 @@ $(function() {
             toastr.warning("<?php echo htmlspecialchars($error); ?>", "Login Failed");
         <?php endif; ?>
     <?php endif; ?>
-});
-</script>
-
-<script type="text/javascript">
-function submitOnEnter(event) {
-    if (event.keyCode == 13) {
-        if ($('#login_form').valid()) {
-            document.getElementById("login_submit").click();
-        } else {
-            toastr.warning("Please fill in all required fields correctly.");
-        }
-    }
-}
-
-// Enhanced client-side error logging
-window.onerror = function(msg, url, line, col, error) {
-    $.post('/portal/includes/logging/log_error.php', {
-        type: 'JS_ERROR',
-        message: msg,
-        url: url,
-        line: line,
-        column: col,
-        error: error ? error.stack : 'No error object',
-        page: 'login'
-    });
-    return false;
-};
-
-// Performance monitoring
-const pageLoadStart = performance.now();
-window.addEventListener('load', function() {
-    const pageLoadTime = performance.now() - pageLoadStart;
-    $.post('/portal/includes/logging/log_error.php', {
-        type: 'PERFORMANCE',
-        message: 'Page Load Complete',
-        duration: pageLoadTime,
-        page: 'login'
-    });
 });
 </script>
 
