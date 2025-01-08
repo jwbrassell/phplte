@@ -19,7 +19,18 @@ define('MODULES_DIR', SCRIPTS_DIR . '/modules');
 define('PORTAL_DIR', PROJECT_ROOT . '/portal');
 define('PORTAL_PATH', '/portal');
 define('BASE_URL', rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/portal'));
-define('VENV_DIR', SHARED_DIR . '/venv');
+
+// Session Configuration
+define('SESSION_NAME', 'PHPADMINLTE');
+ini_set('session.name', SESSION_NAME);
+ini_set('session.cookie_path', '/');
+ini_set('session.cookie_domain', '');  // Empty for current domain
+ini_set('session.cookie_secure', IS_PRODUCTION ? '1' : '0');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.use_only_cookies', '1');
+ini_set('session.use_strict_mode', '1');
+ini_set('session.gc_maxlifetime', 28800);  // 8 hours
+ini_set('session.cookie_lifetime', 28800);  // 8 hours
 
 // Python Environment
 define('PYTHON_VENV', SHARED_DIR . '/venv');
@@ -37,13 +48,6 @@ error_reporting(IS_PRODUCTION ? E_ALL & ~E_DEPRECATED & ~E_STRICT : E_ALL);
 ini_set('display_errors', IS_PRODUCTION ? '0' : '1');
 ini_set('log_errors', '1');
 ini_set('error_log', ERROR_LOG);
-
-// Session Configuration
-ini_set('session.cookie_httponly', '1');
-ini_set('session.use_only_cookies', '1');
-if (IS_PRODUCTION) {
-    ini_set('session.cookie_secure', '1');
-}
 
 // Performance Settings
 ini_set('memory_limit', '256M');

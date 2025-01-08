@@ -2,11 +2,21 @@
 // Load initialization
 require_once __DIR__ . '/includes/init.php';
 
-// Check authentication if not on login page
+// Skip auth check for AJAX requests
+$is_ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+           strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+// Check authentication if not on login page and not an AJAX request
 $current_page = basename($_SERVER['PHP_SELF']);
-if ($current_page !== 'login.php' && !$_SESSION['authenticated']) {
+if (!$is_ajax && $current_page !== 'login.php' && !$_SESSION['authenticated']) {
     header('Location: login.php');
     exit;
+}
+
+// For AJAX requests, only output JSON
+if ($is_ajax) {
+    header('Content-Type: application/json');
+    return;
 }
 ?>
 <!DOCTYPE html>

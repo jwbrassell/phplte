@@ -163,7 +163,35 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         submitHandler: function(form) {
             $('#login_submit').prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Signing In...');
-            form.submit();
+            
+            // Submit form via AJAX
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                data: $(form).serialize(),
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(response) {
+                    if (response && response.status === 'success') {
+                        // Show success message
+                        toastr.success('Login successful, redirecting...');
+                        // Delay redirect slightly to show the success message
+                        setTimeout(function() {
+                            window.location.href = '<?php echo rtrim(dirname($_SERVER['PHP_SELF']), '/portal'); ?>/portal/index.php';
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message || 'Login failed');
+                        $('#login_submit').prop('disabled', false).html('<i class="fas fa-sign-in-alt"></i> SIGN IN');
+                    }
+                },
+                error: function() {
+                    toastr.error('Server error occurred');
+                    $('#login_submit').prop('disabled', false).html('<i class="fas fa-sign-in-alt"></i> SIGN IN');
+                }
+            });
+            
+            return false; // Prevent regular form submission
         }
     });
     

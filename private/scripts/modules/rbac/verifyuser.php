@@ -139,7 +139,16 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         // Debug logging
         error_log("Session variables set: " . print_r($_SESSION, true));
         
-        // Simplified redirection logic
+        // Check if this is an AJAX request
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            // Return JSON response for AJAX requests
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success']);
+            exit;
+        }
+        
+        // Regular form submission - redirect to portal
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
         $domain = $_SERVER['HTTP_HOST'];
         $basePath = rtrim(dirname($_SERVER['PHP_SELF']), '/portal');
@@ -174,7 +183,16 @@ error_log("Login failed for user: $uname - Error: $error");
 $logEntry = date("Y-m-d H:i:s") . "|AUTH_FAIL|" . $uname . "|" . $error . "\n";
 file_put_contents($authLogFile, $logEntry, FILE_APPEND | LOCK_EX);
 
-// Construct full URL for error redirect
+// Check if this is an AJAX request
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    // Return JSON response for AJAX requests
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'error', 'message' => $error]);
+    exit;
+}
+
+// Regular form submission - redirect to login with error
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 $domain = $_SERVER['HTTP_HOST'];
 $basePath = rtrim(dirname($_SERVER['PHP_SELF']), '/portal');
