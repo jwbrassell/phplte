@@ -245,10 +245,11 @@ mkdir -p $(dirname $PHP_FPM_SOCK)
 chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
 chmod 755 $(dirname $PHP_FPM_SOCK)
 
-# Create symbolic links for required directories
+# Create symbolic links for required directories and files
 log "Setting up directory structure..."
 ln -sf $WEB_ROOT/shared $WEB_ROOT/portal/shared
 ln -sf $WEB_ROOT/private $WEB_ROOT/portal/private
+ln -sf $WEB_ROOT/public/auth/login.php $WEB_ROOT/portal/login.php
 
 # Permanently disable SELinux
 log "Permanently disabling SELinux..."
