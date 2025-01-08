@@ -49,16 +49,9 @@ for script in "${setup_scripts[@]}"; do
     log "Completed $script"
 done
 
-# Install nginx configuration
-log "Installing nginx configuration..."
-cp "$SCRIPT_DIR/setup/config/phpadminlte.conf" "/etc/nginx/conf.d/phpadminlte.conf"
-chmod 644 "/etc/nginx/conf.d/phpadminlte.conf"
-chown root:root "/etc/nginx/conf.d/phpadminlte.conf"
-
-# Test nginx configuration
-log "Testing nginx configuration..."
-if ! nginx -t; then
-    error "Invalid nginx configuration"
+# Backup existing nginx config if it exists
+if [ -f "/etc/nginx/nginx.conf" ]; then
+    cp "/etc/nginx/nginx.conf" "/etc/nginx/nginx.conf.bak"
 fi
 
 # Restart services in correct order

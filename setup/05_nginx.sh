@@ -5,6 +5,12 @@ source "$(dirname "$0")/00_init.sh"
 
 log "Configuring Nginx..."
 
+# Create SSL directory
+log "Creating SSL directory..."
+mkdir -p "$SSL_DIR"
+chmod 700 "$SSL_DIR"
+chown root:root "$SSL_DIR"
+
 # Generate SSL certificate
 log "Generating SSL certificate..."
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
@@ -14,6 +20,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 chmod 600 "$SSL_DIR/$DOMAIN.key"
 chmod 644 "$SSL_DIR/$DOMAIN.crt"
+chown root:root "$SSL_DIR/$DOMAIN.key" "$SSL_DIR/$DOMAIN.crt"
 
 # Create main nginx config
 log "Creating main Nginx configuration..."
@@ -52,9 +59,15 @@ EOF
 # Clean up existing configs
 rm -f /etc/nginx/conf.d/*.conf
 
-# Create portal config
-log "Creating portal configuration..."
-cat > /etc/nginx/conf.d/portal.conf << EOF
+# Install our nginx configuration with variable substitution
+log "Installing nginx configuration..."
+sed "s|\$PHP_FPM_SOCK|$PHP_FPM_SOCK|g" "$(dirname "$0")/config/phpadminlte.conf" > "/etc/nginx/conf.d/phpadminlte.conf"
+chmod 644 "/etc/nginx/conf.d/phpadminlte.conf"
+chown root:root "/etc/nginx/conf.d/phpadminlte.conf"
+
+# Create default server block for non-matching requests
+log "Creating default server configuration..."
+cat > /etc/nginx/conf.d/default.conf << EOF
 # Default server block for non-matching requests
 server {
     listen 80 default_server;
@@ -70,62 +83,6 @@ server {
     ssl_certificate $SSL_DIR/$DOMAIN.crt;
     ssl_certificate_key $SSL_DIR/$DOMAIN.key;
     return 444;
-}
-
-# HTTP server block for domain
-server {
-    listen 80;
-    listen [::]:80;
-    server_name $DOMAIN;
-    return 301 https://\$server_name\$request_uri;
-}
-
-# HTTPS server block for domain
-server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
-    server_name $DOMAIN;
-    root $WEB_ROOT/portal;
-    index login.php index.php;
-
-    # Error logs
-    access_log $WEB_ROOT/portal/logs/access/nginx_access.log;
-    error_log $WEB_ROOT/portal/logs/errors/nginx_error.log debug;
-
-    # SSL Configuration
-    ssl_certificate $SSL_DIR/$DOMAIN.crt;
-    ssl_certificate_key $SSL_DIR/$DOMAIN.key;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers HIGH:!aNULL:!MD5;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
-
-    # Handle PHP files
-    location ~ \.php$ {
-        try_files \$uri =404;
-        fastcgi_pass 127.0.0.1:9000;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        fastcgi_param PATH_INFO \$fastcgi_path_info;
-    }
-
-    # Block access to dot files
-    location ~ /\. {
-        deny all;
-        access_log off;
-        log_not_found off;
-    }
-
-    # Error pages
-    error_page 404 /404.php;
-    error_page 403 /403.php;
-    error_page 500 502 503 504 /50x.html;
-
-    # Main location - try files then default to login.php
-    location / {
-        try_files \$uri \$uri/ /login.php?\$query_string;
-    }
 }
 EOF
 
