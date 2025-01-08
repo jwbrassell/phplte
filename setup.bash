@@ -259,12 +259,17 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
-    # Default to portal directory
+    # Handle root and portal directory
     location = / {
-        return 301 /portal/;
+        try_files /portal/index.php =404;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root/portal/index.php;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
     }
 
-    # Handle PHP files in portal directory first
+    # Handle PHP files
     location ~ ^/portal/.*\.php$ {
         try_files \$uri =404;
         fastcgi_pass 127.0.0.1:9000;
@@ -282,6 +287,16 @@ server {
     location ^~ /portal/ {
         root $WEB_ROOT;
         index index.php;
+        
+        location ~ \.php$ {
+            try_files \$uri =404;
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+            fastcgi_param PATH_INFO \$fastcgi_path_info;
+        }
+        
         try_files \$uri \$uri/ /portal/index.php?\$query_string;
     }
 
@@ -374,6 +389,14 @@ pm.max_spare_servers = 35
 ; Basic settings
 clear_env = no
 catch_workers_output = yes
+security.limit_extensions = .php
+
+; PHP settings
+php_admin_value[error_log] = $WEB_ROOT/portal/logs/errors/php_errors.log
+php_admin_flag[log_errors] = on
+php_value[session.save_handler] = files
+php_value[session.save_path] = /var/lib/php/session
+php_value[soap.wsdl_cache_dir] = /var/lib/php/wsdlcache
 
 ; Environment variables
 env[PYTHONPATH] = "$WEB_ROOT/shared/scripts"
