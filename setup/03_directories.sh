@@ -85,8 +85,12 @@ chown -R root:$NGINX_GROUP "$WEB_ROOT/private/config"
 
 # Ensure PHP-FPM and nginx can access files
 log "Setting proper file permissions..."
-find "$WEB_ROOT" -type f -exec chmod 644 {} \;
+find "$WEB_ROOT" -type f ! -name "*.sh" ! -name "*.py" -exec chmod 644 {} \;
 find "$WEB_ROOT" -type d -exec chmod 755 {} \;
+
+# Re-ensure scripts are executable
+find "$WEB_ROOT" -type f -name "*.sh" -exec chmod 755 {} \;
+find "$WEB_ROOT" -type f -name "*.py" -exec chmod 755 {} \;
 
 # Double-check system logs permissions and ownership
 log "Ensuring system logs permissions..."
