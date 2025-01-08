@@ -1,10 +1,18 @@
 <?php
+// Load initialization
 require_once 'includes/init.php';
 
 // Debug session state before header inclusion
 error_log("Index.php - Session state before header: " . print_r($_SESSION, true));
 error_log("Index.php - Current user: " . ($_SESSION[$APP.'_user_name'] ?? 'none'));
 error_log("Index.php - Authenticated: " . ($_SESSION['authenticated'] ? 'yes' : 'no'));
+
+// Check authentication before loading header
+if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+    error_log("Index.php - Not authenticated, redirecting to login");
+    header("Location: login.php");
+    exit;
+}
 
 require_once 'header.php';
 

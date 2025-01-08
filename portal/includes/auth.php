@@ -66,6 +66,9 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
     
     // Test authentication bypass
     if ($_POST['login_user'] === 'test' && $_POST['login_passwd'] === 'test123') {
+        // Start with a clean session
+        session_regenerate_id(true);
+        
         // Set test session variables
         $_SESSION[$APP."_user_name"] = "Test User";
         $_SESSION[$APP."_user_session"] = "test";
@@ -76,14 +79,35 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
         $_SESSION[$APP."_is_admin"] = true;
         // Set authenticated flag
         $_SESSION['authenticated'] = true;
+        $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         
         logEvent('access', 'login_success', ['username' => 'test', 'type' => 'test_account']);
+        
+        // Debug session state
+        error_log("Auth.php - Session after test login: " . print_r($_SESSION, true));
+        
+        // Check if this is an AJAX request
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+            strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode(['status' => 'success']);
+            exit;
+        }
+        
         header("Location: " . $basePath . "/portal/index.php");
         exit;
     } else {
         // Include verifyuser.php
         require_once PROJECT_ROOT . "/private/scripts/modules/rbac/verifyuser.php";
     }
+}
+
+// Skip remaining checks for login page and AJAX requests
+$is_ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+           strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+if ($PAGE === 'login.php' || $is_ajax) {
+    return;
 }
 
 // Page access control
@@ -152,27 +176,6 @@ if (!$pageAllowed) {
         'user_groups' => $_SESSION[$APP."_adom_groups"] ?? 'none'
     ]);
     header("Location: " . $basePath . "/portal/403.php?page=".urlencode($PAGE)."&referrer=".urlencode($referrer));
-    exit;
-}
-
-// Handle login redirects
-if (($PAGE == "login.php") && (isset($_SESSION[$APP."_user_name"]))) {
-    $destination = isset($_POST['next']) ? $_POST['next'] : (isset($_GET['next']) ? $_GET['next'] : 'index.php');
-    logEvent('access', 'redirect_logged_in_user', [
-        'username' => $_SESSION[$APP."_user_name"],
-        'destination' => $destination
-    ]);
-    
-    if ($destination !== 'index.php') {
-        $next_url = filter_var(urldecode($destination), FILTER_SANITIZE_URL);
-        // Ensure next_url starts with a slash
-        if (strpos($next_url, '/') !== 0) {
-            $next_url = '/' . $next_url;
-        }
-        header("Location: " . $protocol . $domain . $basePath . $next_url);
-    } else {
-        header("Location: " . $basePath . "/portal/index.php");
-    }
     exit;
 }
 

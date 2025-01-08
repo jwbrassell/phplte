@@ -1,10 +1,16 @@
 <?php
+// Load initialization without header
 require_once __DIR__ . '/includes/init.php';
-require_once __DIR__ . '/header.php';
 
 // Initialize error handling
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
+
+// If already authenticated, redirect to index
+if (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) {
+    header("Location: index.php");
+    exit;
+}
 
 // Get error from query parameter if it exists
 if (isset($_GET['error'])) {
@@ -68,15 +74,37 @@ if(isset($_POST['login_submit'])) {
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Portal</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="static/css/adminlte.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="static/css/custom.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="plugins/toastr/toastr.min.css">
+    
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="static/js/adminlte.min.js"></script>
+    <!-- Toastr -->
+    <script src="plugins/toastr/toastr.min.js"></script>
+    <!-- Validation -->
+    <script src="plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="plugins/jquery-validation/additional-methods.min.js"></script>
+</head>
 
-<!-- Add required plugins -->
-<link rel="stylesheet" href="plugins/toastr/toastr.min.css">
-
-<script src="plugins/toastr/toastr.min.js" defer></script>
-<script src="plugins/jquery-validation/jquery.validate.min.js" defer></script>
-<script src="plugins/jquery-validation/additional-methods.min.js" defer></script>
-
-<!-- Initialize scripts after jQuery loads -->
+<!-- Initialize scripts -->
 <script type="text/javascript">
 function submitOnEnter(event) {
     if (event.keyCode == 13) {
@@ -178,7 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         toastr.success('Login successful, redirecting...');
                         // Delay redirect slightly to show the success message
                         setTimeout(function() {
-                            window.location.href = '<?php echo rtrim(dirname($_SERVER['PHP_SELF']), '/portal'); ?>/portal/index.php';
+                            // Use absolute path for redirection
+                            var baseUrl = window.location.protocol + '//' + window.location.host;
+                            window.location.href = baseUrl + '/portal/index.php';
                         }, 1000);
                     } else {
                         toastr.error(response.message || 'Login failed');
@@ -273,7 +303,4 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </body>
-
-<?php
-require_once __DIR__ . '/footer.php';
-?>
+</html>

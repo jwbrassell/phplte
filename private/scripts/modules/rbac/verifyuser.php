@@ -27,10 +27,7 @@ foreach ($logDirs as $dir) {
         mkdir($dir, 0775, true);
         error_log("Created log directory: " . $dir);
     }
-    // Ensure web server can write to directory
     chmod($dir, 0775);
-    $webUser = exec('whoami');
-    error_log("Setting permissions for $dir to 0775, current user: $webUser");
 }
 
 // Execute ldapcheck and capture only stdout
@@ -43,29 +40,9 @@ $ldapScript = dirname(dirname(__FILE__)) . "/ldap/ldapcheck.py";
 
 // Debug environment
 error_log("Python Environment Check:");
-error_log("- Python path: " . $pythonPath . " (exists: " . (file_exists($pythonPath) ? 'yes' : 'no') . ")");
-error_log("- LDAP script path: " . $ldapScript . " (exists: " . (file_exists($ldapScript) ? 'yes' : 'no') . ")");
+error_log("- Python path: " . $pythonPath);
+error_log("- LDAP script path: " . $ldapScript);
 error_log("- Current working directory: " . getcwd());
-error_log("- Script owner/group: " . exec("ls -l " . escapeshellarg($ldapScript)));
-error_log("- PHP process user: " . exec('whoami'));
-error_log("- Project root: " . PROJECT_ROOT);
-
-// Check Python modules
-$checkModules = $pythonPath . ' -c "import ldap, hvac; print(\'Modules OK\')"';
-$moduleCheck = [];
-exec($checkModules . " 2>&1", $moduleCheck, $moduleStatus);
-error_log("Python Module Check:");
-error_log("- Status: " . ($moduleStatus === 0 ? 'OK' : 'Failed'));
-error_log("- Output: " . implode("\n", $moduleCheck));
-
-// Set environment variables
-putenv("PYTHONPATH=" . dirname(dirname(__FILE__))); // Set to modules directory
-putenv("PATH=/usr/local/bin:/usr/bin:/bin");
-
-// Try to get Python version
-$pythonVersion = [];
-exec($pythonPath . ' --version 2>&1', $pythonVersion);
-error_log("Python Version: " . implode("\n", $pythonVersion));
 
 // Build command with explicit Python interpreter
 $cmd = sprintf('PYTHONPATH=%s %s -u %s %s %s %s',
@@ -77,14 +54,10 @@ $cmd = sprintf('PYTHONPATH=%s %s -u %s %s %s %s',
     escapeshellarg($APP)
 );
 
-error_log("Command Execution:");
-error_log("- Full command: " . $cmd);
-error_log("- PYTHONPATH: " . getenv('PYTHONPATH'));
-error_log("- PATH: " . getenv('PATH'));
 $descriptorspec = array(
    0 => array("pipe", "r"),  // stdin
    1 => array("pipe", "w"),  // stdout
-   2 => array("pipe", "w")   // stderr to capture Python errors
+   2 => array("pipe", "w")   // stderr
 );
 
 $process = proc_open($cmd, $descriptorspec, $pipes);
@@ -101,14 +74,10 @@ if (is_resource($process)) {
     if (!empty($stderr)) {
         error_log("- STDERR: " . $stderr);
     }
-    
-    // Log raw LDAP response
-    $logEntry = date("Y-m-d H:i:s") . "|LDAP_RESPONSE|" . $ldapcheck . "\n";
-    if (!empty($stderr)) {
-        $logEntry .= date("Y-m-d H:i:s") . "|LDAP_ERROR|" . $stderr . "\n";
-    }
-    file_put_contents($authLogFile, $logEntry, FILE_APPEND | LOCK_EX);
 }
+
+// Debug session state before changes
+error_log("Session state before authentication: " . print_r($_SESSION, true));
 
 // Look for LDAP response in format: OK!|field1|field2|...
 if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
@@ -117,6 +86,9 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
     if (count($parts) >= 6) {  // Allow for extra fields
         list($employee_num, $employee_name, $employee_email, $adom_group, $vzid, $adom_groups) = $parts;
         
+        // Start with a clean session
+        session_regenerate_id(true);
+        
         // Set session variables
         $_SESSION[$APP . "_user_session"] = $uname;
         $_SESSION[$APP . "_user_num"] = $employee_num;
@@ -124,20 +96,18 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         $_SESSION[$APP . "_user_vzid"] = $vzid;
         $_SESSION[$APP . "_user_email"] = $employee_email;
         $_SESSION[$APP . "_adom_groups"] = $adom_groups;
-        
-        // Set admin status based on groups
         $_SESSION[$APP . "_is_admin"] = in_array('admin', explode(',', $adom_groups));
-        
-        // Set authenticated flag
         $_SESSION['authenticated'] = true;
+        $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+        $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
         
-        // Log success using error_log
+        // Debug session state after changes
+        error_log("Session state after successful authentication: " . print_r($_SESSION, true));
+        
+        // Log success
         error_log("Login successful for user: $uname (Groups: $adom_groups)");
         $logEntry = date("Y-m-d H:i:s") . "|AUTH_SUCCESS|" . $uname . "|" . $adom_groups . "\n";
         file_put_contents($authLogFile, $logEntry, FILE_APPEND | LOCK_EX);
-        
-        // Debug logging
-        error_log("Session variables set: " . print_r($_SESSION, true));
         
         // Check if this is an AJAX request
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
@@ -155,7 +125,6 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         
         if (isset($_POST['next'])) {
             $next_url = filter_var(urldecode($_POST['next']), FILTER_SANITIZE_URL);
-            // Ensure next_url starts with a slash
             if (strpos($next_url, '/') !== 0) {
                 $next_url = '/' . $next_url;
             }
