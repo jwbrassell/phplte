@@ -2,6 +2,7 @@
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WEB_ROOT="/var/www/html"
 
 # Colors for output
 RED='\033[0;31m'
@@ -36,23 +37,33 @@ declare -a setup_scripts=(
     "07_logging.sh"
 )
 
-# Make all setup scripts executable
+# Create setup directory in web root and copy scripts
+log "Copying setup scripts to web root..."
+mkdir -p "$WEB_ROOT/setup"
+chmod 755 "$WEB_ROOT/setup"
+chown root:root "$WEB_ROOT/setup"
+cp -r "$SCRIPT_DIR"/setup/* "$WEB_ROOT/setup/"
+
+# Make all setup scripts executable in web root
 log "Making setup scripts executable..."
-if ! chmod +x "$SCRIPT_DIR"/setup/*.sh; then
+if ! chmod +x "$WEB_ROOT"/setup/*.sh; then
     error "Failed to make setup scripts executable. Please check permissions."
 fi
 
 # Verify scripts are executable
 for script in "${setup_scripts[@]}"; do
-    if [ ! -x "$SCRIPT_DIR/setup/$script" ]; then
+    if [ ! -x "$WEB_ROOT/setup/$script" ]; then
         error "Script $script is not executable. Please check permissions."
     fi
 done
 
+# Change to web root directory
+cd "$WEB_ROOT" || error "Failed to change to web root directory"
+
 # Run each setup script
 for script in "${setup_scripts[@]}"; do
     log "Running $script..."
-    if ! "$SCRIPT_DIR/setup/$script"; then
+    if ! "./setup/$script"; then
         error "Failed to run $script"
     fi
     log "Completed $script"
