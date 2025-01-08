@@ -19,12 +19,16 @@ if (IS_PRODUCTION) {
     ini_set('session.cookie_secure', '1');
 }
 
-// Start session
-session_start();
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    error_log("Init.php - Started new session: " . session_id());
+} else {
+    error_log("Init.php - Using existing session: " . session_id());
+}
 
 // Debug session state
-error_log("Init.php - Session ID: " . session_id());
-error_log("Init.php - Initial Session State: " . print_r($_SESSION, true));
+error_log("Init.php - Current Session State: " . print_r($_SESSION, true));
 
 // Load required files
 require_once __DIR__ . '/logging_bootstrap.php';
@@ -32,13 +36,16 @@ require_once __DIR__ . '/logging_bootstrap.php';
 // Load additional files
 require_once __DIR__ . '/auth.php';
 
-// Initialize session variables only if they don't exist
-if (!isset($_SESSION['initialized'])) {
-    $_SESSION['authenticated'] = false;
-    $_SESSION['user'] = null;
+// Initialize session variables only if they don't exist and we're not already authenticated
+if (!isset($_SESSION['initialized']) && !isset($_SESSION['authenticated'])) {
     $_SESSION['initialized'] = true;
-    error_log("Init.php - New session initialized");
+    error_log("Init.php - Initialized new session");
+} else {
+    error_log("Init.php - Using existing initialized session");
 }
+
+// Debug final session state
+error_log("Init.php - Final Session State: " . print_r($_SESSION, true));
 
 // Verify critical directories exist
 $criticalDirs = [
@@ -53,7 +60,3 @@ foreach ($criticalDirs as $dir) {
         error_log("Critical directory missing: $dir");
     }
 }
-
-// Debug final session state
-error_log("Init.php - Final Session State: " . print_r($_SESSION, true));
-?>
