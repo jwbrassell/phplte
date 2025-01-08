@@ -87,26 +87,33 @@ http {
         access_log /var/www/html/portal/logs/access/nginx.access.log combined;
         error_log /var/www/html/portal/logs/errors/nginx_error.log;
 
-        # Root location
-        location / {
-            try_files \$uri \$uri/ /index.php?\$query_string;
+        # Root location - redirect to portal
+        location = / {
+            return 301 /portal/;
         }
 
-        # Protect includes directory
-        location ~ ^/portal/includes/ {
+        # Portal location
+        location /portal {
+            index index.php;
+            try_files \$uri \$uri/ /portal/index.php?\$query_string;
+        }
+
+        # Block direct access to includes directory except PHP files
+        location ~ ^/portal/includes/(?!.*\.php$) {
             deny all;
             return 403;
         }
 
-        # API endpoints
-        location ~ ^/portal/api/ {
+        # Handle PHP files
+        location ~ \.php$ {
             try_files \$uri =404;
-            fastcgi_split_path_info ^(.+\.php)(/.+)\$;
+            fastcgi_split_path_info ^(.+\.php)(/.+)$;
             fastcgi_pass 127.0.0.1:9000;
             fastcgi_index index.php;
             fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
             include fastcgi_params;
-            
+            fastcgi_param HTTPS on;
+
             # Security headers
             add_header X-Frame-Options "SAMEORIGIN" always;
             add_header X-XSS-Protection "1; mode=block" always;
@@ -116,15 +123,10 @@ http {
             add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
         }
 
-        # PHP handling for portal
-        location ~ \.php\$ {
-            try_files \$uri =404;
-            fastcgi_split_path_info ^(.+\.php)(/.+)\$;
-            fastcgi_pass 127.0.0.1:9000;
-            fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-            include fastcgi_params;
-            fastcgi_param HTTPS on;
+        # Default location
+        location / {
+            try_files \$uri \$uri/ =404;
+            autoindex off;
         }
 
         # Deny access to . files
@@ -135,7 +137,7 @@ http {
         }
 
         # Handle static files
-        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)\$ {
+        location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
             expires max;
             log_not_found off;
             access_log off;

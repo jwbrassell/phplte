@@ -9,9 +9,9 @@ log "Creating directory structure..."
 log "Creating required directories..."
 
 # Main directories
-ensure_dir "$WEB_ROOT/portal" "755" "$NGINX_USER" "$NGINX_GROUP"
-ensure_dir "$WEB_ROOT/shared" "755" "$NGINX_USER" "$NGINX_GROUP"
-ensure_dir "$WEB_ROOT/private" "750" "$NGINX_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/portal" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared" "755" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/private" "750" "$APACHE_USER" "$NGINX_GROUP"
 
 # Log directories
 ensure_dir "$WEB_ROOT/portal/logs/access" "775" "$APACHE_USER" "$NGINX_GROUP"
@@ -56,16 +56,16 @@ ensure_dir "$WEB_ROOT/shared/scripts/modules/oncall_calendar" "755" "$APACHE_USE
 ensure_dir "$(dirname $PHP_FPM_SOCK)" "755" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$SSL_DIR" "700" "root" "root"
 
-# Set base permissions
-log "Setting base permissions..."
+# Create web root if it doesn't exist
+ensure_dir "$WEB_ROOT" "755" "root" "root"
+
+# Set base ownership and permissions
+log "Setting base ownership and permissions..."
+chown -R $APACHE_USER:$NGINX_GROUP "$WEB_ROOT"
 find "$WEB_ROOT" -type d -exec chmod 755 {} \;
 find "$WEB_ROOT" -type f -exec chmod 644 {} \;
 find "$WEB_ROOT" -type f -name "*.sh" -exec chmod 755 {} \;
 find "$WEB_ROOT" -type f -name "*.py" -exec chmod 755 {} \;
-
-# Set base ownership
-log "Setting base ownership..."
-chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
 
 # Set specific directory permissions and ownership
 log "Setting specific permissions..."
@@ -76,7 +76,12 @@ find "$WEB_ROOT/shared/data/logs" -type d -exec chmod 775 {} \;
 log "Setting specific ownership..."
 chown -R $APACHE_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs"
 chown -R $APACHE_USER:$NGINX_GROUP "$WEB_ROOT/shared/data/logs"
-chown -R root:$APACHE_GROUP "$WEB_ROOT/private/config"
+chown -R root:$NGINX_GROUP "$WEB_ROOT/private/config"
+
+# Ensure PHP-FPM and nginx can access files
+log "Setting proper file permissions..."
+find "$WEB_ROOT" -type f -exec chmod 644 {} \;
+find "$WEB_ROOT" -type d -exec chmod 755 {} \;
 
 # Double-check system logs permissions and ownership
 log "Ensuring system logs permissions..."
@@ -86,12 +91,8 @@ chown -R $APACHE_USER:$NGINX_GROUP "$WEB_ROOT/shared/data/logs/system"
 # Set SELinux context if enabled
 if command -v selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
     log "Setting SELinux context..."
-    semanage fcontext -a -t httpd_log_t "$WEB_ROOT/shared/data/logs/system(/.*)?"
-    restorecon -R "$WEB_ROOT/shared/data/logs/system"
+    semanage fcontext -a -t httpd_sys_content_t "$WEB_ROOT(/.*)?"
+    restorecon -R "$WEB_ROOT"
 fi
-
-# Ensure PHP-FPM can read files
-log "Setting PHP-FPM permissions..."
-usermod -a -G $NGINX_GROUP $APACHE_USER
 
 log "Directory structure creation complete"

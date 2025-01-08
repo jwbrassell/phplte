@@ -39,6 +39,9 @@ output_buffering = On
 expose_php = On
 allow_url_fopen = On
 allow_url_include = On
+
+; SOAP settings
+soap.wsdl_cache_dir = /var/lib/php/wsdlcache
 EOF
 
 # Configure PHP-FPM
@@ -46,8 +49,8 @@ log "Creating PHP-FPM configuration..."
 cat > /etc/php-fpm.d/www.conf << EOF
 [www]
 ; User and group
-user = $APACHE_USER
-group = $APACHE_GROUP
+user = $NGINX_USER
+group = $NGINX_GROUP
 listen = 127.0.0.1:9000
 listen.owner = $NGINX_USER
 listen.group = $NGINX_GROUP
@@ -72,7 +75,6 @@ php_admin_value[error_log] = $WEB_ROOT/portal/logs/errors/php_errors.log
 php_admin_flag[log_errors] = on
 php_value[session.save_handler] = files
 php_value[session.save_path] = /var/lib/php/session
-php_value[soap.wsdl_cache_dir] = /var/lib/php/wsdlcache
 
 ; Environment variables
 env[PYTHONPATH] = "$WEB_ROOT/shared/scripts"
@@ -85,13 +87,13 @@ EOF
 # Create and configure PHP session directory
 log "Setting up PHP session directory..."
 mkdir -p /var/lib/php/session
-chown $APACHE_USER:$APACHE_GROUP /var/lib/php/session
+chown $NGINX_USER:$NGINX_GROUP /var/lib/php/session
 chmod 700 /var/lib/php/session
 
 # Create and configure WSDL cache directory
 log "Setting up WSDL cache directory..."
 mkdir -p /var/lib/php/wsdlcache
-chown $APACHE_USER:$APACHE_GROUP /var/lib/php/wsdlcache
+chown $NGINX_USER:$NGINX_GROUP /var/lib/php/wsdlcache
 chmod 700 /var/lib/php/wsdlcache
 
 # Create log files
@@ -100,8 +102,8 @@ touch "$WEB_ROOT/portal/logs/errors/php_errors.log"
 touch "$WEB_ROOT/portal/logs/access/php-fpm.access.log"
 
 # Set log file permissions
-chown $APACHE_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs/errors/php_errors.log"
-chown $APACHE_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs/access/php-fpm.access.log"
+chown $NGINX_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs/errors/php_errors.log"
+chown $NGINX_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs/access/php-fpm.access.log"
 chmod 664 "$WEB_ROOT/portal/logs/errors/php_errors.log"
 chmod 664 "$WEB_ROOT/portal/logs/access/php-fpm.access.log"
 
