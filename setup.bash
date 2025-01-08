@@ -37,6 +37,7 @@ declare -a setup_scripts=(
     "04_python.sh"
     "05_nginx.sh"
     "06_php.sh"
+    "07_logging.sh"
 )
 
 # Run each setup script
@@ -47,6 +48,18 @@ for script in "${setup_scripts[@]}"; do
     fi
     log "Completed $script"
 done
+
+# Install nginx configuration
+log "Installing nginx configuration..."
+cp "$SCRIPT_DIR/setup/config/phpadminlte.conf" "/etc/nginx/conf.d/phpadminlte.conf"
+chmod 644 "/etc/nginx/conf.d/phpadminlte.conf"
+chown root:root "/etc/nginx/conf.d/phpadminlte.conf"
+
+# Test nginx configuration
+log "Testing nginx configuration..."
+if ! nginx -t; then
+    error "Invalid nginx configuration"
+fi
 
 # Restart services in correct order
 log "Restarting services..."

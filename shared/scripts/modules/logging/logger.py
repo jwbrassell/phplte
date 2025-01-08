@@ -2,10 +2,37 @@
 import sys
 import json
 import os
+import time
 from datetime import datetime
 import uuid
+from typing import Dict, Any, Optional
 
-def ensure_log_dir(level):
+def cleanup_old_logs(directory: str, days_to_keep: int = 7) -> None:
+    """Remove log files older than specified days.
+    
+    Args:
+        directory: The directory to clean up
+        days_to_keep: Number of days to keep logs for (default: 7)
+    """
+    current_time = time.time()
+    cutoff = current_time - (days_to_keep * 86400)
+    
+    try:
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if not file.endswith('.json'):
+                    continue
+                    
+                file_path = os.path.join(root, file)
+                if os.path.getmtime(file_path) < cutoff:
+                    try:
+                        os.remove(file_path)
+                    except OSError as e:
+                        print(f"Error removing old log file {file_path}: {e}", file=sys.stderr)
+    except Exception as e:
+        print(f"Error during log cleanup: {e}", file=sys.stderr)
+
+def ensure_log_dir(level: str) -> str:
     """Ensure log directory exists for the given level."""
     # Get project root (4 levels up from this script)
     project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
@@ -16,7 +43,7 @@ def ensure_log_dir(level):
     
     return log_dir
 
-def write_log(level, message, context):
+def write_log(level: str, message: str, context: Dict[str, Any]) -> bool:
     """Write a log entry to a JSON file."""
     try:
         # Parse context
@@ -49,7 +76,7 @@ def write_log(level, message, context):
         print(f"Error writing log: {str(e)}", file=sys.stderr)
         sys.exit(1)
 
-def main():
+def main() -> None:
     """Main entry point for logger script."""
     if len(sys.argv) < 4:
         print("Usage: logger.py <level> <message> <context>", file=sys.stderr)
@@ -59,7 +86,17 @@ def main():
     message = sys.argv[2]
     context = sys.argv[3]
     
-    write_log(level, message, context)
+    try:
+        # Clean up old logs before writing new ones
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+        log_dir = os.path.join(project_root, 'shared', 'data', 'logs', 'system')
+        cleanup_old_logs(log_dir)
+        
+        # Write new log
+        write_log(level, message, context)
+    except Exception as e:
+        print(f"Error in main: {e}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,29 @@
+# Rotate system logs
+/var/www/html/shared/data/logs/system/*/*.json {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 664 apache nginx
+    sharedscripts
+    postrotate
+        /bin/kill -HUP `cat /var/run/nginx.pid 2>/dev/null` 2>/dev/null || true
+    endscript
+}
+
+# Rotate portal logs
+/var/www/html/portal/logs/*/*.log {
+    daily
+    rotate 7
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 664 apache nginx
+    sharedscripts
+    postrotate
+        /bin/kill -HUP `cat /var/run/nginx.pid 2>/dev/null` 2>/dev/null || true
+    endscript
+}
