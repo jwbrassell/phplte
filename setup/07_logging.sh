@@ -63,13 +63,15 @@ if command -v selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
     setsebool -P httpd_can_network_connect 1
 fi
 
-# Create API directory if it doesn't exist
+# Create API directory and set up endpoint
 ensure_dir "$WEB_ROOT/portal/api" "755" "$NGINX_USER" "$NGINX_GROUP"
+chown "$APACHE_USER:$NGINX_GROUP" "$WEB_ROOT/portal/api/log.php"
+chmod 644 "$WEB_ROOT/portal/api/log.php"
 
 # Verify nginx configuration includes API location
 log "Checking nginx configuration..."
 NGINX_CONF="/etc/nginx/conf.d/phpadminlte.conf"
-if [ ! -f "$NGINX_CONF" ] || ! grep -q "location /portal/api" "$NGINX_CONF"; then
+if [ ! -f "$NGINX_CONF" ] || ! grep -q "location.*portal/api/" "$NGINX_CONF"; then
     warn "Please ensure your nginx configuration includes the API location block"
     echo "Example configuration:"
     echo "    location ~ ^/portal/includes/ {"
