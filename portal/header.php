@@ -23,6 +23,13 @@ if ($current_page !== 'login.php' && !$_SESSION['authenticated']) {
     <link rel="stylesheet" href="static/css/adminlte.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="static/css/custom.css">
+    
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="static/js/adminlte.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
