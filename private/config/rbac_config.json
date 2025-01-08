@@ -1,0 +1,43 @@
+{
+    "menu_structure": {
+        "Dashboard": {
+            "icon": "fas fa-tachometer-alt",
+            "urls": {
+                "Dashboard": {
+                    "url": "index.php",
+                    "roles": ["admin", "user"]
+                }
+            }
+        },
+        "Admin": {
+            "icon": "fas fa-cogs",
+            "urls": {
+                "Users": {
+                    "url": "admin/users.php",
+                    "roles": ["admin"]
+                },
+                "Logs": {
+                    "url": "admin/logs.php",
+                    "roles": ["admin"]
+                },
+                "Web Links": {
+                    "url": "admin/weblinks.php",
+                    "roles": ["admin"]
+                }
+            }
+        },
+        "Tools": {
+            "icon": "fas fa-tools",
+            "urls": {
+                "Calendar": {
+                    "url": "calendar/test_calendar.php",
+                    "roles": ["admin", "user"]
+                },
+                "OnCall": {
+                    "url": "oncall.php",
+                    "roles": ["admin", "user"]
+                }
+            }
+        }
+    }
+}
