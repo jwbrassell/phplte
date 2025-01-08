@@ -64,6 +64,11 @@ log "Setting base ownership and permissions..."
 chown -R $APACHE_USER:$NGINX_GROUP "$WEB_ROOT"
 find "$WEB_ROOT" -type d -exec chmod 755 {} \;
 find "$WEB_ROOT" -type f -exec chmod 644 {} \;
+
+# Make scripts executable and owned by root
+log "Setting script permissions..."
+find "$WEB_ROOT" -type f -name "*.sh" -exec chown root:root {} \;
+find "$WEB_ROOT" -type f -name "*.py" -exec chown root:root {} \;
 find "$WEB_ROOT" -type f -name "*.sh" -exec chmod 755 {} \;
 find "$WEB_ROOT" -type f -name "*.py" -exec chmod 755 {} \;
 
