@@ -19,7 +19,6 @@ session_start();
 
 // Load additional files
 require_once __DIR__ . '/auth.php';
-require_once PROJECT_ROOT . '/private/includes/logging/PythonLogger.php';
 
 // Initialize global variables
 $_SESSION['authenticated'] = $_SESSION['authenticated'] ?? false;
