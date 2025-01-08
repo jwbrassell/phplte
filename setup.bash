@@ -61,7 +61,7 @@ if command -v dnf >/dev/null 2>&1; then
         php-cli \
         php-json \
         php-common \
-        php-mysql \
+        php-mysqlnd \
         php-zip \
         php-gd \
         php-mbstring \
@@ -135,27 +135,25 @@ server {
         return 301 /portal/;
     }
 
+    # Handle PHP files in portal directory first
+    location ~ ^/portal/.*\.php$ {
+        try_files \$uri =404;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $WEB_ROOT/portal/\$fastcgi_script_name;
+        fastcgi_param PATH_INFO \$fastcgi_path_info;
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+        fastcgi_intercept_errors on;
+        fastcgi_param PHP_VALUE "error_log=$WEB_ROOT/portal/logs/errors/php_errors.log";
+    }
+
     # Handle portal directory
     location ^~ /portal/ {
         alias $WEB_ROOT/portal/;
         index index.php;
         try_files \$uri \$uri/ /portal/index.php?\$query_string;
-
-        # Handle PHP files in portal directory
-        location ~ \.php$ {
-            if (!-f \$request_filename) {
-                return 404;
-            }
-            fastcgi_pass 127.0.0.1:9000;
-            fastcgi_index index.php;
-            include fastcgi_params;
-            fastcgi_param SCRIPT_FILENAME $WEB_ROOT/portal\$fastcgi_script_name;
-            fastcgi_param PATH_INFO \$fastcgi_path_info;
-            fastcgi_buffers 16 16k;
-            fastcgi_buffer_size 32k;
-            fastcgi_intercept_errors on;
-            fastcgi_param PHP_VALUE "error_log=$WEB_ROOT/portal/logs/errors/php_errors.log";
-        }
     }
 
     # Handle includes from private directory
@@ -219,7 +217,7 @@ php_admin_flag[log_errors] = on
 php_admin_flag[display_errors] = off
 php_admin_value[error_reporting] = E_ALL
 php_admin_flag[display_startup_errors] = off
-php_admin_flag[log_errors_max_len] = 4096
+php_admin_value[log_errors_max_len] = 4096
 php_value[session.save_handler] = files
 php_value[session.save_path] = /var/lib/php/session
 php_value[max_execution_time] = 300
@@ -237,12 +235,26 @@ mkdir -p /var/lib/php/session
 chown apache:apache /var/lib/php/session
 chmod 700 /var/lib/php/session
 
-# Configure SELinux for PHP sessions
-if command -v semanage >/dev/null 2>&1; then
-    log "Configuring SELinux context for session directory..."
-    semanage fcontext -a -t httpd_sess_t "/var/lib/php/session(/.*)?"
-    restorecon -Rv /var/lib/php/session
-fi
+# Create all required directories
+log "Creating required directories..."
+mkdir -p "$WEB_ROOT"/{portal,shared,private,public}
+mkdir -p "$WEB_ROOT/portal/logs"/{access,errors,client,python}
+mkdir -p "$WEB_ROOT/private/config"
+mkdir -p $(dirname $PHP_FPM_SOCK)
+
+# Set initial permissions
+log "Setting initial permissions..."
+chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
+chmod -R 755 "$WEB_ROOT"
+chmod -R 775 "$WEB_ROOT/portal/logs"
+chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
+chmod 755 $(dirname $PHP_FPM_SOCK)
+
+# Create symbolic links
+log "Setting up symbolic links..."
+ln -sf "$WEB_ROOT/shared" "$WEB_ROOT/portal/shared"
+ln -sf "$WEB_ROOT/private" "$WEB_ROOT/portal/private"
+ln -sf "$WEB_ROOT/public/auth/login.php" "$WEB_ROOT/portal/login.php"
 
 # Enable necessary SELinux booleans
 if command -v setsebool >/dev/null 2>&1; then
@@ -258,18 +270,6 @@ if [ ! -w "/var/lib/php/session" ]; then
     chmod 777 /var/lib/php/session
     warn "Please investigate SELinux or permission issues"
 fi
-
-# Create PHP-FPM socket directory
-log "Creating PHP-FPM socket directory..."
-mkdir -p $(dirname $PHP_FPM_SOCK)
-chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
-chmod 755 $(dirname $PHP_FPM_SOCK)
-
-# Create symbolic links for required directories and files
-log "Setting up directory structure..."
-ln -sf $WEB_ROOT/shared $WEB_ROOT/portal/shared
-ln -sf $WEB_ROOT/private $WEB_ROOT/portal/private
-ln -sf $WEB_ROOT/public/auth/login.php $WEB_ROOT/portal/login.php
 
 # Permanently disable SELinux
 log "Permanently disabling SELinux..."
@@ -336,19 +336,10 @@ elif [ ! -f "$VAULT_ENV" ] && [ -f "$VAULT_TEMPLATE" ]; then
     warn "Please update $VAULT_ENV with your Vault credentials"
 fi
 
-# Set permissions for project directories
-log "Setting directory permissions..."
-find "$WEB_ROOT" -type d -exec chmod 755 {} \;
+# Set final permissions for files
+log "Setting file permissions..."
 find "$WEB_ROOT" -type f -exec chmod 644 {} \;
 find "$WEB_ROOT" -type f -name "*.py" -exec chmod 755 {} \;
-find "$WEB_ROOT" -type f -name "*.php" -exec chmod 644 {} \;
-chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
-
-# Create log directories if they don't exist
-log "Setting up log directories..."
-mkdir -p "$WEB_ROOT/portal/logs"/{access,errors,client,python}
-chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs"
-chmod -R 775 "$WEB_ROOT/portal/logs"
 
 # Ensure PHP-FPM can read files
 log "Setting PHP-FPM permissions..."
