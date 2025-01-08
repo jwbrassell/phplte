@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Domain configuration
-DOMAIN="exampledomain.com"
+DOMAIN="dogcrayons.com"
 
 # Colors for output
 RED='\033[0;31m'
@@ -136,7 +136,7 @@ server {
     location ~ \.php$ {
         try_files \$uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:$PHP_FPM_SOCK;
+        fastcgi_pass 127.0.0.1:9000;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         include fastcgi_params;
@@ -173,7 +173,7 @@ cat > /etc/php-fpm.d/www.conf << EOF
 [www]
 user = $APACHE_USER
 group = $APACHE_GROUP
-listen = $PHP_FPM_SOCK
+listen = 127.0.0.1:9000
 listen.owner = $NGINX_USER
 listen.group = $NGINX_GROUP
 listen.mode = 0660
