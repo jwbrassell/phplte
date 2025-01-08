@@ -12,7 +12,7 @@ def ensure_log_dir(level):
     log_dir = os.path.join(project_root, 'shared', 'data', 'logs', 'system', level)
     
     if not os.path.exists(log_dir):
-        os.makedirs(log_dir, mode=0o755, exist_ok=True)
+        os.makedirs(log_dir, mode=0o775, exist_ok=True)
     
     return log_dir
 

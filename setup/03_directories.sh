@@ -18,6 +18,7 @@ ensure_dir "$WEB_ROOT/portal/logs/access" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/errors" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/client" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/python" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/error" "775" "$APACHE_USER" "$NGINX_GROUP"
 
 # Python directories
 ensure_dir "$WEB_ROOT/shared/scripts/modules" "755" "$APACHE_USER" "$NGINX_GROUP"
