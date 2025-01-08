@@ -147,7 +147,7 @@ function submitOnEnter(event) {
 
 // Enhanced client-side error logging
 window.onerror = function(msg, url, line, col, error) {
-    $.post('includes/logging/log_error.php', {
+    $.post('/portal/includes/logging/log_error.php', {
         type: 'JS_ERROR',
         message: msg,
         url: url,
@@ -163,7 +163,7 @@ window.onerror = function(msg, url, line, col, error) {
 const pageLoadStart = performance.now();
 window.addEventListener('load', function() {
     const pageLoadTime = performance.now() - pageLoadStart;
-    $.post('includes/logging/log_error.php', {
+    $.post('/portal/includes/logging/log_error.php', {
         type: 'PERFORMANCE',
         message: 'Page Load Complete',
         duration: pageLoadTime,

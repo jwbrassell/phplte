@@ -1,4 +1,7 @@
 <?php
+// Include error logging functionality
+require_once __DIR__ . '/logging/log_error.php';
+
 // Ensure error reporting is properly configured
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
@@ -20,8 +23,7 @@ foreach ($logDirs as $dir) {
 
 // Set up error handler
 function customErrorHandler($errno, $errstr, $errfile, $errline) {
-    $logMessage = date('[Y-m-d H:i:s]') . " PHP {$errno}: {$errstr} in {$errfile} on line {$errline}\n";
-    error_log($logMessage, 3, ERROR_LOG);
+    logError($errstr, 'PHP_ERROR', $errfile, $errline);
     
     // Don't execute PHP's internal error handler
     return true;
@@ -29,10 +31,8 @@ function customErrorHandler($errno, $errstr, $errfile, $errline) {
 
 // Set up exception handler
 function customExceptionHandler($exception) {
-    $logMessage = date('[Y-m-d H:i:s]') . " Uncaught Exception: " . $exception->getMessage() . 
-                 " in " . $exception->getFile() . " on line " . $exception->getLine() . 
-                 "\nStack trace: " . $exception->getTraceAsString() . "\n";
-    error_log($logMessage, 3, ERROR_LOG);
+    $message = "Uncaught Exception: " . $exception->getMessage() . "\nStack trace: " . $exception->getTraceAsString();
+    logError($message, 'EXCEPTION', $exception->getFile(), $exception->getLine());
     
     // Display user-friendly error message in production
     if (!DEBUG_MODE) {
@@ -48,8 +48,7 @@ function customExceptionHandler($exception) {
 function shutdownHandler() {
     $error = error_get_last();
     if ($error !== NULL && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
-        $logMessage = date('[Y-m-d H:i:s]') . " Fatal Error: {$error['message']} in {$error['file']} on line {$error['line']}\n";
-        error_log($logMessage, 3, ERROR_LOG);
+        logError($error['message'], 'FATAL_ERROR', $error['file'], $error['line']);
         
         if (!DEBUG_MODE) {
             http_response_code(500);
@@ -65,19 +64,18 @@ register_shutdown_function("shutdownHandler");
 
 // Function to log application events
 function logEvent($type, $message, $context = []) {
-    $timestamp = date('[Y-m-d H:i:s]');
     $contextStr = !empty($context) ? ' ' . json_encode($context) : '';
-    $logMessage = "{$timestamp} {$type}: {$message}{$contextStr}\n";
+    $fullMessage = $message . $contextStr;
     
     switch (strtolower($type)) {
         case 'error':
-            error_log($logMessage, 3, ERROR_LOG);
+            logError($fullMessage, 'ERROR');
             break;
         case 'access':
-            error_log($logMessage, 3, ACCESS_LOG);
+            logError($fullMessage, 'ACCESS');
             break;
         default:
-            error_log($logMessage, 3, ERROR_LOG);
+            logError($fullMessage, strtoupper($type));
     }
 }
 

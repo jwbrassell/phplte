@@ -1,8 +1,23 @@
-# Setup.bash Requirements
+# Setup Requirements
+
+## Overview
+The application is cloned directly into /var/www/html and configured to serve files from the portal directory without exposing the directory structure in URLs.
+
+## Installation
+1. Clone repository:
+   ```bash
+   cd /var/www
+   git clone [repo-url] html
+   ```
+2. Run setup:
+   ```bash
+   cd html
+   sudo ./setup.bash
+   ```
 
 ## Domain Configuration
 - Domain: dogcrayons.com
-- Self-signed SSL certificate requirements:
+- Self-signed SSL certificate:
   - Location: /etc/nginx/ssl/
   - Files: dogcrayons.com.key and dogcrayons.com.crt
   - Validity: 365 days
@@ -10,90 +25,52 @@
   - Certificate subject: /C=US/ST=State/L=City/O=Organization/CN=dogcrayons.com
 
 ## Directory Structure
+Repository is cloned directly into /var/www/html with the following structure:
 ```
 /var/www/html/
-├── portal/
-│   ├── logs/
-│   │   ├── access/
-│   │   ├── errors/
-│   │   ├── client/
-│   │   └── python/
-│   ├── includes/
-│   ├── plugins/
-│   └── static/
+├── portal/              # Served as root URL (/)
+│   ├── logs/           # Runtime logs
+│   ├── includes/       # PHP includes
+│   ├── plugins/        # Frontend libraries
+│   └── static/         # Static assets
 ├── shared/
-│   ├── scripts/
-│   │   └── modules/
-│   │       ├── logging/
-│   │       ├── vault/
-│   │       ├── ldap/
-│   │       ├── rbac/
-│   │       ├── utilities/
-│   │       ├── api/
-│   │       ├── data_processing/
-│   │       └── oncall_calendar/
-│   ├── data/
-│   └── venv/
-└── private/
-    ├── config/
-    └── includes/
-        ├── logging/
-        ├── auth/
-        ├── calendar/
-        └── components/
-            ├── datatables/
-            ├── forms/
-            └── widgets/
+│   ├── scripts/        # Python scripts
+│   │   └── modules/    # Python modules
+│   ├── data/          # Shared data
+│   └── venv/          # Python virtual environment
+└── private/           # Protected files
+    ├── config/        # Configuration files
+    └── includes/      # Private includes
 ```
 
 ## Nginx Configuration
-1. Server Blocks:
-   - Default server (port 80/443): Return 444
-   - HTTP server: Redirect to HTTPS
-   - HTTPS server: Main application
+1. URL Structure:
+   - Clean URLs without /portal/ prefix
+   - Example: https://dogcrayons.com/login.php
+   - Files served directly from portal directory
 
-2. Main HTTPS Server Configuration:
+2. Server Configuration:
    - Root: /var/www/html/portal
-   - Index: index.php
+   - Index: login.php, index.php
    - SSL: TLSv1.2 and TLSv1.3
-   - SSL Ciphers: HIGH:!aNULL:!MD5
+   - Default response: 444 for unknown hosts
 
 3. Location Blocks:
    ```nginx
-   # Root redirect
-   location = / {
-       return 301 /portal/;
-   }
-
    # PHP handling
    location ~ \.php$ {
+       try_files $uri =404;
        fastcgi_pass 127.0.0.1:9000;
        include fastcgi_params;
        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+       fastcgi_param PATH_INFO $fastcgi_path_info;
    }
 
-   # Private directory protection
-   location ^~ /private {
-       deny all;
-       return 404;
-   }
-
-   # Shared directory
-   location ^~ /shared {
-       alias /var/www/html/shared;
-       try_files $uri $uri/ =404;
-   }
-
-   # Main location
+   # Main location - default to login.php
    location / {
-       try_files $uri $uri/ /index.php?$query_string;
+       try_files $uri $uri/ /login.php?$query_string;
    }
    ```
-
-4. Error Pages:
-   - 404: /404.php
-   - 403: /403.php
-   - 500,502,503,504: /50x.html
 
 ## PHP-FPM Configuration
 1. Process Manager:
@@ -109,6 +86,8 @@
    - post_max_size = 50M
    - upload_max_filesize = 50M
    - error_log = /var/www/html/portal/logs/errors/php_errors.log
+   - display_errors = On (initial setup)
+   - allow_url_fopen = On (initial setup)
 
 3. User/Group:
    - User: apache
@@ -119,6 +98,7 @@
 1. Virtual Environment:
    - Location: /var/www/html/shared/venv
    - Python version: 3.x
+   - Created during setup
 
 2. Required Packages:
    - python-ldap
@@ -132,6 +112,7 @@
 ## File Permissions
 1. Directories:
    - Default: 755
+   - Private: 750
    - Logs: 775
 
 2. Files:
@@ -144,32 +125,38 @@
    - Web files: nginx:nginx
    - Log files: apache:nginx
    - Python files: apache:nginx
+   - Private config: root:apache
 
 ## SELinux Configuration
 - Disabled for initial setup
-- Booleans (while active):
+- Booleans set (while active):
   - httpd_can_network_connect = 1
   - httpd_unified = 1
   - httpd_can_network_connect_db = 1
 
 ## Required Packages
-- nginx
-- php-fpm
-- php-cli
-- php-json
-- php-common
-- php-mysqlnd
-- php-zip
-- php-gd
-- php-mbstring
-- php-curl
-- php-xml
-- php-bcmath
-- php-ldap
-- python3
-- python3-pip
-- python3-devel
-- openldap-devel
+1. Web Server:
+   - nginx
+   - php-fpm
+
+2. PHP Extensions:
+   - php-cli
+   - php-json
+   - php-common
+   - php-mysqlnd
+   - php-zip
+   - php-gd
+   - php-mbstring
+   - php-curl
+   - php-xml
+   - php-bcmath
+   - php-ldap
+
+3. Python:
+   - python3
+   - python3-pip
+   - python3-devel
+   - openldap-devel
 
 ## Vault Configuration
 - Config directory: /var/www/html/private/config
