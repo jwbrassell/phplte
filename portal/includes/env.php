@@ -15,6 +15,12 @@ define('DATA_DIR', SHARED_DIR . '/data');
 define('SCRIPTS_DIR', SHARED_DIR . '/scripts');
 define('MODULES_DIR', SCRIPTS_DIR . '/modules');
 
+// URL and Path Configuration
+define('PORTAL_DIR', PROJECT_ROOT . '/portal');
+define('PORTAL_PATH', '/portal');
+define('BASE_URL', rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/portal'));
+define('VENV_DIR', SHARED_DIR . '/venv');
+
 // Python Environment
 define('PYTHON_VENV', SHARED_DIR . '/venv');
 define('PYTHON_BIN', PYTHON_VENV . '/bin/python3');
@@ -54,7 +60,9 @@ $_ENV['APP'] = [
     'environment' => APP_ENV,
     'log_dir' => LOG_DIR,
     'python_venv' => PYTHON_VENV,
-    'python_bin' => PYTHON_BIN
+    'python_bin' => PYTHON_BIN,
+    'base_url' => BASE_URL,
+    'portal_path' => PORTAL_PATH
 ];
 
 // Ensure critical directories exist
@@ -74,3 +82,6 @@ foreach ($required_dirs as $dir) {
         @mkdir($dir, 0775, true);
     }
 }
+
+// Set global APP variable for legacy support
+$APP = $_ENV['APP']['name'];

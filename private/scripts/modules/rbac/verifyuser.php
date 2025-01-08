@@ -128,6 +128,9 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         // Set admin status based on groups
         $_SESSION[$APP . "_is_admin"] = in_array('admin', explode(',', $adom_groups));
         
+        // Set authenticated flag
+        $_SESSION['authenticated'] = true;
+        
         // Log success using error_log
         error_log("Login successful for user: $uname (Groups: $adom_groups)");
         $logEntry = date("Y-m-d H:i:s") . "|AUTH_SUCCESS|" . $uname . "|" . $adom_groups . "\n";
@@ -136,21 +139,20 @@ if (preg_match('/^OK!\|([^\n]+)$/', $ldapcheck, $matches)) {
         // Debug logging
         error_log("Session variables set: " . print_r($_SESSION, true));
         
-        // Handle redirection with next parameter
+        // Simplified redirection logic
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
         $domain = $_SERVER['HTTP_HOST'];
-        $basePath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
-        if ($basePath === '\\') $basePath = '/';
+        $basePath = rtrim(dirname($_SERVER['PHP_SELF']), '/portal');
         
         if (isset($_POST['next'])) {
             $next_url = filter_var(urldecode($_POST['next']), FILTER_SANITIZE_URL);
-            if (strpos($next_url, 'http') !== 0) {
-                // If not absolute URL, make it absolute
-                $next_url = $protocol . $domain . $next_url;
+            // Ensure next_url starts with a slash
+            if (strpos($next_url, '/') !== 0) {
+                $next_url = '/' . $next_url;
             }
-            header("Location: " . $next_url);
+            header("Location: " . $protocol . $domain . $basePath . $next_url);
         } else {
-            header("Location: " . $protocol . $domain . $basePath . "/index.php");
+            header("Location: " . $protocol . $domain . $basePath . "/portal/index.php");
         }
         exit;
     } else {
@@ -175,10 +177,9 @@ file_put_contents($authLogFile, $logEntry, FILE_APPEND | LOCK_EX);
 // Construct full URL for error redirect
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
 $domain = $_SERVER['HTTP_HOST'];
-$basePath = dirname(dirname(dirname(dirname($_SERVER['SCRIPT_NAME']))));
-if ($basePath === '\\') $basePath = '/';
+$basePath = rtrim(dirname($_SERVER['PHP_SELF']), '/portal');
 
-$redirectUrl = $protocol . $domain . $basePath . "/auth/login.php?error=" . urlencode($error);
+$redirectUrl = $protocol . $domain . $basePath . "/portal/login.php?error=" . urlencode($error);
 error_log("Redirecting to: " . $redirectUrl);
 header("Location: " . $redirectUrl);
 exit;

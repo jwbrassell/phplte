@@ -45,8 +45,7 @@ function check_access($feature) {
  * Check if user is authenticated
  */
 function isAuthenticated() {
-    global $APP;
-    return isset($_SESSION[$APP."_user_name"]);
+    return isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true;
 }
 
 // Get current page from URL if not already set
@@ -56,7 +55,7 @@ if (!isset($PAGE)) {
 
 // Get base path if not already set
 if (!isset($basePath)) {
-    $basePath = dirname(dirname($_SERVER['SCRIPT_NAME']));
+    $basePath = rtrim(dirname(dirname($_SERVER['SCRIPT_NAME'])), '/portal');
     if ($basePath === '\\') $basePath = '/';
 }
 
@@ -75,9 +74,11 @@ if (($PAGE == "login.php") && (!isset($_SESSION[$APP."_user_name"])) && (isset($
         // Set admin groups in a consistent format
         $_SESSION[$APP."_adom_groups"] = "admin,user";
         $_SESSION[$APP."_is_admin"] = true;
+        // Set authenticated flag
+        $_SESSION['authenticated'] = true;
         
         logEvent('access', 'login_success', ['username' => 'test', 'type' => 'test_account']);
-        header("Location: " . $basePath . "/index.php");
+        header("Location: " . $basePath . "/portal/index.php");
         exit;
     } else {
         // Include verifyuser.php
@@ -138,7 +139,7 @@ if (!$pageExists) {
         'page' => $PAGE,
         'referrer' => $_SERVER['HTTP_REFERER'] ?? 'direct'
     ]);
-    header("Location: " . $basePath . "/404.php?page=".urlencode($PAGE));
+    header("Location: " . $basePath . "/portal/404.php?page=".urlencode($PAGE));
     exit;
 }
 
@@ -150,7 +151,7 @@ if (!$pageAllowed) {
         'referrer' => $referrer,
         'user_groups' => $_SESSION[$APP."_adom_groups"] ?? 'none'
     ]);
-    header("Location: " . $basePath . "/403.php?page=".urlencode($PAGE)."&referrer=".urlencode($referrer));
+    header("Location: " . $basePath . "/portal/403.php?page=".urlencode($PAGE)."&referrer=".urlencode($referrer));
     exit;
 }
 
@@ -164,9 +165,13 @@ if (($PAGE == "login.php") && (isset($_SESSION[$APP."_user_name"]))) {
     
     if ($destination !== 'index.php') {
         $next_url = filter_var(urldecode($destination), FILTER_SANITIZE_URL);
-        header("Location: " . $next_url);
+        // Ensure next_url starts with a slash
+        if (strpos($next_url, '/') !== 0) {
+            $next_url = '/' . $next_url;
+        }
+        header("Location: " . $protocol . $domain . $basePath . $next_url);
     } else {
-        header("Location: " . $basePath . "/index.php");
+        header("Location: " . $basePath . "/portal/index.php");
     }
     exit;
 }
