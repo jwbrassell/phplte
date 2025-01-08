@@ -24,10 +24,6 @@ if [ "$EUID" -ne 0 ]; then
     error "Please run as root"
 fi
 
-# Make all setup scripts executable
-log "Making setup scripts executable..."
-chmod +x "$SCRIPT_DIR"/setup/*.sh
-
 # Array of setup scripts in order
 declare -a setup_scripts=(
     "00_init.sh"
@@ -39,6 +35,19 @@ declare -a setup_scripts=(
     "06_php.sh"
     "07_logging.sh"
 )
+
+# Make all setup scripts executable
+log "Making setup scripts executable..."
+if ! chmod +x "$SCRIPT_DIR"/setup/*.sh; then
+    error "Failed to make setup scripts executable. Please check permissions."
+fi
+
+# Verify scripts are executable
+for script in "${setup_scripts[@]}"; do
+    if [ ! -x "$SCRIPT_DIR/setup/$script" ]; then
+        error "Script $script is not executable. Please check permissions."
+    fi
+done
 
 # Run each setup script
 for script in "${setup_scripts[@]}"; do
