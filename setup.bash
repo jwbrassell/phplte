@@ -35,6 +35,7 @@ APACHE_GROUP="apache"
 NGINX_USER="nginx"
 NGINX_GROUP="nginx"
 SSL_DIR="/etc/nginx/ssl"
+PHP_FPM_SOCK="/run/php-fpm/www.sock"
 
 # Create SSL directory
 log "Creating SSL directory..."
@@ -116,6 +117,10 @@ server {
     root $WEB_ROOT/portal;
     index index.php;
 
+    # Error logs
+    access_log $WEB_ROOT/portal/logs/access/nginx_access.log;
+    error_log $WEB_ROOT/portal/logs/errors/nginx_error.log error;
+
     ssl_certificate $SSL_DIR/$DOMAIN.crt;
     ssl_certificate_key $SSL_DIR/$DOMAIN.key;
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -129,12 +134,16 @@ server {
     }
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php-fpm/www.sock;
+        try_files \$uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:$PHP_FPM_SOCK;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         include fastcgi_params;
         fastcgi_buffers 16 16k;
         fastcgi_buffer_size 32k;
+        fastcgi_intercept_errors on;
+        fastcgi_param PHP_VALUE "error_log=$WEB_ROOT/portal/logs/errors/php_errors.log";
     }
 
     location /shared {
@@ -148,6 +157,13 @@ server {
 
     error_page 404 /404.php;
     error_page 403 /403.php;
+    error_page 500 502 503 504 /50x.html;
+
+    # Custom error handling
+    location = /50x.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
 }
 EOF
 
@@ -157,7 +173,7 @@ cat > /etc/php-fpm.d/www.conf << EOF
 [www]
 user = $APACHE_USER
 group = $APACHE_GROUP
-listen = /var/run/php-fpm/www.sock
+listen = $PHP_FPM_SOCK
 listen.owner = $NGINX_USER
 listen.group = $NGINX_GROUP
 listen.mode = 0660
@@ -185,9 +201,13 @@ chmod 770 /var/lib/php/session
 
 # Create PHP-FPM socket directory
 log "Creating PHP-FPM socket directory..."
-mkdir -p /var/run/php-fpm
-chown $APACHE_USER:$NGINX_GROUP /var/run/php-fpm
-chmod 755 /var/run/php-fpm
+mkdir -p $(dirname $PHP_FPM_SOCK)
+chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
+chmod 755 $(dirname $PHP_FPM_SOCK)
+
+# Create symbolic links for shared directories
+log "Setting up shared directory structure..."
+ln -sf $WEB_ROOT/shared $WEB_ROOT/portal/shared
 
 # Permanently disable SELinux
 log "Permanently disabling SELinux..."
