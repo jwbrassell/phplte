@@ -144,6 +144,23 @@ server {
         fastcgi_buffer_size 32k;
         fastcgi_intercept_errors on;
         fastcgi_param PHP_VALUE "error_log=$WEB_ROOT/portal/logs/errors/php_errors.log";
+        fastcgi_param DOCUMENT_ROOT \$document_root;
+        fastcgi_param SCRIPT_NAME \$fastcgi_script_name;
+    }
+
+    # Handle includes from private directory
+    location ~ ^/private/.*\.php$ {
+        internal;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $WEB_ROOT\$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Block direct access to private directory
+    location ^~ /private {
+        deny all;
+        return 404;
     }
 
     location /shared {
@@ -191,6 +208,7 @@ php_value[max_execution_time] = 300
 php_value[memory_limit] = 128M
 php_value[post_max_size] = 50M
 php_value[upload_max_filesize] = 50M
+php_value[include_path] = ".:/usr/share/php:$WEB_ROOT:$WEB_ROOT/portal:$WEB_ROOT/private"
 EOF
 
 # Create and configure PHP session directory
@@ -227,9 +245,10 @@ mkdir -p $(dirname $PHP_FPM_SOCK)
 chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
 chmod 755 $(dirname $PHP_FPM_SOCK)
 
-# Create symbolic links for shared directories
-log "Setting up shared directory structure..."
+# Create symbolic links for required directories
+log "Setting up directory structure..."
 ln -sf $WEB_ROOT/shared $WEB_ROOT/portal/shared
+ln -sf $WEB_ROOT/private $WEB_ROOT/portal/private
 
 # Permanently disable SELinux
 log "Permanently disabling SELinux..."
