@@ -114,13 +114,14 @@ server {
 server {
     listen 443 ssl;
     server_name $DOMAIN;
-    root $WEB_ROOT/portal;
+    root $WEB_ROOT;
     index index.php;
 
     # Error logs
     access_log $WEB_ROOT/portal/logs/access/nginx_access.log;
-    error_log $WEB_ROOT/portal/logs/errors/nginx_error.log error;
+    error_log $WEB_ROOT/portal/logs/errors/nginx_error.log debug;
 
+    # SSL Configuration
     ssl_certificate $SSL_DIR/$DOMAIN.crt;
     ssl_certificate_key $SSL_DIR/$DOMAIN.key;
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -129,23 +130,32 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
-    location / {
-        try_files \$uri \$uri/ /index.php?\$query_string;
+    # Default to portal directory
+    location = / {
+        return 301 /portal/;
     }
 
-    location ~ \.php$ {
-        try_files \$uri =404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass 127.0.0.1:9000;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        include fastcgi_params;
-        fastcgi_buffers 16 16k;
-        fastcgi_buffer_size 32k;
-        fastcgi_intercept_errors on;
-        fastcgi_param PHP_VALUE "error_log=$WEB_ROOT/portal/logs/errors/php_errors.log";
-        fastcgi_param DOCUMENT_ROOT \$document_root;
-        fastcgi_param SCRIPT_NAME \$fastcgi_script_name;
+    # Handle portal directory
+    location ^~ /portal/ {
+        alias $WEB_ROOT/portal/;
+        index index.php;
+        try_files \$uri \$uri/ /portal/index.php?\$query_string;
+
+        # Handle PHP files in portal directory
+        location ~ \.php$ {
+            if (!-f \$request_filename) {
+                return 404;
+            }
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $WEB_ROOT/portal\$fastcgi_script_name;
+            fastcgi_param PATH_INFO \$fastcgi_path_info;
+            fastcgi_buffers 16 16k;
+            fastcgi_buffer_size 32k;
+            fastcgi_intercept_errors on;
+            fastcgi_param PHP_VALUE "error_log=$WEB_ROOT/portal/logs/errors/php_errors.log";
+        }
     }
 
     # Handle includes from private directory
@@ -153,8 +163,8 @@ server {
         internal;
         fastcgi_pass 127.0.0.1:9000;
         fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $WEB_ROOT\$fastcgi_script_name;
         include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $WEB_ROOT\$fastcgi_script_name;
     }
 
     # Block direct access to private directory
@@ -163,22 +173,26 @@ server {
         return 404;
     }
 
-    location /shared {
+    # Handle shared directory
+    location ^~ /shared {
         alias $WEB_ROOT/shared;
         try_files \$uri \$uri/ =404;
     }
 
-    location ~ /\.ht {
+    # Block access to dot files
+    location ~ /\. {
         deny all;
+        access_log off;
+        log_not_found off;
     }
 
-    error_page 404 /404.php;
-    error_page 403 /403.php;
-    error_page 500 502 503 504 /50x.html;
+    # Error pages
+    error_page 404 /portal/404.php;
+    error_page 403 /portal/403.php;
+    error_page 500 502 503 504 /portal/50x.html;
 
     # Custom error handling
-    location = /50x.html {
-        root /usr/share/nginx/html;
+    location = /portal/50x.html {
         internal;
     }
 }
@@ -202,6 +216,10 @@ pm.max_spare_servers = 35
 
 php_admin_value[error_log] = $WEB_ROOT/portal/logs/php_errors.log
 php_admin_flag[log_errors] = on
+php_admin_flag[display_errors] = off
+php_admin_value[error_reporting] = E_ALL
+php_admin_flag[display_startup_errors] = off
+php_admin_flag[log_errors_max_len] = 4096
 php_value[session.save_handler] = files
 php_value[session.save_path] = /var/lib/php/session
 php_value[max_execution_time] = 300
@@ -209,6 +227,8 @@ php_value[memory_limit] = 128M
 php_value[post_max_size] = 50M
 php_value[upload_max_filesize] = 50M
 php_value[include_path] = ".:/usr/share/php:$WEB_ROOT:$WEB_ROOT/portal:$WEB_ROOT/private"
+php_value[catch_workers_output] = yes
+php_value[decorate_workers_output] = no
 EOF
 
 # Create and configure PHP session directory
@@ -318,16 +338,21 @@ fi
 
 # Set permissions for project directories
 log "Setting directory permissions..."
-find "$WEB_ROOT" -type d -exec chmod 775 {} \;
-find "$WEB_ROOT" -type f -exec chmod 664 {} \;
-find "$WEB_ROOT" -type f -name "*.py" -exec chmod 775 {} \;
-chown -R root:$APACHE_GROUP "$WEB_ROOT"
+find "$WEB_ROOT" -type d -exec chmod 755 {} \;
+find "$WEB_ROOT" -type f -exec chmod 644 {} \;
+find "$WEB_ROOT" -type f -name "*.py" -exec chmod 755 {} \;
+find "$WEB_ROOT" -type f -name "*.php" -exec chmod 644 {} \;
+chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
 
 # Create log directories if they don't exist
 log "Setting up log directories..."
 mkdir -p "$WEB_ROOT/portal/logs"/{access,errors,client,python}
-chown -R root:$APACHE_GROUP "$WEB_ROOT/portal/logs"
+chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT/portal/logs"
 chmod -R 775 "$WEB_ROOT/portal/logs"
+
+# Ensure PHP-FPM can read files
+log "Setting PHP-FPM permissions..."
+usermod -a -G $NGINX_GROUP $APACHE_USER
 
 # Install Python dependencies
 log "Installing Python dependencies..."
