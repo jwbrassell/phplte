@@ -95,24 +95,97 @@ if ! id -u $NGINX_USER >/dev/null 2>&1; then
     error "Nginx user ($NGINX_USER) does not exist"
 fi
 
-# Verify web root exists
-if [ ! -d "$WEB_ROOT" ]; then
-    error "Web root directory $WEB_ROOT does not exist"
-fi
+# Create all required directories first
+log "Creating required directories..."
+mkdir -p "$WEB_ROOT"/{portal,shared,private,public}
+mkdir -p "$WEB_ROOT/portal/logs"/{access,errors,client,python}
+mkdir -p "$WEB_ROOT/private/config"
+mkdir -p $(dirname $PHP_FPM_SOCK)
+
+# Set initial permissions
+log "Setting initial permissions..."
+chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
+chmod -R 755 "$WEB_ROOT"
+chmod -R 775 "$WEB_ROOT/portal/logs"
+chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
+chmod 755 $(dirname $PHP_FPM_SOCK)
+
+# Create symbolic links
+log "Setting up symbolic links..."
+ln -sf "$WEB_ROOT/shared" "$WEB_ROOT/portal/shared"
+ln -sf "$WEB_ROOT/private" "$WEB_ROOT/portal/private"
+ln -sf "$WEB_ROOT/public/auth/login.php" "$WEB_ROOT/portal/login.php"
 
 # Configure nginx
 log "Configuring nginx..."
+
+# Clean up existing nginx configs
+rm -f /etc/nginx/conf.d/*.conf
+
+# Create main nginx config
+cat > /etc/nginx/nginx.conf << EOF
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log notice;
+pid /run/nginx.pid;
+
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                      '\$status \$body_bytes_sent "\$http_referer" '
+                      '"\$http_user_agent" "\$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+EOF
+
+# Create portal config
 cat > /etc/nginx/conf.d/portal.conf << EOF
-# HTTP server to redirect to HTTPS
+# Default server block for non-matching requests
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+    return 444;
+}
+
+server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
+    ssl_certificate $SSL_DIR/$DOMAIN.crt;
+    ssl_certificate_key $SSL_DIR/$DOMAIN.key;
+    return 444;
+}
+
+# HTTP server block for domain
 server {
     listen 80;
+    listen [::]:80;
     server_name $DOMAIN;
     return 301 https://\$server_name\$request_uri;
 }
 
-# HTTPS server
+# HTTPS server block for domain
 server {
     listen 443 ssl;
+    listen [::]:443 ssl;
     server_name $DOMAIN;
     root $WEB_ROOT;
     index index.php;
@@ -141,7 +214,7 @@ server {
         fastcgi_pass 127.0.0.1:9000;
         fastcgi_index index.php;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $WEB_ROOT/portal/\$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param PATH_INFO \$fastcgi_path_info;
         fastcgi_buffers 16 16k;
         fastcgi_buffer_size 32k;
@@ -151,7 +224,7 @@ server {
 
     # Handle portal directory
     location ^~ /portal/ {
-        alias $WEB_ROOT/portal/;
+        root $WEB_ROOT;
         index index.php;
         try_files \$uri \$uri/ /portal/index.php?\$query_string;
     }
@@ -162,7 +235,7 @@ server {
         fastcgi_pass 127.0.0.1:9000;
         fastcgi_index index.php;
         include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $WEB_ROOT\$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
     }
 
     # Block direct access to private directory
@@ -206,55 +279,39 @@ listen = 127.0.0.1:9000
 listen.owner = $NGINX_USER
 listen.group = $NGINX_GROUP
 listen.mode = 0660
+
 pm = dynamic
 pm.max_children = 50
 pm.start_servers = 5
 pm.min_spare_servers = 5
 pm.max_spare_servers = 35
 
+error_log = $WEB_ROOT/portal/logs/php_errors.log
+log_level = notice
+
+; PHP settings
+php_flag[display_errors] = off
 php_admin_value[error_log] = $WEB_ROOT/portal/logs/php_errors.log
 php_admin_flag[log_errors] = on
-php_admin_flag[display_errors] = off
-php_admin_value[error_reporting] = E_ALL
-php_admin_flag[display_startup_errors] = off
-php_admin_value[log_errors_max_len] = 4096
-php_value[session.save_handler] = files
-php_value[session.save_path] = /var/lib/php/session
-php_value[max_execution_time] = 300
-php_value[memory_limit] = 128M
-php_value[post_max_size] = 50M
-php_value[upload_max_filesize] = 50M
-php_value[include_path] = ".:/usr/share/php:$WEB_ROOT:$WEB_ROOT/portal:$WEB_ROOT/private"
-php_value[catch_workers_output] = yes
-php_value[decorate_workers_output] = no
+php_admin_value[memory_limit] = 128M
+php_admin_value[max_execution_time] = 300
+php_admin_value[max_input_time] = 300
+php_admin_value[post_max_size] = 50M
+php_admin_value[upload_max_filesize] = 50M
+php_admin_value[session.save_handler] = files
+php_admin_value[session.save_path] = /var/lib/php/session
+php_admin_value[error_reporting] = E_ALL & ~E_DEPRECATED & ~E_STRICT
+php_admin_value[date.timezone] = UTC
+php_admin_value[include_path] = ".:/usr/share/php:$WEB_ROOT:$WEB_ROOT/portal:$WEB_ROOT/private"
+
+catch_workers_output = yes
 EOF
 
 # Create and configure PHP session directory
 log "Setting up PHP session directory..."
 mkdir -p /var/lib/php/session
-chown apache:apache /var/lib/php/session
+chown $APACHE_USER:$APACHE_GROUP /var/lib/php/session
 chmod 700 /var/lib/php/session
-
-# Create all required directories
-log "Creating required directories..."
-mkdir -p "$WEB_ROOT"/{portal,shared,private,public}
-mkdir -p "$WEB_ROOT/portal/logs"/{access,errors,client,python}
-mkdir -p "$WEB_ROOT/private/config"
-mkdir -p $(dirname $PHP_FPM_SOCK)
-
-# Set initial permissions
-log "Setting initial permissions..."
-chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
-chmod -R 755 "$WEB_ROOT"
-chmod -R 775 "$WEB_ROOT/portal/logs"
-chown $APACHE_USER:$NGINX_GROUP $(dirname $PHP_FPM_SOCK)
-chmod 755 $(dirname $PHP_FPM_SOCK)
-
-# Create symbolic links
-log "Setting up symbolic links..."
-ln -sf "$WEB_ROOT/shared" "$WEB_ROOT/portal/shared"
-ln -sf "$WEB_ROOT/private" "$WEB_ROOT/portal/private"
-ln -sf "$WEB_ROOT/public/auth/login.php" "$WEB_ROOT/portal/login.php"
 
 # Enable necessary SELinux booleans
 if command -v setsebool >/dev/null 2>&1; then
@@ -264,43 +321,21 @@ if command -v setsebool >/dev/null 2>&1; then
     setsebool -P httpd_can_network_connect_db 1
 fi
 
-# Verify session directory permissions
-if [ ! -w "/var/lib/php/session" ]; then
-    warn "Session directory is not writable, applying emergency fix..."
-    chmod 777 /var/lib/php/session
-    warn "Please investigate SELinux or permission issues"
-fi
-
 # Permanently disable SELinux
 log "Permanently disabling SELinux..."
-
-# Disable immediately if possible
 if command -v setenforce >/dev/null 2>&1; then
     setenforce 0
     log "SELinux disabled for current session"
 fi
 
-# Update SELinux config file
 if [ -f "/etc/selinux/config" ]; then
-    # Backup original config
     cp /etc/selinux/config /etc/selinux/config.bak
-    
-    # Update config file
     sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
-    
-    # Verify change
     if grep -q "^SELINUX=disabled" /etc/selinux/config; then
         log "SELinux permanently disabled in config"
     else
         error "Failed to update SELinux config"
     fi
-    
-    # Check if reboot needed
-    if [ "$(getenforce)" != "Disabled" ]; then
-        warn "System reboot required for SELinux changes to take full effect"
-    fi
-else
-    warn "SELinux config file not found at /etc/selinux/config"
 fi
 
 # Set up vault configuration
@@ -308,38 +343,25 @@ log "Setting up vault configuration..."
 VAULT_CONFIG_DIR="$WEB_ROOT/private/config"
 VAULT_ENV="$VAULT_CONFIG_DIR/vault.env"
 VAULT_TEMPLATE="$VAULT_CONFIG_DIR/vault.env.template"
-OLD_VAULT_ENV="/etc/vault.env"
 
-# Create vault config directory if it doesn't exist
 if [ ! -d "$VAULT_CONFIG_DIR" ]; then
     install -d -m 750 -o root -g $APACHE_GROUP "$VAULT_CONFIG_DIR"
 fi
 
-# Handle vault.env setup
-if [ -f "$OLD_VAULT_ENV" ]; then
-    log "Found existing vault token at $OLD_VAULT_ENV"
-    if [ ! -f "$VAULT_ENV" ]; then
-        log "Migrating vault token to new location..."
-        cp "$OLD_VAULT_ENV" "$VAULT_ENV"
-        chown root:$APACHE_GROUP "$VAULT_ENV"
-        chmod 640 "$VAULT_ENV"
-        log "Vault token migrated successfully"
-        warn "You can now safely remove $OLD_VAULT_ENV"
-    else
-        warn "New vault.env already exists, skipping migration"
-    fi
-elif [ ! -f "$VAULT_ENV" ] && [ -f "$VAULT_TEMPLATE" ]; then
-    log "Creating vault.env from template..."
+if [ -f "$VAULT_TEMPLATE" ]; then
     cp "$VAULT_TEMPLATE" "$VAULT_ENV"
     chown root:$APACHE_GROUP "$VAULT_ENV"
     chmod 640 "$VAULT_ENV"
     warn "Please update $VAULT_ENV with your Vault credentials"
 fi
 
-# Set final permissions for files
-log "Setting file permissions..."
+# Set final permissions
+log "Setting final permissions..."
+find "$WEB_ROOT" -type d -exec chmod 755 {} \;
 find "$WEB_ROOT" -type f -exec chmod 644 {} \;
 find "$WEB_ROOT" -type f -name "*.py" -exec chmod 755 {} \;
+chown -R $NGINX_USER:$NGINX_GROUP "$WEB_ROOT"
+chmod -R 775 "$WEB_ROOT/portal/logs"
 
 # Ensure PHP-FPM can read files
 log "Setting PHP-FPM permissions..."
@@ -351,20 +373,6 @@ if [ -f "requirements.txt" ]; then
     pip3 install -r requirements.txt
 else
     warn "requirements.txt not found"
-fi
-
-# Verify PHP-FPM is running
-log "Verifying PHP-FPM..."
-if ! systemctl is-active --quiet php-fpm; then
-    log "Starting PHP-FPM..."
-    systemctl start php-fpm
-fi
-
-# Verify nginx is running
-log "Verifying nginx..."
-if ! systemctl is-active --quiet nginx; then
-    log "Starting nginx..."
-    systemctl start nginx
 fi
 
 # Restart services
