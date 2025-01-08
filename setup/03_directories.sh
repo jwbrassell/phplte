@@ -18,7 +18,28 @@ ensure_dir "$WEB_ROOT/portal/logs/access" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/errors" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/client" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/portal/logs/python" "775" "$APACHE_USER" "$NGINX_GROUP"
+
+# System log directories
+ensure_dir "$WEB_ROOT/shared/data/logs" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system" "775" "$APACHE_USER" "$NGINX_GROUP"
 ensure_dir "$WEB_ROOT/shared/data/logs/system/error" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/access" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/audit" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/client" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/errors" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/general" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/performance" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/rbac" "775" "$APACHE_USER" "$NGINX_GROUP"
+ensure_dir "$WEB_ROOT/shared/data/logs/system/test" "775" "$APACHE_USER" "$NGINX_GROUP"
+
+# Ensure proper ownership of all log directories
+chown -R "$APACHE_USER:$NGINX_GROUP" "$WEB_ROOT/shared/data/logs"
+chmod -R 775 "$WEB_ROOT/shared/data/logs"
+
+# Set SELinux context if enabled
+if command -v selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
+    restorecon -R "$WEB_ROOT/shared/data/logs"
+fi
 
 # Python directories
 ensure_dir "$WEB_ROOT/shared/scripts/modules" "755" "$APACHE_USER" "$NGINX_GROUP"
