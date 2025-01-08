@@ -83,7 +83,12 @@ function logEvent($type, $message, $context = []) {
 
 // Initialize session handling
 ini_set('session.save_handler', 'files');
-ini_set('session.save_path', '/var/lib/php/session');
+ini_set('session.save_path', PROJECT_ROOT . '/portal/sessions');
+
+// Ensure sessions directory exists
+if (!is_dir(PROJECT_ROOT . '/portal/sessions')) {
+    mkdir(PROJECT_ROOT . '/portal/sessions', 0775, true);
+}
 ini_set('session.gc_maxlifetime', 3600); // 1 hour
 ini_set('session.cookie_lifetime', 0); // Until browser closes
 ini_set('session.use_strict_mode', 1);

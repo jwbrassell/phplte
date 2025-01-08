@@ -8,7 +8,7 @@ define('IS_PRODUCTION', $is_production);
 define('APP_ENV', $is_production ? 'production' : 'development');
 
 // Directory Structure
-define('PROJECT_ROOT', '/var/www/html');
+define('PROJECT_ROOT', dirname(dirname(dirname(__FILE__))));
 define('BASE_PATH', PROJECT_ROOT);
 define('SHARED_DIR', PROJECT_ROOT . '/shared');
 define('DATA_DIR', SHARED_DIR . '/data');

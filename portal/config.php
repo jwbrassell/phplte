@@ -30,19 +30,15 @@ $DIR = __DIR__;  // Current directory (portal)
 $ROOTDIR = dirname($DIR);  // Up to project root
 
 // Get absolute paths
-if (IS_PRODUCTION) {
-    $projectRoot = '/var/www/html';
-} else {
-    $projectRoot = realpath($ROOTDIR);
-    if (!$projectRoot) {
-        error_log("Failed to resolve project root from: " . $ROOTDIR);
-        throw new Exception("Could not resolve project root directory");
-    }
+$projectRoot = realpath($ROOTDIR);
+if (!$projectRoot) {
+    error_log("Failed to resolve project root from: " . $ROOTDIR);
+    throw new Exception("Could not resolve project root directory");
 }
 
 // Define path constants
 define('PROJECT_ROOT', $projectRoot);
-define('BASE_PATH', IS_PRODUCTION ? '/var/www/html' : PROJECT_ROOT);
+define('BASE_PATH', $projectRoot);
 
 // Shared directory paths
 define('SHARED_DIR', PROJECT_ROOT . '/shared');
@@ -57,7 +53,7 @@ define('PYTHON_MODULES', [
 // Virtual environment paths
 $venvPaths = [
     SHARED_DIR . '/venv',
-    '/var/www/html/shared/venv'
+    PROJECT_ROOT . '/shared/venv'
 ];
 
 $activeVenv = null;
@@ -87,19 +83,19 @@ function resolvePath($path, $type = 'shared') {
     switch ($type) {
         case 'module':
             // For Python modules, ensure we're in the modules directory
-            $base = IS_PRODUCTION ? '/var/www/html/shared/scripts/modules' : MODULES_DIR;
+            $base = MODULES_DIR;
             // Remove redundant module path if present
             $cleanPath = preg_replace('#^scripts/modules/#', '', $cleanPath);
             break;
         case 'data':
             // For data files
-            $base = IS_PRODUCTION ? '/var/www/html/shared/data' : DATA_DIR;
+            $base = DATA_DIR;
             // Remove redundant data path if present
             $cleanPath = preg_replace('#^data/#', '', $cleanPath);
             break;
         default:
             // Default shared directory
-            $base = IS_PRODUCTION ? '/var/www/html/shared' : SHARED_DIR;
+            $base = SHARED_DIR;
             // Remove redundant shared path if present
             $cleanPath = preg_replace('#^shared/#', '', $cleanPath);
     }
